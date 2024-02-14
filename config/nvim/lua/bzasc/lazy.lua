@@ -12,15 +12,15 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup(
-{ { import = "bzasc.plugins" }, { import = "bzasc.plugins.lsp" }, { import = "bzasc.plugins.dap" } }, {
-  install = {
-    colorscheme = { "nightfly" },
-  },
-  checker = {
-    enabled = true,
-    notify = false,
-  },
-  change_detection = {
-    notify = false,
-  },
-})
+  { { import = "bzasc.plugins" }, { import = "bzasc.plugins.lsp" }, { import = "bzasc.plugins.dap" } }, {
+    install = {
+      colorscheme = { "catppuccin-mocha" },
+    },
+    checker = {
+      enabled = true,
+      notify = false,
+    },
+    change_detection = {
+      notify = false,
+    },
+  })
