@@ -14,5 +14,13 @@ return {
     dap.listeners.before.event_exited["dapui_config"] = function()
       dapui.close()
     end
+
+    vim.keymap.set("n", "<leader>do", function()
+      require("dapui").open()
+    end)
+
+    vim.keymap.set("n", "<leader>dc", function()
+      require("dapui").close()
+    end)
   end,
 }

@@ -34,7 +34,7 @@ return {
         "graphql",
         "emmet_ls",
         "prismals",
-        "pyright",
+        "debugpy",
       },
       -- auto-install configured servers (with lspconfig)
       automatic_installation = true, -- not the same as ensure_installed
@@ -43,7 +43,6 @@ return {
     mason_tool_installer.setup({
       ensure_installed = {
         "isort", -- python formatter
-        "pylint", -- python linter
         "eslint_d", -- js linter
       },
     })

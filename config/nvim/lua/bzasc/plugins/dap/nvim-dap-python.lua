@@ -1,12 +1,13 @@
 return {
   "mfussenegger/nvim-dap-python",
   config = function()
-    require("dap-python").setup("~/.pyenv/versions/neovim/bin/python", {})
+    require("dap-python").setup("~/.pyenv/versions/debugpy/bin/python", {})
+
     table.insert(require("dap").configurations.python, {
       type = "python",
       request = "attach",
       connect = {
-        port = 8000,
+        port = 5678,
         host = "127.0.0.1",
       },
       mode = "remote",
@@ -19,10 +20,13 @@ return {
           end,
           remoteRoot = function()
             return vim.fn.input("Container code folder > ", "/", "file")
-            -- "/fastapi", -- Wherever your Python code lives in the container.
           end,
         },
       },
     })
+    require("dap-python").test_runner = "pytest"
+
+    vim.keymap.set("n", "<leader>dn", ":lua require('dap-python').test_method()<CR>")
+    vim.keymap.set("n", "<leader>df", ":lua require('dap-python').test_class()<CR>")
   end,
 }
