@@ -3,11 +3,11 @@ return {
   branch = "0.1.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
+    "ThePrimeagen/harpoon",
     --{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     {
       "nvim-telescope/telescope-fzf-native.nvim",
-      build =
-      "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+      build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
       cond = vim.fn.executable("cmake") == 1,
     },
     "nvim-tree/nvim-web-devicons",
@@ -22,7 +22,7 @@ return {
         mappings = {
           i = {
             ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-            ["<C-j>"] = actions.move_selection_next,     -- move to next result
+            ["<C-j>"] = actions.move_selection_next, -- move to next result
             ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
             ["<C-x>"] = actions.delete_buffer,
           },
@@ -39,6 +39,8 @@ return {
       },
     })
 
+    require("telescope").load_extension("harpoon")
+
     pcall(telescope.load_extension, "fzf")
 
     -- set keymaps
@@ -49,5 +51,6 @@ return {
     keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
     keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
     keymap.set("n", "<Leader>fg", "<cmd>Telescope git_files<cr>", { desc = "Find git files" })
+    keymap.set("n", "<Leader>fh", "<cmd>Telescope harpoon marks<cr>", { desc = "Open harpoon menu" })
   end,
 }
