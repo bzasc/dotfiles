@@ -3,11 +3,14 @@ return {
   branch = "0.1.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    "ThePrimeagen/harpoon",
-    --{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    {
+      "ThePrimeagen/harpoon",
+      branch = "harpoon2",
+    },
     {
       "nvim-telescope/telescope-fzf-native.nvim",
-      build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+      build =
+      "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
       cond = vim.fn.executable("cmake") == 1,
     },
     "nvim-tree/nvim-web-devicons",
@@ -22,7 +25,7 @@ return {
         mappings = {
           i = {
             ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-            ["<C-j>"] = actions.move_selection_next, -- move to next result
+            ["<C-j>"] = actions.move_selection_next,     -- move to next result
             ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
             ["<C-x>"] = actions.delete_buffer,
           },
@@ -40,6 +43,26 @@ return {
     })
 
     require("telescope").load_extension("harpoon")
+    local harpoon = require('harpoon')
+    harpoon:setup({})
+
+    -- basic telescope configuration
+    local conf = require("telescope.config").values
+    local function toggle_telescope(harpoon_files)
+      local file_paths = {}
+      for _, item in ipairs(harpoon_files.items) do
+        table.insert(file_paths, item.value)
+      end
+
+      require("telescope.pickers").new({}, {
+        prompt_title = "Harpoon",
+        finder = require("telescope.finders").new_table({
+          results = file_paths,
+        }),
+        previewer = conf.file_previewer({}),
+        sorter = conf.generic_sorter({}),
+      }):find()
+    end
 
     pcall(telescope.load_extension, "fzf")
 
@@ -51,6 +74,6 @@ return {
     keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
     keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
     keymap.set("n", "<Leader>fg", "<cmd>Telescope git_files<cr>", { desc = "Find git files" })
-    keymap.set("n", "<Leader>fh", "<cmd>Telescope harpoon marks<cr>", { desc = "Open harpoon menu" })
+    keymap.set("n", "<Leader>fh", function() toggle_telescope(harpoon:list()) end, { desc = "Open harpoon menu" })
   end,
 }
