@@ -10,7 +10,6 @@ return {
 
     -- import mason-lspconfig
     local mason_lspconfig = require("mason-lspconfig")
-
     local mason_tool_installer = require("mason-tool-installer")
 
     -- enable mason and configure icons
@@ -41,10 +40,10 @@ return {
 
     mason_tool_installer.setup({
       ensure_installed = {
-        "isort", -- python formatter
-        "black", -- python formatter
+        "isort",    -- python formatter
+        "black",    -- python formatter
         "eslint_d", -- js linter
-        "debugpy", -- python debug
+        "debugpy",  -- python debug
       },
     })
   end,
