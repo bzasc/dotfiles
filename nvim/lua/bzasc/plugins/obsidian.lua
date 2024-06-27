@@ -25,7 +25,6 @@ return {
         time_format = "%H:%M:%S",
       },
 
-
       -- key mappings, below are the defaults
       mappings = {
         -- overrides the 'gf' mapping to work on markdown/wiki links within your vault
