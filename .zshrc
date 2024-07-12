@@ -59,7 +59,4 @@ export PATH="$PATH:$GEM_HOME/bin"
 # NPM
 export PATH=~/.npm-global/bin:$PATH
 
-# Display Pokemon-colorscripts
-# Project page: https://gitlab.com/phoneybadger/pokemon-colorscripts#on-other-distros-and-macos
-# pokemon-colorscripts --no-title -s -r
 eval "$(zoxide init zsh)"
