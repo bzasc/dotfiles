@@ -11,8 +11,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Fixes Notify opacity issues
+vim.o.termguicolors = true
+
 require("lazy").setup(
-  { { import = "bzasc.plugins" }, { import = "bzasc.plugins.lsp" }, { import = "bzasc.plugins.dap" } }, {
+  { { import = "plugins" }, { import = "plugins.lsp" }, { import = "plugins.dap" } }, {
     install = {
       colorscheme = { "catppuccin-mocha" },
     },

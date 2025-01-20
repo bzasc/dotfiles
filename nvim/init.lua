@@ -1,2 +1,3 @@
-require("bzasc.core")
-require("bzasc.lazy")
+require("keymaps")
+require("options")
+require("lazy_setup")
