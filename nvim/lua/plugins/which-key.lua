@@ -5,5 +5,11 @@ return {
     vim.o.timeout = true
     vim.o.timeoutlen = 500
   end,
-  opts = {},
+  opts = {
+    defaults = {
+      ["<leader>r"] = { name = "+LSP" },
+      ["<leader>f"] = { name = "+Find" },
+      ["<leader>g"] = { name = "+Git" },
+    },
+  },
 }

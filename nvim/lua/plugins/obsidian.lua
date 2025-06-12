@@ -12,7 +12,7 @@ return {
       workspaces = {
         {
           name = "bzasc-brain",
-          path = "/home/bzasc/annotations/bzasc-brain",
+          path = "/home/bzasc/annotations/bzasc_brain",
         },
       },
       notes_subdir = "inbox",

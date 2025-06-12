@@ -32,6 +32,7 @@ return {
         "lua_ls",
         "graphql",
         "emmet_ls",
+        "pyright",
         "prismals",
       },
       -- auto-install configured servers (with lspconfig)

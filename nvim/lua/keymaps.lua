@@ -2,6 +2,9 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- Python virtualenv
+vim.g.python3_host_prog = "/home/bzasc/.pyenv/versions/3.13.4/envs/neovim/bin/python"
+
 local keymap = vim.keymap -- for conciseness
 
 ---------------------
