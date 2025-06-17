@@ -19,6 +19,7 @@ local plugins = {
   require("plugins.lsp"),
   require("plugins.lualine"),
   require("plugins.mini"),
+  require("plugins.noice"),
   require("plugins.neogen"),
   require("plugins.nvim-tree"),
   require("plugins.nvim-treesitter"),
