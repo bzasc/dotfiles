@@ -19,7 +19,28 @@ return {
         markdown = { "prettier" },
         graphql = { "prettier" },
         lua = { "stylua" },
-        python = { "isort", "black" },
+        python = { "ruff_organise_imports", "ruff_fix", "ruff_format" },
+      },
+      formatters = {
+        ruff_organise_imports = {
+          command = 'ruff',
+          args = {
+            'check',
+            '--force-exclude',
+            '--select=I001',
+            '--fix',
+            '--exit-zero',
+            '--stdin-filename',
+            '$FILENAME',
+            '-',
+          },
+          stdin = true,
+          cwd = require('conform.util').root_file {
+            'pyproject.toml',
+            'ruff.toml',
+            '.ruff.toml',
+          },
+        },
       },
       format_on_save = {
         lsp_fallback = true,

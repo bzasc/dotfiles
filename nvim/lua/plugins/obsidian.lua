@@ -36,7 +36,7 @@ return {
         },
       },
       completion = {
-        nvim_cmp = true,
+        blink = true,
         min_chars = 2,
       },
       ui = {

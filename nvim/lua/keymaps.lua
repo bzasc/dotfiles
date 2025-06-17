@@ -7,9 +7,6 @@ vim.g.python3_host_prog = "/home/bzasc/.pyenv/versions/3.13.4/envs/neovim/bin/py
 
 local keymap = vim.keymap -- for conciseness
 
----------------------
--- General Keymaps -------------------
-
 -- use jk to exit insert mode
 keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 
@@ -47,6 +44,5 @@ keymap.set("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Dismiss Noice M
 
 -- workspace obsidian
 keymap.set("n", "<leader>on", ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>")
-
-keymap.set("n", "<leader>os", ":Telescope find_files search_dirs={\"/home/bzasc/annotations/bzasc-brain\"}<cr>")
-keymap.set("n", "<leader>oz", ":Telescope live_grep search_dirs={\"/home/bzasc/annotations/bzasc-brain\"}<cr>")
+keymap.set("n", "<leader>os", "<cmd>Telescope find_files search_dirs={\"/home/bzasc/annotations/bzasc-brain\"}<cr>")
+keymap.set("n", "<leader>oz", "<cmd>Telescope live_grep search_dirs={\"/home/bzasc/annotations/bzasc-brain\"}<cr>")

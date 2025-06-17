@@ -45,3 +45,4 @@ plugin/packer_compiled.lua
 lazy-lock.json
 tmux/plugins
 tmux/tpm
+nvim/lazy

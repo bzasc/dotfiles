@@ -1,25 +1,27 @@
+-- Fuzzy finder
 return {
-  "nvim-telescope/telescope.nvim",
-  branch = "master",
+  -- https://github.com/nvim-telescope/telescope.nvim
+  'nvim-telescope/telescope.nvim',
+  event = 'VimEnter',
   dependencies = {
-    "nvim-lua/plenary.nvim",
+    -- https://github.com/nvim-lua/plenary.nvim
+    { 'nvim-lua/plenary.nvim' },
     {
-      "ThePrimeagen/harpoon",
-      branch = "harpoon2",
+      -- https://github.com/nvim-telescope/telescope-fzf-native.nvim
+      'nvim-telescope/telescope-fzf-native.nvim',
+      build = 'make',
+      cond = function()
+        return vim.fn.executable 'make' == 1
+      end,
     },
-    {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build =
-      "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 && cmake --build build --config Release",
-      cond = vim.fn.executable("cmake") == 1,
-    },
-    "nvim-tree/nvim-web-devicons",
+    { 'nvim-telescope/telescope-ui-select.nvim' },
   },
   config = function()
     local telescope = require("telescope")
     local actions = require("telescope.actions")
+    local builtin = require("telescope.builtin")
 
-    telescope.setup({
+    telescope.setup {
       defaults = {
         path_display = { "truncate " },
         mappings = {
@@ -40,7 +42,12 @@ return {
         },
         hidden = true,
       },
-    })
+      extensions = {
+        ['ui-select'] = {
+          require('telescope.themes').get_dropdown(),
+        },
+      },
+    }
 
     require("telescope").load_extension("harpoon")
     local harpoon = require('harpoon')
@@ -64,9 +71,11 @@ return {
       }):find()
     end
 
-    pcall(telescope.load_extension, "fzf")
 
-    -- set keymaps
+    -- Enable Telescope extensions if they are installed
+    pcall(telescope.load_extension, 'fzf')
+    pcall(telescope.load_extension, 'ui-select')
+
     local keymap = vim.keymap -- for conciseness
 
     keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
@@ -74,6 +83,28 @@ return {
     keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
     keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
     keymap.set("n", "<Leader>fg", "<cmd>Telescope git_files<cr>", { desc = "Find git files" })
-    keymap.set("n", "<Leader>fh", function() toggle_telescope(harpoon:list()) end, { desc = "Open harpoon menu" })
+
+    -- Slightly advanced example of overriding default behavior and theme
+    keymap.set('n', '<leader>/', function()
+      -- You can pass additional configuration to Telescope to change the theme, layout, etc.
+      builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+        winblend = 10,
+        previewer = false,
+      })
+    end, { desc = '[/] Fuzzily search in current buffer' })
+
+    -- It's also possible to pass additional configuration options.
+    --  See `:help telescope.builtin.live_grep()` for information about particular keys
+    vim.keymap.set('n', '<leader>f/', function()
+      builtin.live_grep {
+        grep_open_files = true,
+        prompt_title = 'Live Grep in Open Files',
+      }
+    end, { desc = '[S]earch [/] in Open Files' })
+
+    -- Shortcut for searching your Neovim configuration files
+    vim.keymap.set('n', '<leader>fn', function()
+      builtin.find_files { cwd = vim.fn.stdpath 'config' }
+    end, { desc = '[S]earch [N]eovim files' })
   end,
 }
