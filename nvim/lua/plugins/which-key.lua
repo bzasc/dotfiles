@@ -7,9 +7,16 @@ return {
   end,
   opts = {
     defaults = {
-      ["<leader>r"] = { name = "+LSP" },
+      ["<leader>c"] = { name = "+Code" },
+      ["<leader>d"] = { name = "+Debug" },
+      ["<leader>e"] = { name = "+Explore" },
       ["<leader>f"] = { name = "+Find" },
       ["<leader>g"] = { name = "+Git" },
+      ["<leader>h"] = { name = "+Harpoon" },
+      ["<leader>m"] = { name = "+Misc" },
+      ["<leader>n"] = { name = "+Next/Swap" },
+      ["<leader>o"] = { name = "+Obsidian" },
+      ["<leader>p"] = { name = "+Prev/Swap" },
     },
   },
 }

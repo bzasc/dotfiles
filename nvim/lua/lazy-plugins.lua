@@ -21,14 +21,16 @@ local plugins = {
   require("plugins.mini"),
   require("plugins.noice"),
   require("plugins.neogen"),
-  require("plugins.nvim-tree"),
   require("plugins.nvim-treesitter"),
   require("plugins.nvim-treesitter-text-objects"),
+  require("plugins.ruby"),
   require("plugins.obsidian"),
   require("plugins.oil"),
   require("plugins.puppeteer"),
   require("plugins.telescope"),
   require("plugins.which-key"),
+  require("plugins.checkmate"),
+  require("plugins.wrapping"),
   require("plugins.extras"),
 }
 
@@ -38,7 +40,7 @@ require("lazy").setup(plugins, {
     colorscheme = { "catppuccin-mocha" },
   },
   checker = {
-    enabled = true,
+    enabled = false,
     notify = false,
   },
   change_detection = {

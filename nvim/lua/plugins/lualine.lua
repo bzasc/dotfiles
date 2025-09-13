@@ -47,7 +47,7 @@ return {
         },
         sections = {
           lualine_b = {
-            { "branch", icon = "", fmt = truncate_branch_name },
+            { "branch", icon = "" },
             --      harpoon_component,
             "diff",
             "diagnostics",

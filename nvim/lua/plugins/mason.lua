@@ -16,6 +16,8 @@ return {
       "prettier", -- opinionated code formatter,
       "stylua", -- A lua code formatter
       "typescript-language-server", -- LSP for typescript
+      "ruby-lsp", -- LSP for Ruby
+      "rubocop", -- formatter/linter for Ruby
     },
   },
 }

@@ -19,6 +19,7 @@ return {
         markdown = { "prettier" },
         graphql = { "prettier" },
         lua = { "stylua" },
+        ruby = { "rubocop" },
         python = { "ruff_organise_imports", "ruff_fix", "ruff_format" },
       },
       formatters = {
@@ -49,12 +50,12 @@ return {
       },
     })
 
-    vim.keymap.set({ "n", "v" }, "<leader>mp", function()
+    vim.keymap.set({ "n", "v" }, "<leader>cf", function()
       conform.format({
         lsp_fallback = true,
         async = false,
         timeout_ms = 1000,
       })
-    end, { desc = "Format file or range (in visual mode)" })
+    end, { desc = "Format file or range" })
   end,
 }

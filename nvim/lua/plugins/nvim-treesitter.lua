@@ -32,6 +32,7 @@ return {
           "lua",
           "markdown",
           "markdown_inline",
+          "ruby",
           "python",
           "rust",
           "toml",

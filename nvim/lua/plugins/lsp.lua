@@ -1,17 +1,17 @@
 -- Setup the LSPs
 -- `gd` and `gr` for goto definition / references
--- `<C-f>` for formatting
+-- `<leader>cf` for formatting
 -- `<leader>c` for code actions (organize imports, etc.)
 
 return {
 	"neovim/nvim-lspconfig",
+	event = { "BufReadPre", "BufNewFile" },
 	keys = {
 		{ "gd", vim.lsp.buf.definition, desc = "Goto Definition" },
 		{ "gr", vim.lsp.buf.references, desc = "Goto References" },
 		{ "<leader>c", vim.lsp.buf.code_action, desc = "Code Action" },
-		{ "<C-f>", vim.lsp.buf.format, desc = "Format File" },
 	},
-	init = function()
+	config = function()
 		-- this snippet enables auto-completion
 		local lspCapabilities = vim.lsp.protocol.make_client_capabilities()
 		lspCapabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -34,6 +34,12 @@ return {
 			on_attach = function(client)
 				client.server_capabilities.hoverProvider = false
 			end,
+		})
+
+		-- Ruby LSP (ruby-lsp) for Ruby / Rails projects
+		-- Requires the ruby-lsp gem or mason package "ruby-lsp"
+		require("lspconfig").ruby_lsp.setup({
+			capabilities = lspCapabilities,
 		})
 	end,
 }
