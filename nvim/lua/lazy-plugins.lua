@@ -5,6 +5,7 @@ local plugins = {
   require("plugins.mason"),
   require("plugins.alpha-nvim"),
   require("plugins.blink-cmp"),
+  require("plugins.codex"),
   require("plugins.colorscheme"),
   require("plugins.comment"),
   require("plugins.conform"),
