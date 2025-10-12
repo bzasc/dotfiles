@@ -38,8 +38,17 @@ return {
         max_items = 10,
       },
 
-      documentation = { auto_show = true, auto_show_delay_ms = 500 },
-      menu = { scrollbar = false },
+      documentation = { auto_show = true, auto_show_delay_ms = 200 },
+      menu = {
+        scrollbar = false,
+        draw = {
+          treesitter = { "lsp" },
+          columns = {
+            { "label", gap = 2 },
+            { "kind_icon", gap = 1, "kind" },
+          },
+        },
+      },
     },
 
     cmdline = { enabled = false },
@@ -48,6 +57,9 @@ return {
       default = { "lazydev", "lsp", "path", "snippets", "buffer" },
       providers = {
         lazydev = { module = "lazydev.integrations.blink", score_offset = 100 },
+      },
+      lsp = {
+        fallbacks = { "buffer", "path" },
       },
     },
 

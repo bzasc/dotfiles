@@ -38,9 +38,9 @@ return {
       local map = function(mode, lhs, rhs, desc)
         vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
       end
-      map("n", "gd", vim.lsp.buf.definition, "Goto Definition")
-      map("n", "gr", vim.lsp.buf.references, "References")
-      map("n", "gi", vim.lsp.buf.implementation, "Goto Implementation")
+      map("n", "lg", vim.lsp.buf.definition, "Goto Definition")
+      map("n", "lr", vim.lsp.buf.references, "References")
+      map("n", "li", vim.lsp.buf.implementation, "Goto Implementation")
       map("n", "K", vim.lsp.buf.hover, "Hover")
       map({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
       map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")

@@ -2,6 +2,7 @@
 return {
   -- https://github.com/nvim-telescope/telescope.nvim
   "nvim-telescope/telescope.nvim",
+  enabled = false,
   cmd = "Telescope",
   keys = {
     { "<leader>ff", function() require("telescope.builtin").find_files() end, desc = "Fuzzy find files in cwd" },

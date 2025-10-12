@@ -3,8 +3,29 @@ return {
   version = "*",
   lazy = true,
   ft = "markdown",
+  -- Allow lazy-loading the plugin when these commands are invoked
+  cmd = {
+    "ObsidianQuickSwitch",
+    "ObsidianSearch",
+    "ObsidianToday",
+    "ObsidianYesterday",
+    "ObsidianNew",
+    "ObsidianLink",
+    "ObsidianLinkNew",
+    "ObsidianTemplate",
+  },
   dependencies = {
     "nvim-lua/plenary.nvim",
+  },
+  -- Global keymaps that will lazy-load obsidian.nvim on first use
+  keys = {
+    { "<leader>oq", "<cmd>ObsidianQuickSwitch<cr>", desc = "Obsidian Quick Switch" },
+    { "<leader>og", "<cmd>ObsidianSearch<cr>", desc = "Obsidian Search" },
+    { "<leader>ot", "<cmd>ObsidianToday<cr>", desc = "Obsidian Today" },
+    { "<leader>oy", "<cmd>ObsidianYesterday<cr>", desc = "Obsidian Yesterday" },
+    { "<leader>on", "<cmd>ObsidianNew<cr>", desc = "Obsidian New Note" },
+    { "<leader>ol", "<cmd>ObsidianFollowLink<cr>", desc = "Obsidian Follow Link" },
+    { "<leader>oL", "<cmd>ObsidianLinkNew<cr>", desc = "Obsidian Link New" },
   },
 
   config = function()

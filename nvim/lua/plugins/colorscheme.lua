@@ -2,29 +2,36 @@ function ColorMyPencils(color)
   color = color or "catppuccin"
   vim.cmd.colorscheme(color)
 
-  --vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-  --vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
 return {
   {
     "catppuccin/nvim",
     name = "catppuccin",
-    -- priority = 1000,
+    priority = 1000,
     config = function()
       require("catppuccin").setup({
+        custom_highlights = function(colors)
+          return {
+            WinSeparator = { fg = colors.overlay1 },
+            BlinkCmpDocBorder = { fg = colors.blue },
+            BlinkCmpKind = { fg = colors.blue },
+            BlinkCmpMenu = { fg = colors.text },
+            BlinkCmpMenuBorder = { fg = colors.blue, bg = colors.base },
+            BlinkCmpSignatureHelpActiveParameter = { fg = colors.mauve },
+            BlinkCmpSignatureHelpBorder = { fg = colors.blue },
+          }
+        end,
         integrations = {
           cmp = true,
           gitsigns = true,
           harpoon = true,
           illuminate = true,
-          indent_blankline = {
-            enabled = false,
-            scope_color = "sapphire",
-            colored_indent_levels = false,
-          },
+          indent_blankline = { enabled = false, scope_color = "sapphire", colored_indent_levels = false },
           mason = true,
-          native_lsp = { enabled = true },
+          native_lsp = { enabled = true, inlay_hints = { background = true } },
           notify = true,
           nvimtree = true,
           neotree = true,
@@ -32,7 +39,20 @@ return {
           telescope = true,
           treesitter = true,
           treesitter_context = true,
+          blink_cmp = true,
+          fzf = true,
         },
+        color_overrides = {
+          mocha = {
+            base = "#222221",
+            mantle = "#222221",
+            crust = "#222221",
+            surface0 = "#292929",
+            surface2 = "#4d4d4d",
+            surface1 = "#404040",
+          },
+        },
+        transparent_background = true,
       })
 
       -- setup must be called before loading
@@ -44,40 +64,195 @@ return {
       end
     end,
   },
-  { "rebelot/kanagawa.nvim", lazy = false },
-  {
-    "rose-pine/neovim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require("rose-pine").setup({
-        variant = "auto", -- auto, main, moon, or dawn
-        dark_variant = "main", -- main, moon, or dawn
-      })
-    end,
-  },
-  { "shaunsingh/nord.nvim", lazy = false, priority = 1000 },
+  --{
+  --  "ViViDboarder/wombat.nvim",
+  --  dependencies = { { "rktjmp/lush.nvim" } },
+  --  opts = {
+  --    -- You can optionally specify the name of the ansi colors you wish to use
+  --    -- This defaults to nil and will use the default ansi colors for the theme
+  --    ansi_colors_name = nil,
+  --  },
+  --  priority = 1000,
+  --  config = function()
+  --    require("wombat").setup({
+  --      ansi_colors_name = nil,
 
-  {
-    "folke/tokyonight.nvim",
-    config = function()
-      require("tokyonight").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
-        transparent = true, -- Enable this to disable setting the background color
-        terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
-        styles = {
-          -- Style to be applied to different syntax groups
-          -- Value is any valid attr-list value for `:help nvim_set_hl`
-          comments = { italic = false },
-          keywords = { italic = false },
-          -- Background styles. Can be "dark", "transparent" or "normal"
-          sidebars = "dark", -- style for sidebars, see below
-          floats = "dark", -- style for floating windows
-        },
-      })
-      --ColorMyPencils("rose-pine-moon")
-    end,
-  },
+  --      transparent_background = true,
+  --    })
+
+  --    vim.cmd.colorscheme("wombat")
+  --  end,
+  --},
+  --{
+  --  "neanias/everforest-nvim",
+  --  version = false,
+  --  lazy = false,
+  --  priority = 1000, -- make sure to load this before all the other start plugins
+  --  -- Optional; default configuration will be used if setup isn't called.
+  --  config = function()
+  --    require("everforest").setup({
+  --      background = "soft",
+  --      transparent_background_level = 0,
+  --      italics = true,
+  --      disable_italic_comments = false,
+  --      inlay_hints_background = "dimmed",
+  --      on_highlights = function(hl, palette)
+  --        hl["@string.special.symbol.ruby"] = { link = "@field" }
+  --        hl["DiagnosticUnderlineWarn"] = { undercurl = true, sp = palette.yellow }
+  --      end,
+  --      colours_override = function(palette)
+  --        palette.bg0 = "#141415"
+  --        palette.bg_dim = "#141415"
+  --        palette.bg1 = "#141415"
+  --        palette.bg2 = "#141415"
+  --        --palette.bg3 = "#141415"
+  --        --palette.bg4 = "#141415"
+  --        --palette.bg5 = "#141415"
+  --        palette.bg_visual = "#5c3f4f"
+  --        palette.bg_red = "#59464c"
+  --        palette.bg_green = "#48584e"
+  --        palette.bg_blue = "#3f5865"
+  --        palette.bg_yellow = "#55544a"
+  --        palette.bg_purple = "#4e4953"
+  --      end,
+  --    })
+  --    vim.cmd.colorscheme("everforest")
+  --  end,
+  --},
+  --{
+  --  "vague-theme/vague.nvim",
+  --  lazy = false, -- make sure we load this during startup if it is your main colorscheme
+  --  priority = 1000, -- make sure to load this before all the other plugins
+  --  config = function()
+  --    -- NOTE: you do not need to call setup if you don't want to.
+  --    require("vague").setup({
+  --      -- optional configuration here
+  --    })
+  --    vim.cmd("colorscheme vague")
+  --  end,
+  --},
+  -- {
+  --   "sainnhe/gruvbox-material",
+  --   lazy = false,
+  --   priority = 1000,
+  --   init = function() -- Use init instead of config
+  --     -- Set all options before the plugin loads
+  --     vim.g.gruvbox_material_better_performance = 1
+  --     vim.g.gruvbox_material_transparent_background = 2
+  --     vim.g.gruvbox_material_diagnostic_text_highlight = 1
+  --     vim.g.gruvbox_material_current_word = "bold"
+  --     vim.g.gruvbox_material_enable_italic = 0
+  --     vim.g.gruvbox_material_disable_terminal_colors = 1
+  --   end,
+  --   config = function()
+  --     vim.cmd.colorscheme("gruvbox-material")
+  --   end,
+  -- },
+  -- {
+  --   "Shatur/neovim-ayu",
+  --   lazy = false,
+  --   priority = 1000,
+  --   config = function()
+  --     vim.opt.termguicolors = true
+  --     require("ayu").setup({
+  --       overrides = {
+  --         CursorLine = { bg = "#0b0f14" },
+  --         CursorColumn = { bg = "#0b0f14" },
+  --         CursorLineNr = { bg = "#0b0f14", fg = "#f39f29" },
+  --         LineNr = { fg = "#626a73" },
+  --         Folded = { bg = "None", fg = "#5e666f" },
+  --         MarkSignHL = { bg = "#121821", fg = "#f39f29" },
+  --         MarkSignNumHL = { bg = "#121821", fg = "#f39f29" },
+  --         Normal = { bg = "None" },
+  --         IblScope = { fg = "#f39f29" },
+  --       },
+  --     })
+
+  --     -- vim.cmd.colorscheme("ayu-mirage")
+  --   end,
+  -- },
+  --{
+  --  "loctvl842/monokai-pro.nvim",
+  --  lazy = false,
+  --  priority = 1000,
+  --  config = function()
+  --    require("monokai-pro").setup()
+
+  --    --vim.cmd.colorscheme("monokai-pro-octagon")
+  --  end,
+  --},
+  --{
+  --  "rebelot/kanagawa.nvim",
+  --  lazy = false,
+  --  config = function()
+  --    require("kanagawa").setup()
+  --    vim.cmd.colorscheme("kanagawa-wave")
+  --  end,
+  --},
+  --{
+  --  "rose-pine/neovim",
+  --  lazy = false,
+  --  priority = 1000,
+  --  config = function()
+  --    require("rose-pine").setup({
+  --      variant = "moon", -- auto, main, moon, or dawn
+  --      dark_variant = "moon", -- main, moon, or dawn
+  --    })
+  --    vim.cmd.colorscheme("rose-pine-moon")
+  --  end,
+  --},
+  --{ "shaunsingh/nord.nvim", lazy = false, priority = 1000 },
+
+  --{
+  --  "folke/tokyonight.nvim",
+  --  config = function()
+  --    require("tokyonight").setup({
+  --      -- your configuration comes here
+  --      -- or leave it empty to use the default settings
+  --      style = "storm", -- The theme comes in three styles, `storm`, `moon`, a darker variant `night` and `day`
+  --      transparent = true, -- Enable this to disable setting the background color
+  --      terminal_colors = true, -- Configure the colors used when opening a `:terminal` in Neovim
+  --      styles = {
+  --        -- Style to be applied to different syntax groups
+  --        -- Value is any valid attr-list value for `:help nvim_set_hl`
+  --        comments = { italic = false },
+  --        keywords = { italic = false },
+  --        -- Background styles. Can be "dark", "transparent" or "normal"
+  --        sidebars = "dark", -- style for sidebars, see below
+  --        floats = "dark", -- style for floating windows
+  --      },
+  --    })
+  --    --ColorMyPencils("rose-pine-moon")
+  --  end,
+  --},
+  --{
+  --  "armannikoyan/rusty",
+  --  lazy = false,
+  --  priority = 1000,
+  --  opts = {
+  --    transparent = true,
+  --    italic_comments = true,
+  --    underline_current_line = true,
+  --    colors = {
+  --      foreground = "#c5c8c6",
+  --      background = "#1d1f21",
+  --      selection = "#373b41",
+  --      line = "#282a2e",
+  --      comment = "#969896",
+  --      red = "#cc6666",
+  --      orange = "#de935f",
+  --      yellow = "#f0c674",
+  --      green = "#b5bd68",
+  --      aqua = "#8abeb7",
+  --      blue = "#81a2be",
+  --      purple = "#b294bb",
+  --      window = "#4d5057",
+  --    },
+  --  },
+  --  -- config = function(_, opts)
+  --  --  -- require("rusty").setup(opts)
+  --  --  -- ColorMyPencils("rusty")
+  --  --  -- vim.cmd("colorscheme rusty")
+  --  -- end,
+  --},
 }

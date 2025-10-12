@@ -97,7 +97,6 @@ return {
           { mode = "x", keys = "<leader>f", desc = "+find" },
           { mode = "n", keys = "<leader>g", desc = "+lsp" },
           { mode = "x", keys = "<leader>g", desc = "+lsp" },
-
           { mode = "n", keys = "<leader>o", desc = "+obsidian" },
           { mode = "n", keys = "<leader>t", desc = "+tabs" },
           { mode = "n", keys = "<leader>x", desc = "+loclist/quickfix" },

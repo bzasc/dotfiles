@@ -2,7 +2,7 @@
 vim.o.termguicolors = true
 
 local plugins = {
-  require("plugins.which-key"),
+  --require("plugins.which-key"),
   require("plugins.lspconfig"),
   require("plugins.conform"),
   require("plugins.blink-cmp"),
@@ -12,7 +12,6 @@ local plugins = {
   require("plugins.dap-python"),
   require("plugins.flash"),
   require("plugins.lualine"),
-  require("plugins.miniicons"),
   require("plugins.miniai"),
   require("plugins.miniclue"),
   require("plugins.minifiles"),
@@ -29,6 +28,11 @@ local plugins = {
   require("plugins.markdown-preview"),
   require("plugins.indent-blankline"),
   require("plugins.treesitter"),
+  require("plugins.telescope"),
+  require("plugins.no-neck-pain"),
+  require("plugins.venv-selector"),
+  require("plugins.miniicons"),
+  require("plugins.nvim-web-devicons"),
   require("plugins.extras"),
 }
 
