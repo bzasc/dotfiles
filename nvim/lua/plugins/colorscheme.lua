@@ -8,62 +8,72 @@ end
 
 return {
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
+    "sainnhe/sonokai",
+    lazy = false,
     priority = 1000,
     config = function()
-      require("catppuccin").setup({
-        custom_highlights = function(colors)
-          return {
-            WinSeparator = { fg = colors.overlay1 },
-            BlinkCmpDocBorder = { fg = colors.blue },
-            BlinkCmpKind = { fg = colors.blue },
-            BlinkCmpMenu = { fg = colors.text },
-            BlinkCmpMenuBorder = { fg = colors.blue, bg = colors.base },
-            BlinkCmpSignatureHelpActiveParameter = { fg = colors.mauve },
-            BlinkCmpSignatureHelpBorder = { fg = colors.blue },
-          }
-        end,
-        integrations = {
-          cmp = true,
-          gitsigns = true,
-          harpoon = true,
-          illuminate = true,
-          indent_blankline = { enabled = false, scope_color = "sapphire", colored_indent_levels = false },
-          mason = true,
-          native_lsp = { enabled = true, inlay_hints = { background = true } },
-          notify = true,
-          nvimtree = true,
-          neotree = true,
-          symbols_outline = true,
-          telescope = true,
-          treesitter = true,
-          treesitter_context = true,
-          blink_cmp = true,
-          fzf = true,
-        },
-        color_overrides = {
-          mocha = {
-            base = "#222221",
-            mantle = "#222221",
-            crust = "#222221",
-            surface0 = "#292929",
-            surface2 = "#4d4d4d",
-            surface1 = "#404040",
-          },
-        },
-        transparent_background = true,
-      })
-
-      -- setup must be called before loading
-      vim.cmd.colorscheme("catppuccin-mocha")
-
-      -- Hide all semantic highlights until upstream issues are resolved (https://github.com/catppuccin/nvim/issues/480)
-      for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
-        vim.api.nvim_set_hl(0, group, {})
-      end
+      vim.g.sonokai_enable_italic = true
+      vim.cmd.colorscheme("sonokai")
     end,
   },
+  --{
+  --  "catppuccin/nvim",
+  --  name = "catppuccin",
+  --  priority = 1000,
+  --  config = function()
+  --    require("catppuccin").setup({
+  --      custom_highlights = function(colors)
+  --        return {
+  --          WinSeparator = { fg = colors.overlay1 },
+  --          BlinkCmpDocBorder = { fg = colors.blue },
+  --          BlinkCmpKind = { fg = colors.blue },
+  --          BlinkCmpMenu = { fg = colors.text },
+  --          BlinkCmpMenuBorder = { fg = colors.blue, bg = colors.base },
+  --          BlinkCmpSignatureHelpActiveParameter = { fg = colors.mauve },
+  --          BlinkCmpSignatureHelpBorder = { fg = colors.blue },
+  --        }
+  --      end,
+  --      integrations = {
+  --        cmp = true,
+  --        gitsigns = true,
+  --        harpoon = true,
+  --        illuminate = true,
+  --        indent_blankline = { enabled = false, scope_color = "sapphire", colored_indent_levels = false },
+  --        mason = true,
+  --        native_lsp = { enabled = true, inlay_hints = { background = true } },
+  --        notify = true,
+  --        nvimtree = true,
+  --        neotree = true,
+  --        symbols_outline = true,
+  --        telescope = true,
+  --        treesitter = true,
+  --        treesitter_context = true,
+  --        blink_cmp = true,
+  --        fzf = true,
+  --      },
+  --      color_overrides = {
+  --        mocha = {
+  --          base = "#222221",
+  --          mantle = "#222221",
+  --          crust = "#222221",
+  --          surface0 = "#292929",
+  --          surface2 = "#4d4d4d",
+  --          surface1 = "#404040",
+  --        },
+  --      },
+  --      transparent_background = true,
+  --    })
+
+  --    -- setup must be called before loading
+  --    --ColorMyPencils("catppuccin-mocha")
+  --    --vim.cmd.colorscheme("catppuccin-mocha")
+
+  --    -- Hide all semantic highlights until upstream issues are resolved (https://github.com/catppuccin/nvim/issues/480)
+  --    for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+  --      vim.api.nvim_set_hl(0, group, {})
+  --    end
+  --  end,
+  --},
   --{
   --  "ViViDboarder/wombat.nvim",
   --  dependencies = { { "rktjmp/lush.nvim" } },

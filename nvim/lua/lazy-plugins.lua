@@ -40,11 +40,6 @@ local plugins = {
 require("lazy").setup(plugins, {
   install = {
     colorscheme = { "catppuccin-mocha" },
-    --colorscheme = { "nord" },
-    -- colorscheme = { "kanagawa-wave" },
-    -- colorscheme = { "kanagawa-dragon" },
-    -- colorscheme = { "rose-pine-moon" },
-    --colorscheme = { "tokyonight" },
   },
   checker = {
     enabled = false,

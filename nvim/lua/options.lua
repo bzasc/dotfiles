@@ -35,8 +35,6 @@ vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpo
 
 vim.g.autoformat = true
 
-vim.g.loaded_perl_provider = 0
-
 function _G.toggle_wrap()
   vim.wo.wrap = not vim.wo.wrap
   if vim.wo.wrap then
@@ -45,4 +43,6 @@ function _G.toggle_wrap()
     print("Wrap: OFF")
   end
 end
-vim.keymap.set("n", "<leader>w", ":lua toggle_wrap()<CR>", { desc = "Toggle line wrap" })
+vim.keymap.set("n", "<leader>tw", ":lua toggle_wrap()<CR>", { desc = "Toggle line wrap" })
+
+vim.g.loaded_perl_provider = 0

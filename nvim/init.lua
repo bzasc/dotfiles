@@ -1,5 +1,4 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+--vim.cmd.colorscheme("miss-dracula")
 
 require("options")
 require("keymaps")
