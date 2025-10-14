@@ -29,7 +29,7 @@ local plugins = {
   require("plugins.indent-blankline"),
   require("plugins.treesitter"),
   require("plugins.telescope"),
-  require("plugins.no-neck-pain"),
+  --require("plugins.no-neck-pain"),
   require("plugins.venv-selector"),
   require("plugins.miniicons"),
   require("plugins.nvim-web-devicons"),
@@ -38,9 +38,6 @@ local plugins = {
 
 -- tell lazy.nvim to load and configure all the plugins
 require("lazy").setup(plugins, {
-  install = {
-    colorscheme = { "catppuccin-mocha" },
-  },
   checker = {
     enabled = false,
     notify = false,

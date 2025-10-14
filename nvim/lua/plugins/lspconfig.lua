@@ -27,42 +27,80 @@ return {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
 
-          ---- Rename the variable under your cursor.
-          ----  Most Language Servers support renaming across files, etc.
-          --map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
+          -- Safely map fzf-lua LSP pickers so rhs is always a function
+          local function map_fzf(keys, method, desc, mode)
+            map(keys, function()
+              local ok, fzf = pcall(require, "fzf-lua")
+              if not ok or type(fzf[method]) ~= "function" then
+                vim.notify(string.format("fzf-lua method '%s' not available", tostring(method)), vim.log.levels.WARN)
+                return
+              end
+              fzf[method]()
+            end, desc, mode)
+          end
 
-          ---- Execute a code action, usually your cursor needs to be on top of an error
-          ---- or a suggestion from your LSP for this to activate.
-          --map("ga", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
+          -- Hover documentation
+          map("K", vim.lsp.buf.hover, "Hover Documentation")
 
-          ---- Find references for the word under your cursor.
-          map("gr", require("fzf-lua").lsp_references, "[G]oto [R]eferences")
+          -- navigation on diagnostic
+          map("[d", function()
+            vim.diagnostic.jump({ count = -1 })
+          end, "Previous diagnostic")
+          map("]d", function()
+            vim.diagnostic.jump({ count = 1 })
+          end, "Next diagnostic")
+          map("[e", function()
+            vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
+          end, "Previous error")
+          map("]e", function()
+            vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR })
+          end, "Next error")
 
-          ------ Jump to the implementation of the word under your cursor.
-          ------  Useful when your language has ways of declaring types without an actual implementation.
-          map("gI", require("fzf-lua").lsp_implementations, "[G]oto [I]mplementation")
+          -- Rename symbol (two mappings for convenience)
+          map("<leader>rn", vim.lsp.buf.rename, "Rename")
+          map("grn", vim.lsp.buf.rename, "Rename")
 
-          ------ Jump to the definition of the word under your cursor.
-          ------  This is where a variable was first declared, or where a function is defined, etc.
-          ------  To jump back, press <C-t>.
-          map("gd", require("fzf-lua").lsp_definitions, "[G]oto [D]efinition")
+          -- Code actions (normal and visual)
+          -- map("ga", vim.lsp.buf.code_action, "Code Action", { "n", "x" })
+
+          -- Diagnostics navigation and float
+          map("gl", vim.diagnostic.open_float, "Line Diagnostics")
+
+          -- Find references for the word under your cursor.
+          map_fzf("gr", "lsp_references", "[G]oto [R]eferences")
+
+          -- Jump to the implementation of the word under your cursor.
+          --  Useful when your language has ways of declaring types without an actual implementation.
+          map_fzf("gI", "lsp_implementations", "[G]oto [I]mplementation")
+
+          -- Jump to the definition of the word under your cursor.
+          --  This is where a variable was first declared, or where a function is defined, etc.
+          --  To jump back, press <C-t>.
+          map_fzf("gd", "lsp_definitions", "[G]oto [D]efinition")
 
           ------ WARN: This is not Goto Definition, this is Goto Declaration.
           ------  For example, in C this would take you to the header.
           map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
-          ------ Fuzzy find all the symbols in your current document.
-          ------  Symbols are things like variables, functions, types, etc.
-          map("gO", require("fzf-lua").lsp_document_symbols, "Open Document Symbols")
+          -- Fuzzy find all the symbols in your current document.
+          --  Symbols are things like variables, functions, types, etc.
+          map_fzf("gO", "lsp_document_symbols", "Open Document Symbols")
 
-          ------ Fuzzy find all the symbols in your current workspace.
-          ------  Similar to document symbols, except searches over your entire project.
-          --map("gW", require("fzf-lua").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
+          -- Fuzzy find all the symbols in your current workspace.
+          --  Similar to document symbols, except searches over your entire project.
+          map_fzf("gW", "lsp_dynamic_workspace_symbols", "Workspace Symbols (Dynamic)")
 
-          ------ Jump to the type of the word under your cursor.
-          ------  Useful when you're not sure what type a variable is and you want to see
-          ------  the definition of its *type*, not where it was *defined*.
-          --map("gy", require("fzf-lua").lsp_type_definitions, "[G]oto [T]ype Definition")
+          -- Jump to the type of the word under your cursor.
+          --  Useful when you're not sure what type a variable is and you want to see
+          --  the definition of its *type*, not where it was *defined*.
+          map_fzf("gy", "lsp_type_definitions", "Type Definitions")
+
+          -- Calls (via fzf-lua)
+          map_fzf("<leader>gi", "lsp_incoming_calls", "Incoming Calls")
+          map_fzf("<leader>go", "lsp_outgoing_calls", "Outgoing Calls")
+
+          -- Code actions picker (fzf-lua)
+          -- map("gA", require("fzf-lua").lsp_code_actions, "Code Actions (FZF)", { "n", "x" })
 
           local function client_supports_method(client, method, bufnr)
             return client:supports_method(method, bufnr)

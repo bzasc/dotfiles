@@ -10,11 +10,6 @@ return {
 	keys = {
 		{ "<leader>tr", vim.cmd.IronRepl, desc = "󱠤 Toggle REPL" },
 		{ "<leader>tR", vim.cmd.IronRestart, desc = "󱠤 Restart REPL" },
-
-		-- rhese keymaps need no right-hand-side, since that is defined by the
-		-- plugin config further below
-		{ "<leader>u", mode = { "n", "x" }, desc = "󱠤 Send-to-REPL Operator" },
-		{ "<leader>uu", desc = "󱠤 Send Line to REPL" },
 	},
 
 	-- since irons's setup call is `require("iron.core").setup`, instead of
