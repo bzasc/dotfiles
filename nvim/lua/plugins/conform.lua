@@ -25,6 +25,8 @@ return {
         lua = { "stylua" },
         ruby = { "rubocop" },
         python = { "ruff_organise_imports", "ruff_fix", "ruff_format" },
+        erb = { "erb-formatter" },
+        html_erb = { "erb-formatter" },
         -- For filetypes without a formatter:
         ["_"] = { "trim_whitespace", "trim_newlines" },
       },

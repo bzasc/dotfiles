@@ -17,7 +17,7 @@ vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- incr
 vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
 vim.keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" }) -- split window vertically
-vim.keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
+vim.keymap.set("n", "<leader>ss", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
 vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" }) -- make split windows equal width & height
 vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" }) -- close current split window
 
@@ -53,3 +53,13 @@ vim.keymap.set(
   '<cmd>FzfLua live_grep cwd="/home/bzasc/annotations/bzasc_brain"<cr>',
   { desc = "Search with ripgrep (rg) in the Obsidian vault" }
 )
+
+function _G.toggle_wrap()
+  vim.wo.wrap = not vim.wo.wrap
+  if vim.wo.wrap then
+    print("Wrap: ON")
+  else
+    print("Wrap: OFF")
+  end
+end
+vim.keymap.set("n", "<leader>tw", ":lua toggle_wrap()<CR>", { desc = "Toggle line wrap" })

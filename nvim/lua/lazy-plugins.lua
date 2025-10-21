@@ -8,8 +8,6 @@ local plugins = {
   require("plugins.blink-cmp"),
   require("plugins.colorscheme"),
   require("plugins.dap"),
-  require("plugins.dap-ui"),
-  require("plugins.dap-python"),
   require("plugins.flash"),
   require("plugins.lualine"),
   require("plugins.miniai"),
@@ -29,10 +27,11 @@ local plugins = {
   require("plugins.indent-blankline"),
   require("plugins.treesitter"),
   require("plugins.telescope"),
-  --require("plugins.no-neck-pain"),
   require("plugins.venv-selector"),
   require("plugins.miniicons"),
   require("plugins.nvim-web-devicons"),
+  require("plugins.overseer"),
+  require("plugins.neotest"),
   require("plugins.extras"),
 }
 
