@@ -55,6 +55,8 @@ return {
           },
         },
       },
+      { "leoluz/nvim-dap-go" },
+      { "mfussenegger/nvim-dap-python" },
     },
     keys = {
       {
@@ -122,6 +124,9 @@ return {
       dap.listeners.before.event_exited["dap-view-config"] = function()
         dv.close()
       end
+      require("dap-go").setup({})
+      require("dap-python").setup("uv")
+      require("dap-python").test_runner = "pytest"
 
       -- Use overseer for running preLaunchTask and postDebugTask.
       require("overseer").patch_dap(true)

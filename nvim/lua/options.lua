@@ -26,6 +26,10 @@ vim.opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line
 
 vim.opt.clipboard:append("unnamedplus") -- use system clipboard as default register
 
+vim.o.updatetime = 300
+vim.o.timeoutlen = 500
+vim.o.ttimeoutlen = 10
+
 vim.opt.splitright = true -- split vertical window to the right
 vim.opt.splitbelow = true -- split horizontal window to the bottom
 
@@ -34,5 +38,7 @@ vim.opt.swapfile = false
 vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 vim.g.autoformat = true
+vim.opt.showmode = false
 
 vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0

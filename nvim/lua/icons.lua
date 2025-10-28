@@ -1,3 +1,4 @@
+-- Borrowed from https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/icons.lua
 local M = {}
 
 --- Diagnostic severities.

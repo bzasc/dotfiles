@@ -4,6 +4,7 @@ vim.g.maplocalleader = " "
 vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 
 vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+vim.keymap.set("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Dismiss Noice Message" })
 
 vim.keymap.set("n", "x", '"_x')
 
@@ -21,14 +22,6 @@ vim.keymap.set("n", "<leader>ss", "<C-w>s", { desc = "Split window horizontally"
 vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" }) -- make split windows equal width & height
 vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" }) -- close current split window
 
-vim.keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" }) -- open new tab
-vim.keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" }) -- close current tab
-vim.keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" }) --  go to next tab
-vim.keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" }) --  go to previous tab
-vim.keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" }) --  move current buffer to new tab
-
-vim.keymap.set("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Dismiss Noice Message" })
-
 vim.keymap.set(
   "n",
   "<leader>on",
@@ -39,6 +32,12 @@ vim.keymap.set(
   "n",
   "<leader>oc",
   ":ObsidianTemplate class-note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>",
+  { desc = "Add class-note ObsidianTemplate" }
+)
+vim.keymap.set(
+  "n",
+  "<leader>od",
+  ":ObsidianTemplate daily<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>",
   { desc = "Add class-note ObsidianTemplate" }
 )
 vim.keymap.set(
