@@ -61,4 +61,4 @@ function _G.toggle_wrap()
     print("Wrap: OFF")
   end
 end
-vim.keymap.set("n", "<leader>tw", ":lua toggle_wrap()<CR>", { desc = "Toggle line wrap" })
+vim.keymap.set("n", "<leader>Tw", ":lua toggle_wrap()<CR>", { desc = "Toggle line wrap" })

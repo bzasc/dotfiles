@@ -23,6 +23,7 @@ local plugins = "plugins"
 require("options")
 require("keymaps")
 require("commands")
+require("autocmds")
 require("marks")
 require("lsp")
 

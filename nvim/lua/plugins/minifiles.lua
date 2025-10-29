@@ -1,3 +1,4 @@
+-- Borrowed from https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/plugins/minifiles.lua
 local function map_split(buf_id, lhs, direction)
   local minifiles = require("mini.files")
 
@@ -103,7 +104,7 @@ return {
       minifiles.setup(opts)
 
       -- Keep track of when the explorer is open to disable format on save.
-      local minifiles_explorer_group = vim.api.nvim_create_augroup("mariasolos/minifiles_explorer", { clear = true })
+      local minifiles_explorer_group = vim.api.nvim_create_augroup("bzasc/minifiles_explorer", { clear = true })
       vim.api.nvim_create_autocmd("User", {
         group = minifiles_explorer_group,
         pattern = "MiniFilesExplorerOpen",

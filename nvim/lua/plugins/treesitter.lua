@@ -89,8 +89,7 @@ return {
       },
     },
     config = function(_, opts)
-      local toggle_inc_selection_group =
-        vim.api.nvim_create_augroup("mariasolos/toggle_inc_selection", { clear = true })
+      local toggle_inc_selection_group = vim.api.nvim_create_augroup("bzasc/toggle_inc_selection", { clear = true })
       vim.api.nvim_create_autocmd("CmdwinEnter", {
         desc = "Disable incremental selection when entering the cmdline window",
         group = toggle_inc_selection_group,
