@@ -7,7 +7,6 @@ vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights
 vim.keymap.set("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Dismiss Noice Message" })
 
 vim.keymap.set("n", "x", '"_x')
-
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("c", "<CR>", function()
@@ -62,3 +61,10 @@ function _G.toggle_wrap()
   end
 end
 vim.keymap.set("n", "<leader>Tw", ":lua toggle_wrap()<CR>", { desc = "Toggle line wrap" })
+
+-- go to definition split
+vim.keymap.set("n", "gs", function()
+  vim.cmd("vsplit")
+  vim.cmd("wincmd l")
+  vim.lsp.buf.definition()
+end, { noremap = true, silent = true, desc = "Go to definition split" })
