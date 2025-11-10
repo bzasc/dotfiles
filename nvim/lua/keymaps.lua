@@ -62,7 +62,6 @@ function _G.toggle_wrap()
 end
 vim.keymap.set("n", "<leader>Tw", ":lua toggle_wrap()<CR>", { desc = "Toggle line wrap" })
 
--- go to definition split
 vim.keymap.set("n", "gs", function()
   vim.cmd("vsplit")
   vim.cmd("wincmd l")
