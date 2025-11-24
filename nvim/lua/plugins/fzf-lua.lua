@@ -46,6 +46,7 @@ return {
       { "<leader>fg", "<cmd>FzfLua grep_visual<cr>", desc = "Grep", mode = "x" },
       { "<leader>fh", "<cmd>FzfLua help_tags<cr>", desc = "Help" },
       { "<leader>fr", "<cmd>FzfLua oldfiles<cr>", desc = "Recently opened files" },
+      { "<leader>fm", "<cmd>FzfLua marks<cr>", desc = "Fuzzy find marks" },
       { "<leader>f<", "<cmd>FzfLua resume<cr>", desc = "Resume last fzf command" },
       { "z=", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling suggestions" },
     },
