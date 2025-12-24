@@ -4,6 +4,4 @@ return {
   "christoomey/vim-tmux-navigator", -- tmux & split window navigation
 
   "preservim/vimux", -- easily interact with tmux from vim
-
-  "kosayoda/nvim-lightbulb",
 }

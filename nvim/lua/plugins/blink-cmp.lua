@@ -19,7 +19,16 @@ return {
           max_items = 10,
         },
         documentation = { auto_show = true },
-        menu = { scrollbar = false },
+        menu = {
+          scrollbar = false,
+          draw = {
+            gap = 2,
+            columns = {
+              { "kind_icon", "kind", gap = 1 },
+              { "label", "label_description", gap = 1 },
+            },
+          },
+        },
       },
       snippets = { preset = "luasnip" },
       -- Disable command line completion:
@@ -49,11 +58,5 @@ return {
         kind_icons = require("icons").symbol_kinds,
       },
     },
-    config = function(_, opts)
-      require("blink.cmp").setup(opts)
-
-      -- Extend neovim's client capabilities with the completion ones.
-      vim.lsp.config("*", { capabilities = require("blink.cmp").get_lsp_capabilities(nil, true) })
-    end,
   },
 }

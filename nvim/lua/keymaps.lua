@@ -37,18 +37,21 @@ vim.keymap.set(
   "n",
   "<leader>od",
   ":ObsidianTemplate daily<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>",
-  { desc = "Add class-note ObsidianTemplate" }
+  { desc = "Add daily ObsidianTemplate" }
 )
+
+local obsidian_vault = vim.env.HOME .. "/annotations/bzasc_brain"
+
 vim.keymap.set(
   "n",
   "<leader>os",
-  '<cmd>FzfLua files cwd="/home/bzasc/annotations/bzasc_brain"<cr>',
+  string.format('<cmd>FzfLua files cwd="%s"<cr>', obsidian_vault),
   { desc = "Locate files in the Obsidian vault" }
 )
 vim.keymap.set(
   "n",
   "<leader>oz",
-  '<cmd>FzfLua live_grep cwd="/home/bzasc/annotations/bzasc_brain"<cr>',
+  string.format('<cmd>FzfLua live_grep cwd="%s"<cr>', obsidian_vault),
   { desc = "Search with ripgrep (rg) in the Obsidian vault" }
 )
 

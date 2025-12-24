@@ -1,6 +1,5 @@
 -- Global variables.
 vim.g.projects_dir = vim.env.HOME .. "/dev"
-vim.g.work_projects_dir = vim.env.HOME .. "/dev"
 
 -- Install Lazy.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"

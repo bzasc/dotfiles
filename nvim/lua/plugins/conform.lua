@@ -23,10 +23,10 @@ return {
         typescriptreact = { "prettier", name = "dprint", timeout_ms = 500, lsp_format = "fallback" },
         yaml = { "prettier" },
         lua = { "stylua" },
-        ruby = { "rubocop" },
+        ruby = { "standardrb", "rubocop", stop_after_first = true },
         python = { "ruff_organise_imports", "ruff_fix", "ruff_format" },
-        erb = { "erb-formatter" },
-        html_erb = { "erb-formatter" },
+        erb = { "erb_format" },
+        eruby = { "erb_format" },
         -- For filetypes without a formatter:
         ["_"] = { "trim_whitespace", "trim_newlines" },
       },
@@ -76,9 +76,6 @@ return {
       init = function()
         -- Use conform for gq.
         vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-
-        -- Start auto-formatting by default (and disable with my ToggleFormat command).
-        vim.g.autoformat = true
       end,
     })
     vim.keymap.set({ "n", "v" }, "<leader>cf", function()

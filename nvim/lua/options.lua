@@ -34,6 +34,10 @@ vim.opt.splitright = true -- split vertical window to the right
 vim.opt.splitbelow = true -- split horizontal window to the bottom
 
 vim.opt.swapfile = false
+vim.opt.undofile = true -- persist undo history between sessions
+
+vim.opt.scrolloff = 8 -- minimum lines to keep above/below cursor
+vim.opt.sidescrolloff = 8 -- minimum columns to keep left/right of cursor
 
 vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 

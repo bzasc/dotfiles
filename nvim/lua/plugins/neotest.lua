@@ -9,7 +9,8 @@ return {
       "nvim-neotest/neotest-python",
       "nvim-neotest/neotest-jest",
       "marilari88/neotest-vitest",
-      "volodya-lombrozo/neotest-ruby-minitest",
+      "olimorris/neotest-rspec",
+      "zidhuss/neotest-minitest",
     },
     config = function()
       require("neotest").setup({
@@ -23,7 +24,8 @@ return {
           }),
           require("neotest-jest"),
           require("neotest-vitest"),
-          require("neotest-ruby-minitest"),
+          require("neotest-rspec"),
+          require("neotest-minitest"),
         },
       })
     end,

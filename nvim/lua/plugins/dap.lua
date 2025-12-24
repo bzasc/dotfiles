@@ -11,8 +11,8 @@ local icons = {
 for name, sign in pairs(icons) do
   sign = type(sign) == "table" and sign or { sign }
   vim.fn.sign_define("Dap" .. name, {
-        -- stylua: ignore
-        text = sign[1] --[[@as string]] .. ' ',
+    -- stylua: ignore
+    text = sign[1] --[[@as string]] .. ' ',
     texthl = sign[2] or "DiagnosticInfo",
     linehl = sign[3],
     numhl = sign[3],
@@ -110,6 +110,14 @@ return {
     config = function()
       local dap = require("dap")
       local dv = require("dap-view")
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("bzasc/dap_options", { clear = true }),
+        desc = "Set options for DAP UI",
+        pattern = "dap-view",
+        callback = function()
+          vim.wo[0][0].listchars = "space: ,tab:   "
+        end,
+      })
 
       -- Automatically open the UI when a new debug session is created.
       dap.listeners.before.attach["dap-view-config"] = function()
