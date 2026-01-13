@@ -23,10 +23,10 @@ return {
         typescriptreact = { "prettier", name = "dprint", timeout_ms = 500, lsp_format = "fallback" },
         yaml = { "prettier" },
         lua = { "stylua" },
-        ruby = { "standardrb", "rubocop", stop_after_first = true },
+        eruby = { "erb_format" },
+        ruby = { "rubocop" },
         python = { "ruff_organise_imports", "ruff_fix", "ruff_format" },
         erb = { "erb_format" },
-        eruby = { "erb_format" },
         -- For filetypes without a formatter:
         ["_"] = { "trim_whitespace", "trim_newlines" },
       },

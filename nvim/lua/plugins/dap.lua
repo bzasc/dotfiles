@@ -136,9 +136,51 @@ return {
       require("dap-python").setup("uv")
       require("dap-python").test_runner = "pytest"
 
-      -- Use overseer for running preLaunchTask and postDebugTask.
-      require("overseer").patch_dap(true)
-      require("dap.ext.vscode").json_decode = require("overseer.json").decode
+      dap.adapters.ruby = function(callback, config)
+        callback({
+          type = "pipe",
+          pipe = "${pipe}",
+          executable = {
+            command = "rdbg",
+            args = { "-n", "-O", "--sock-path", "${pipe}", "-c", "--", "bin/rails", "server" },
+          },
+          options = {
+            source_filetype = "ruby",
+            initialize_timeout_sec = 5,
+          },
+        })
+      end
+
+      dap.configurations.ruby = {
+        {
+          type = "ruby",
+          name = "Rails server",
+          request = "attach",
+        },
+      }
+
+      -- Docker attach
+      --table.insert(dap.configurations.ruby, {
+      --  type = "ruby_remote",
+      --  name = "Attach to Docker (rdbg)",
+      --  request = "attach",
+      --  port = 38462,
+      --  server = "127.0.0.1",
+      --  command = "rspec",
+      --  pathMappings = {
+      --    {
+      --      localRoot = "${workspaceFolder}",
+      --      remoteRoot = "survey_system",
+      --    },
+      --  },
+      --})
+
+      -- Use overseer for running preLaunchTask and postDebugTask (if available).
+      local ok, overseer = pcall(require, "overseer")
+      if ok and overseer.patch_dap then
+        overseer.patch_dap(true)
+        require("dap.ext.vscode").json_decode = require("overseer.json").decode
+      end
 
       -- Lua configurations.
       dap.adapters.nlua = function(callback, config)
