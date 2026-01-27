@@ -49,6 +49,20 @@ return {
       { "<leader>fm", "<cmd>FzfLua marks<cr>", desc = "Fuzzy find marks" },
       { "<leader>f<", "<cmd>FzfLua resume<cr>", desc = "Resume last fzf command" },
       { "z=", "<cmd>FzfLua spell_suggest<cr>", desc = "Spelling suggestions" },
+      {
+        "<C-x><C-f>",
+        function()
+          require("fzf-lua").complete_path({
+            winopts = {
+              height = 0.4,
+              width = 0.5,
+              relative = "cursor",
+            },
+          })
+        end,
+        desc = "Fuzzy complete path",
+        mode = "i",
+      },
     },
     opts = function()
       local actions = require("fzf-lua.actions")
@@ -181,6 +195,11 @@ return {
             -- Use the kind (if available) to set the previewer's title.
             if ui_opts.kind then
               ui_opts.winopts.title = string.format(" %s ", ui_opts.kind)
+            end
+
+            -- Ensure that there's a space at the end of the prompt.
+            if ui_opts.prompt and not vim.endswith(ui_opts.prompt, " ") then
+              ui_opts.prompt = ui_opts.prompt .. " "
             end
 
             return ui_opts
