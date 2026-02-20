@@ -21,12 +21,6 @@ local function on_attach(client, bufnr)
     vim.keymap.set(mode, lhs, rhs, opts)
   end
 
-  keymap("[d", function()
-    vim.diagnostic.jump({ count = -1 })
-  end, "Previous diagnostic")
-  keymap("]d", function()
-    vim.diagnostic.jump({ count = 1 })
-  end, "Next diagnostic")
   keymap("[e", function()
     vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
   end, "Previous error")
@@ -104,7 +98,7 @@ local function on_attach(client, bufnr)
 
     vim.api.nvim_create_autocmd("InsertEnter", {
       group = inlay_hints_group,
-      desc = "Enable inlay hints",
+      desc = "Disable inlay hints",
       buffer = bufnr,
       callback = function()
         if vim.g.inlay_hints then
@@ -115,7 +109,7 @@ local function on_attach(client, bufnr)
 
     vim.api.nvim_create_autocmd("InsertLeave", {
       group = inlay_hints_group,
-      desc = "Disable inlay hints",
+      desc = "Enable inlay hints",
       buffer = bufnr,
       callback = function()
         if vim.g.inlay_hints then

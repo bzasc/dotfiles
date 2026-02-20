@@ -1,9 +1,13 @@
 return {
   {
     "saghen/blink.cmp",
-    dependencies = "LuaSnip",
+    dependencies = {
+      {
+        "giuxtaposition/blink-cmp-copilot",
+      },
+    },
     build = "cargo +nightly build --release",
-    event = { "InsertEnter", "CmdwinEnter" },
+    event = { "BufReadPre", "InsertEnter", "CmdwinEnter" },
     opts = {
       keymap = {
         preset = "enter",
@@ -36,7 +40,7 @@ return {
       sources = {
         -- Disable some sources in comments and strings.
         default = function()
-          local sources = { "lsp", "buffer" }
+          local sources = { "lsp", "buffer", "copilot" }
           local ok, node = pcall(vim.treesitter.get_node)
 
           if ok and node then
@@ -50,10 +54,24 @@ return {
 
           return sources
         end,
-        per_filetype = {
-          codecompanion = { "codecompanion", "buffer" },
+        providers = {
+          copilot = {
+            name = "copilot",
+            module = "blink-cmp-copilot",
+            score_offset = 100,
+            async = true,
+            transform_items = function(_, items)
+              local icons = require("icons").symbol_kinds
+              for _, item in ipairs(items) do
+                item.kind_name = "Copilot"
+                item.kind_icon = icons.Copilot
+              end
+              return items
+            end,
+          },
         },
       },
+
       appearance = {
         kind_icons = require("icons").symbol_kinds,
       },

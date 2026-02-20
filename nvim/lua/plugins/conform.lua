@@ -51,8 +51,8 @@ return {
 
         return {}
       end,
+      -- (formatexpr is set below, outside setup)
       formatters = {
-        -- Require a Prettier configuration file to format.
         prettier = { require_cwd = true },
         ruff_organise_imports = {
           command = "ruff",
@@ -74,14 +74,13 @@ return {
           }),
         },
       },
-      init = function()
-        -- Use conform for gq.
-        vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-      end,
     })
+    -- Use conform for gq.
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
     vim.keymap.set({ "n", "v" }, "<leader>cf", function()
       conform.format({
-        lsp_fallback = true,
+        lsp_format = "fallback",
         async = true,
       })
     end, { desc = "Format file or range" })

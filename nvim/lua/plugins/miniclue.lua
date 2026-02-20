@@ -88,7 +88,7 @@ return {
           { mode = { "n", "x" }, keys = "<leader>g", desc = "+lsp" },
           { mode = "n", keys = "<leader>b", desc = "+buffers" },
           { mode = "n", keys = "<leader>d", desc = "+debug" },
-          { mode = "n", keys = "<leader>o", desc = "+obsidian" },
+          { mode = "n", keys = "<leader>o", desc = "+obsidian/overseer" },
           { mode = "n", keys = "<leader>t", desc = "+tests" },
           { mode = "n", keys = "<leader>x", desc = "+loclist/quickfix" },
           { mode = "n", keys = "[", desc = "+prev" },

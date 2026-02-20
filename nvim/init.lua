@@ -23,6 +23,8 @@ require("options")
 require("keymaps")
 require("commands")
 require("autocmds")
+require("statusline")
+require("winbar")
 require("marks")
 require("lsp")
 

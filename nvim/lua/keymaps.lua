@@ -23,7 +23,7 @@ vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current spli
 
 vim.keymap.set(
   "n",
-  "<leader>on",
+  "<leader>oN",
   ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>",
   { desc = "Add note ObsidianTemplate" }
 )

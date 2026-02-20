@@ -2,7 +2,6 @@ return {
   {
     "linux-cultist/venv-selector.nvim",
     dependencies = {
-      "neovim/nvim-lspconfig",
       -- Picker will use fzf-lua via vim.ui.select (no Telescope required)
     },
     ft = "python", -- Load when opening Python files

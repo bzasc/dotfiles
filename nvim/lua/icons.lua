@@ -24,6 +24,7 @@ M.symbol_kinds = {
   Color = "󰏘",
   Constant = "󰏿",
   Constructor = "",
+  Copilot = "",
   Enum = "",
   EnumMember = "",
   Event = "",
