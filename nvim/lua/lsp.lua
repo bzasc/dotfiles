@@ -262,6 +262,10 @@ vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
       :map(function(file)
         return vim.fn.fnamemodify(file, ":t:r")
       end)
+      -- rust-analyzer is managed by rustaceanvim.
+      :filter(function(name)
+        return name ~= "rust_analyzer"
+      end)
       :totable()
     vim.lsp.enable(servers)
   end,

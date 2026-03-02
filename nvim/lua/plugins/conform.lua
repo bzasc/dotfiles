@@ -8,6 +8,7 @@ return {
       notify_on_error = false,
       notify_no_formatters = false,
       formatters_by_ft = {
+        html = { "prettier" },
         c = { name = "clangd", timeout_ms = 500, lsp_format = "prefer" },
         go = { name = "gopls", timeout_ms = 500, lsp_format = "prefer" },
         javascript = { "prettier", name = "dprint", timeout_ms = 500, lsp_format = "fallback" },
@@ -24,9 +25,9 @@ return {
         typescriptreact = { "prettier", name = "dprint", timeout_ms = 500, lsp_format = "fallback" },
         yaml = { "prettier" },
         lua = { "stylua" },
-        eruby = { "erb_format" },
         ruby = { "rubocop" },
         python = { "ruff_organise_imports", "ruff_fix", "ruff_format" },
+        eruby = { "erb_format" },
         erb = { "erb_format" },
         -- For filetypes without a formatter:
         ["_"] = { "trim_whitespace", "trim_newlines" },
@@ -53,7 +54,11 @@ return {
       end,
       -- (formatexpr is set below, outside setup)
       formatters = {
-        prettier = { require_cwd = true },
+        dprint = {
+          condition = function(_, ctx)
+            return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
+          end,
+        },
         ruff_organise_imports = {
           command = "ruff",
           args = {

@@ -12,7 +12,6 @@ return {
     "Pipfile",
     "pyrightconfig.json",
     ".jj",
-    ".git",
   },
   init_options = {
     settings = {
