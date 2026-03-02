@@ -11,7 +11,6 @@ return {
     "requirements.txt",
     "Pipfile",
     "pyrightconfig.json",
-    ".jj",
   },
   init_options = {
     settings = {

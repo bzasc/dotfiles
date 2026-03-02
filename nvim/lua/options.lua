@@ -43,6 +43,7 @@ vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpo
 
 vim.g.autoformat = true
 vim.opt.showmode = false
+vim.opt.conceallevel = 1
 
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0

@@ -6,15 +6,19 @@ return {
       require("lualine").setup({
         options = {
           --theme = "catppuccin",
+          theme = "auto",
           globalstatus = true,
-          component_separators = { left = "█", right = "█" },
-          section_separators = { left = "█", right = "█" },
         },
         sections = {
+          lualine_a = { "mode" },
           lualine_b = {
             { "branch", icon = "" },
-            "diff",
-            "diagnostics",
+            { "diff", symbols = { added = " ", modified = "柳 ", removed = " " } },
+            {
+              "diagnostics",
+              sources = { "nvim_diagnostic" },
+              symbols = { error = " ", warn = " ", info = " " },
+            },
           },
           lualine_c = {
             { "filename", path = 1 },
@@ -22,6 +26,8 @@ return {
           lualine_x = {
             "filetype",
           },
+
+          lualine_z = { "location" },
         },
       })
     end,
