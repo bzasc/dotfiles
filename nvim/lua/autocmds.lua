@@ -1,93 +1,128 @@
--- Borrowed from https://github.com/bzasc/dotfiles/blob/main/.config/nvim/lua/autocmds.lua
--- NOTE: Ordered alphabetically by group name.
+local api = vim.api
 
-vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("bzasc/big_file", { clear = true }),
-  desc = "Disable features in big files",
-  pattern = "bigfile",
-  callback = function(args)
-    vim.schedule(function()
-      vim.bo[args.buf].syntax = vim.filetype.match({ buf = args.buf }) or ""
-    end)
+-- don't auto comment new line
+api.nvim_create_autocmd("BufEnter", { command = [[set formatoptions-=cro]] })
+
+-- wrap words "softly" (no carriage return) in mail buffer
+api.nvim_create_autocmd("Filetype", {
+  pattern = "mail",
+  callback = function()
+    vim.opt.textwidth = 0
+    vim.opt.wrapmargin = 0
+    vim.opt.wrap = true
+    vim.opt.linebreak = true
+    vim.opt.columns = 80
+    vim.opt.colorcolumn = "80"
   end,
 })
 
-vim.api.nvim_create_autocmd("FileType", {
-  group = vim.api.nvim_create_augroup("bzasc/close_with_q", { clear = true }),
-  desc = "Close with <q>",
+-- Highlight on yank
+api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
+-- go to last loc when opening a buffer
+-- this mean that when you open a file, you will be at the last position
+api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local lcount = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
+-- show cursor line only in active window
+local cursorGrp = api.nvim_create_augroup("CursorLine", { clear = true })
+api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
+  pattern = "*",
+  command = "set cursorline",
+  group = cursorGrp,
+})
+api.nvim_create_autocmd(
+  { "InsertEnter", "WinLeave" },
+  { pattern = "*", command = "set nocursorline", group = cursorGrp }
+)
+
+-- Enable spell checking for certain file types
+api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = { "*.txt", "*.md", "*.tex" },
+  callback = function()
+    vim.opt.spell = true
+    vim.opt.spelllang = "en"
+  end,
+})
+
+-- close some filetypes with <q>
+api.nvim_create_autocmd("FileType", {
+  group = api.nvim_create_augroup("close_with_q", { clear = true }),
   pattern = {
-    "git",
+    "PlenaryTestPopup",
     "help",
+    "lspinfo",
     "man",
+    "notify",
     "qf",
-    "scratch",
+    "spectre_panel",
+    "startuptime",
+    "tsplayground",
+    "neotest-output",
+    "checkhealth",
+    "neotest-summary",
+    "neotest-output-panel",
   },
-  callback = function(args)
-    vim.keymap.set("n", "q", "<cmd>quit<cr>", { buffer = args.buf })
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
   end,
 })
 
-vim.api.nvim_create_autocmd("VimEnter", {
-  group = vim.api.nvim_create_augroup("bzasc/dotfiles_setup", { clear = true }),
-  desc = "Special dotfiles setup",
+-- Resize neovim split when terminal is resized
+api.nvim_create_autocmd("VimResized", {
   callback = function()
-    local ok, inside_dotfiles = pcall(vim.startswith, vim.fn.getcwd(), vim.env.XDG_CONFIG_HOME)
-    if not ok or not inside_dotfiles then
-      return
-    end
-
-    -- Configure git environment.
-    vim.env.GIT_WORK_TREE = vim.env.HOME
-    vim.env.GIT_DIR = vim.env.HOME .. "/.cfg"
+    vim.cmd("wincmd =")
   end,
 })
 
-vim.api.nvim_create_autocmd("CmdwinEnter", {
-  group = vim.api.nvim_create_augroup("bzasc/execute_cmd_and_stay", { clear = true }),
-  desc = "Execute command and stay in the command-line window",
-  callback = function(args)
-    vim.keymap.set({ "n", "i" }, "<S-CR>", "<cr>q:", { buffer = args.buf })
+-- Fix terraform and hcl comment string
+api.nvim_create_autocmd("FileType", {
+  group = api.nvim_create_augroup("FixTerraformCommentString", { clear = true }),
+  pattern = { "terraform", "hcl" },
+  callback = function(ev)
+    vim.bo[ev.buf].commentstring = "# %s"
   end,
 })
 
-vim.api.nvim_create_autocmd("BufReadPost", {
-  group = vim.api.nvim_create_augroup("bzasc/last_location", { clear = true }),
-  desc = "Go to the last location when opening a buffer",
-  callback = function(args)
-    local mark = vim.api.nvim_buf_get_mark(args.buf, '"')
-    local line_count = vim.api.nvim_buf_line_count(args.buf)
-    if mark[1] > 0 and mark[1] <= line_count then
-      vim.cmd('normal! g`"zz')
-    end
-  end,
-})
-
-local line_numbers_group = vim.api.nvim_create_augroup("bzasc/toggle_line_numbers", {})
-vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "CmdlineLeave", "WinEnter" }, {
-  group = line_numbers_group,
-  desc = "Toggle relative line numbers on",
+-- Check for external file changes (works with Claude Code)
+api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, { -- CursorHold
   callback = function()
-    if vim.wo.nu and not vim.startswith(vim.api.nvim_get_mode().mode, "i") then
-      vim.wo.relativenumber = true
+    if vim.fn.mode() ~= "c" then
+      vim.cmd("checktime")
     end
   end,
 })
-vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEnter", "WinLeave" }, {
-  group = line_numbers_group,
-  desc = "Toggle relative line numbers off",
-  callback = function(args)
-    if vim.wo.nu then
-      vim.wo.relativenumber = false
-    end
 
-    -- Redraw here to avoid having to first write something for the line numbers to update.
-    if args.event == "CmdlineEnter" then
-      if not vim.tbl_contains({ "@", "-" }, vim.v.event.cmdtype) then
-        vim.cmd.redraw()
-      end
-    end
-  end,
-})
+--vim.api.nvim_create_autocmd("FileType", {
+--  group = vim.api.nvim_create_augroup("bzasc/big_file", { clear = true }),
+--  desc = "Disable features in big files",
+--  pattern = "bigfile",
+--  callback = function(args)
+--    vim.schedule(function()
+--      vim.bo[args.buf].syntax = vim.filetype.match({ buf = args.buf }) or ""
+--    end)
+--  end,
+--})
+
+--vim.api.nvim_create_autocmd("CmdwinEnter", {
+--  group = vim.api.nvim_create_augroup("bzasc/execute_cmd_and_stay", { clear = true }),
+--  desc = "Execute command and stay in the command-line window",
+--  callback = function(args)
+--    vim.keymap.set({ "n", "i" }, "<S-CR>", "<cr>q:", { buffer = args.buf })
+--  end,
+--})
 
 --vim.api.nvim_create_autocmd("FileType", {
 --  group = vim.api.nvim_create_augroup("bzasc/treesitter_folding", { clear = true }),
@@ -107,10 +142,10 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "CmdlineEn
 --  end,
 --})
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-  group = vim.api.nvim_create_augroup("bzasc/yank_highlight", { clear = true }),
-  desc = "Highlight on yank",
-  callback = function()
-    vim.hl.on_yank({ higroup = "Visual" })
-  end,
-})
+--api.nvim_create_autocmd("TextYankPost", {
+--  group = vim.api.nvim_create_augroup("bzasc/yank_highlight", { clear = true }),
+--  desc = "Highlight on yank",
+--  callback = function()
+--    vim.hl.on_yank({ higroup = "Visual" })
+--  end,
+--})

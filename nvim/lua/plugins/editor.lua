@@ -1,4 +1,5 @@
--- Borrowed from https://github.com/MariaSolOs/dotfiles/blob/main/.config/nvim/lua/plugins/minifiles.lua
+-- Editor: Navigation, text objects, pairs, statusline, and utilities
+
 local function map_split(buf_id, lhs, direction)
   local minifiles = require("mini.files")
 
@@ -25,10 +26,131 @@ local function map_split(buf_id, lhs, direction)
 
   vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = "Split " .. string.sub(direction, 12) })
 end
--- File explorer.
+
 return {
+  --{
+  --  "folke/flash.nvim",
+  --  event = "VeryLazy",
+  --  ---@type Flash.Config
+  --  opts = {},
+  --  -- stylua: ignore
+  --  keys = {
+  --    { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
+  --    { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
+  --    { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
+  --    { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+  --    { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
+  --  },
+  --},
+
   {
-    "nvim-mini/mini.files",
+    "echasnovski/mini.nvim",
+    --keys = {
+    --  {
+    --    "<leader>cj",
+    --    function()
+    --      require("mini.splitjoin").toggle()
+    --    end,
+    --    desc = "Join/split code block",
+    --  },
+    --},
+    config = function()
+      -- Better Around/Inside textobjects
+      -- Examples:
+      --  - va)  - [V]isually select [A]round [)]paren
+      --  - yinq - [Y]ank [I]nside [N]ext [']quote
+      --  - ci'  - [C]hange [I]nside [']quote
+      require("mini.ai").setup({ n_lines = 500 })
+
+      -- Add/delete/replace surroundings (brackets, quotes, etc.)
+      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+      -- - sd'   - [S]urround [D]elete [']quotes
+      -- - sr)'  - [S]urround [R]eplace [)] [']
+      require("mini.surround").setup()
+
+      require("mini.pairs").setup()
+
+      local statusline = require("mini.statusline")
+      statusline.setup({
+        use_icons = vim.g.have_nerd_font,
+        set_vim_settings = false,
+      })
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_location = function()
+        return "%2l:%-2v"
+      end
+    end,
+  },
+
+  {
+    "echasnovski/mini.icons",
+    enabled = true,
+    opts = {},
+    lazy = true,
+  },
+
+  {
+    "folke/persistence.nvim",
+    event = "BufReadPre",
+    opts = {},
+  },
+
+  {
+    "obsidian-nvim/obsidian.nvim",
+    version = "*",
+    ft = "markdown",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
+    -- Global keymaps that will lazy-load obsidian.nvim on first use
+    keys = {
+      { "<leader>oq", "<cmd>Obsidian quick_switch<cr>", desc = "Obsidian Quick Switch" },
+      { "<leader>og", "<cmd>Obsidian search<cr>", desc = "Obsidian Search" },
+      { "<leader>ot", "<cmd>Obsidian today<cr>", desc = "Obsidian Today" },
+      { "<leader>oy", "<cmd>Obsidian yesterday<cr>", desc = "Obsidian Yesterday" },
+      { "<leader>on", "<cmd>Obsidian new<cr>", desc = "Obsidian New Note" },
+      { "<leader>ol", "<cmd>Obsidian follow_link<cr>", desc = "Obsidian Follow Link" },
+      { "<leader>oL", "<cmd>Obsidian link_new<cr>", desc = "Obsidian Link New" },
+    },
+
+    config = function()
+      require("obsidian").setup({
+        legacy_commands = false,
+        ui = { enable = false },
+        workspaces = {
+          {
+            name = "bzasc-brain",
+            path = vim.env.OBSIDIAN_VAULT or "~/annotations/bzasc_brain",
+          },
+        },
+        notes_subdir = "inbox",
+        new_notes_location = "notes_subdir",
+
+        templates = {
+          subdir = "templates",
+          date_format = "%Y-%m-%d",
+          time_format = "%H:%M:%S",
+        },
+
+        daily_notes = {
+          folder = "periodic-notes/dailies",
+          date_format = "YYYY-MM/YYYY-MM-DD",
+          default_tags = { "daily-notes" },
+          template = "templates/daily.md",
+        },
+
+        completion = {
+          blink = true,
+          min_chars = 2,
+        },
+      })
+    end,
+  },
+
+  { "b0o/SchemaStore.nvim", lazy = true },
+
+  {
+    "echasnovski/mini.files",
     keys = {
       {
         "<leader>e",
@@ -88,14 +210,12 @@ return {
             }
           end, entries)
           table.sort(sorted, compare_alphanumerically)
-          -- Keep only the necessary fields.
           return vim.tbl_map(function(x)
             return { name = x.name, fs_type = x.fs_type, path = x.path }
           end, sorted)
         end,
       },
       windows = { width_nofocus = 25 },
-      -- Move stuff to the minifiles trash instead of it being gone forever.
       options = { permanent_delete = false },
     },
     config = function(_, opts)
@@ -103,7 +223,6 @@ return {
 
       minifiles.setup(opts)
 
-      -- Keep track of when the explorer is open to disable format on save.
       local minifiles_explorer_group = vim.api.nvim_create_augroup("bzasc/minifiles_explorer", { clear = true })
       vim.api.nvim_create_autocmd("User", {
         group = minifiles_explorer_group,

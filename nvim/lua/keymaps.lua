@@ -1,25 +1,62 @@
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+vim.keymap.set("n", "<C-s>", "<cmd>w<cr>", { desc = "Save File" })
+vim.keymap.set({ "i", "x" }, "<C-s>", "<Esc><cmd>w<cr>", { desc = "Save File" })
 
+vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+vim.keymap.set("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
+
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear Highlight", silent = true })
+
+vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit Insert" })
 vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 
-vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
-vim.keymap.set("n", "<leader>nd", "<cmd>NoiceDismiss<CR>", { desc = "Dismiss Noice Message" })
-
+vim.keymap.set("n", "n", "nzzzv", { desc = "Next Match (centered)" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev Match (centered)" })
+vim.keymap.set("n", "*", "*zzzv", { desc = "Search Word (centered)" })
+vim.keymap.set("n", "#", "#zzzv", { desc = "Search Word Back (centered)" })
 vim.keymap.set("n", "x", '"_x')
-vim.keymap.set("n", "n", "nzzzv")
-vim.keymap.set("n", "N", "Nzzzv")
+
+-- Window resizing
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Height" })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Height" })
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Width" })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Width" })
+
 vim.keymap.set("c", "<CR>", function()
   return vim.fn.getcmdtype() == "/" and "<CR>zzzv" or "<CR>"
 end, { expr = true })
 
+vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+
 vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
-vim.keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" }) -- split window vertically
-vim.keymap.set("n", "<leader>ss", "<C-w>s", { desc = "Split window horizontally" }) -- split window horizontally
-vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" }) -- make split windows equal width & height
-vim.keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" }) -- close current split window
+
+-- Better indenting (stay in visual mode)
+vim.keymap.set("v", "<", "<gv", { desc = "Indent Left" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent Right" })
+
+-- Paste over selection without yanking
+vim.keymap.set("v", "p", '"_dP', { desc = "Paste (no yank)" })
+vim.keymap.set("x", "<leader>p", [["_dP]])
+
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
+vim.keymap.set("n", "<leader>Y", [["+Y]])
+
+vim.keymap.set({ "n", "v" }, "<leader>d", '"_d')
+
+-- Yank block
+vim.keymap.set("n", "YY", "va{Vy", { desc = "Yank Block {}" })
+
+-- Split line (opposite of J)
+vim.keymap.set(
+  "n",
+  "X",
+  ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<cr>",
+  { desc = "Split Line", silent = true }
+)
+
+-- Select all
+vim.keymap.set("n", "<C-a>", "ggVG", { desc = "Select All" })
 
 vim.keymap.set(
   "n",
@@ -42,18 +79,13 @@ vim.keymap.set(
 
 local obsidian_vault = vim.env.HOME .. "/annotations/bzasc_brain"
 
-vim.keymap.set(
-  "n",
-  "<leader>os",
-  string.format('<cmd>FzfLua files cwd="%s"<cr>', obsidian_vault),
-  { desc = "Locate files in the Obsidian vault" }
-)
-vim.keymap.set(
-  "n",
-  "<leader>oz",
-  string.format('<cmd>FzfLua live_grep cwd="%s"<cr>', obsidian_vault),
-  { desc = "Search with ripgrep (rg) in the Obsidian vault" }
-)
+vim.keymap.set("n", "<leader>os", function()
+  Snacks.picker.files({ cwd = obsidian_vault })
+end, { desc = "Locate files in the Obsidian vault" })
+
+vim.keymap.set("n", "<leader>oz", function()
+  Snacks.picker.live_grep({ cwd = obsidian_vault })
+end, { desc = "Search with ripgrep (rg) in the Obsidian vault" })
 
 function _G.toggle_wrap()
   vim.wo.wrap = not vim.wo.wrap

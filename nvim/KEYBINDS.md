@@ -1,267 +1,279 @@
-# Keybinds and Plugin Usage
+# Keybindings
 
-This document lists:
-- Global keymaps from `lua/keymaps.lua` and buffer-local/autocmd mappings.
-- Keymaps introduced by active plugins in `lua/plugins/`.
-- Common user commands provided by those plugins (where applicable).
+**Leader key:** `<Space>`
 
-Leader key: space (`<leader> = " "`).
+---
 
-## Active Plugins (by module)
-- LSP: built-in LSP + configs in `lsp/`, completion via `saghen/blink.cmp`, snippets via `L3MON4D3/LuaSnip`.
-- Formatting: `stevearc/conform.nvim`.
-- UI/Status: `nvim-lualine/lualine.nvim`, `folke/noice.nvim`, `rcarriga/nvim-notify`.
-- Treesitter: `nvim-treesitter/nvim-treesitter`, `nvim-treesitter/nvim-treesitter-context`, `windwp/nvim-ts-autotag`.
-- Fuzzy finder: `ibhagwan/fzf-lua`.
-- Debug: `mfussenegger/nvim-dap`, `igorlfs/nvim-dap-view`, `theHamsta/nvim-dap-virtual-text`, `leoluz/nvim-dap-go`, `mfussenegger/nvim-dap-python`, `jbyuki/one-small-step-for-vimkind`.
-- Tasks/Quickfix: `stevearc/overseer.nvim`, `stevearc/quicker.nvim`.
-- Movement/Text: `nvim-mini/mini.ai`, `nvim-mini/mini.clue`, `nvim-mini/mini.files`, `nvim-mini/mini.splitjoin`, `nvim-mini/mini.move`, `nvim-mini/mini.bufremove`, `nvim-mini/mini.comment`, `nvim-mini/mini.icons`, `kylechui/nvim-surround`, `gbprod/yanky.nvim`.
-- Aesthetics: `lukas-reineke/indent-blankline.nvim`, `nvim-tree/nvim-web-devicons`, `nvim-colorizer.lua`, `sainnhe/sonokai`.
-- Obsidian: `epwalsh/obsidian.nvim`.
-- Ruby: `tpope/vim-rails`, `tpope/vim-bundler`, `tpope/vim-rake`.
-- Python venv: `linux-cultist/venv-selector.nvim`.
-- Markdown: `iamcco/markdown-preview.nvim`, `bngarren/checkmate.nvim`.
-- Utilities: `nvim-lua/plenary.nvim`, `christoomey/vim-tmux-navigator`, `preservim/vimux`.
-- Other: `windwp/nvim-autopairs`, `b0o/SchemaStore.nvim`, `mrcjkb/rustaceanvim`, `szymonwilczek/vim-be-better`.
+### Essential (No Prefix)
 
-## Global Keymaps
-- `i jk` -> `<Esc>` (quickly leave insert)
-- `n <leader>nh` -> `:nohl<CR>` (clear search highlights)
-- `n <leader>nd` -> `:NoiceDismiss<CR>` (dismiss Noice message)
-- `n x` -> `"_x` (delete without yanking)
-- `n n` -> `nzzzv` and `n N` -> `Nzzzv` (center after search navigation)
-- `c <CR>` -> adds `zzzv` after `/` searches to center results
-- `n <leader>+` -> `<C-a>` (increment number)
-- `n <leader>-` -> `<C-x>` (decrement number)
-- Splits:
-  - `n <leader>sv` -> vertical split
-  - `n <leader>ss` -> horizontal split
-  - `n <leader>se` -> equalize splits
-  - `n <leader>sx` -> close current split
-- Wrap:
-  - `n <leader>Tw` -> toggle line wrap
-- Obsidian templates/search (custom):
-  - `n <leader>on` -> `:ObsidianTemplate note` (then clean initial blank lines)
-  - `n <leader>oc` -> `:ObsidianTemplate class-note` (then clean initial blank lines)
-  - `n <leader>od` -> `:ObsidianTemplate daily` (then clean initial blank lines)
-  - `n <leader>os` -> `FzfLua files` in vault
-  - `n <leader>oz` -> `FzfLua live_grep` in vault
-- `n gs` -> open definition in a vertical split
+| Key | Action |
+|-----|--------|
+| `jj` / `jk` | Exit insert mode |
+| `<C-s>` | Save file |
+| `<Esc>` | Clear search highlights |
+| `K` | Hover documentation |
+| `<C-k>` | Signature help |
+| `n` / `N` | Next/prev match (centered) |
+| `H` / `L` | Jump to line start/end |
+| `X` | Split line (opposite of J) |
+| `x` | Delete to black hole register |
+| `<C-a>` | Select all |
+| `<C-Up/Down>` | Resize window height |
+| `<C-Left/Right>` | Resize window width |
+| `<C-/>` | Toggle terminal |
 
-### Buffer-local / autocmd mappings
-- Filetypes `git`, `help`, `man`, `qf`, `scratch`: `n q` -> `:quit<CR>`
-- Command-line window: `<S-CR>` executes and stays in cmdwin
+---
 
-## LSP (on_attach)
-Defined in `lua/lsp.lua` when a client attaches (capability gated):
-- `n [d` / `n ]d` -> previous/next diagnostic
-- `n [e` / `n ]e` -> previous/next error
-- `n grc` -> color presentation (if supported)
-- `n grr` -> references (FzfLua)
-- `n gy` -> type definition (FzfLua)
-- `n <leader>fs` -> document symbols (FzfLua)
-- `n gd` -> go to definition (FzfLua)
-- `n gD` -> peek definition (FzfLua)
-- `i <C-k>` -> signature help
-- `n <leader>cl` -> fix all (ESLint/Stylelint only)
+### Quick Access (`<leader>`)
 
-Common commands:
-- LSP core: `:LspInfo`, `:LspStart`, `:LspStop`, `:LspRestart`, `:LspLog`
+| Key | Action |
+|-----|--------|
+| `<leader><space>` | Find files |
+| `<leader>/` | Grep search |
+| `<leader>,` | Buffers list |
+| `<leader>.` | Scratch buffer |
+| `<leader>e` | Toggle file explorer (mini.files) |
+| `<leader>E` | Toggle file explorer (Snacks) |
+| `<leader>q` | Quit |
+| `<leader>Q` | Quit all |
+| `<leader>?` | Buffer keymaps |
+| `<leader>K` | All keymaps |
 
-## Plugins — Keymaps and Commands
+---
 
-### fzf-lua
-Keymaps:
-- `n/x <leader>fb` -> search in current buffer (normal: ripgrep; visual: `blines`)
-- `n <leader>fB` -> buffers
-- `n <leader>fc` -> highlights
-- `n <leader>fd` -> document diagnostics
-- `n <leader>ff` -> files
-- `n <leader>fg` -> live grep
-- `x <leader>fg` -> grep visual selection
-- `n <leader>fh` -> help tags
-- `n <leader>fr` -> recent files
-- `n <leader>fm` -> marks
-- `n <leader>f<` -> resume last fzf command
-- `n z=` -> spelling suggestions
-- `i <C-x><C-f>` -> fuzzy complete path
+### Buffers (`<leader>b`)
 
-Picker controls (inside fzf windows):
-- Builtin: `<C-/>` help, `<C-a>` fullscreen, `<C-i>` toggle preview
-- FZF: `alt-s` toggle, `alt-a` toggle-all, `ctrl-i` toggle preview
+| Key | Action |
+|-----|--------|
+| `<leader>bb` | Switch buffer |
+| `<leader>bd` | Delete buffer |
+| `<leader>bo` | Delete other buffers |
+| `Q` | Delete buffer |
 
-Commands:
-- `:FzfLua <picker>` — run any picker, e.g. `files`, `live_grep`, `buffers`, `oldfiles`, `help_tags`, `resume`, `lsp_*`.
+---
 
-### Neotest
-Keymaps:
-- `n <leader>tt` -> run current file
-- `n <leader>tT` -> run all tests in cwd
-- `n <leader>tr` -> run nearest
-- `n <leader>tl` -> run last
-- `n <leader>ts` -> toggle summary
-- `n <leader>to` -> show output
-- `n <leader>tO` -> toggle output panel
-- `n <leader>tS` -> stop run
-- `n <leader>tw` -> toggle watch (current file)
+### Code (`<leader>c`)
 
-### mini.files (file explorer)
-Keymaps:
-- `n <leader>e` -> open explorer at current buffer path
-- In mini.files buffers:
-  - `?` help
-  - `<CR>` open/enter (`go_in_plus`)
-  - `<Tab>` go out/up (`go_out_plus`)
-  - `<C-w>s` split below and open file; `<C-w>v` split right and open file
+| Key | Action |
+|-----|--------|
+| `<leader>ca` | Code action |
+| `<leader>cr` | Rename symbol |
+| `<leader>cd` | Line diagnostic |
+| `<leader>cf` | Format file/range |
+| `<leader>cv` | Definition in vertical split |
 
-### mini.splitjoin
-Keymaps:
-- `n <leader>cj` -> toggle join/split of code block
+---
 
-### mini.bufremove
-Keymaps:
-- `n <leader>bd` -> delete current buffer preserving window layout
+### Diagnostics (`<leader>d`)
 
-### nvim-surround
-Keymaps:
-- `n yz` -> add surround
-- `n yzz` -> add surround to current line
-- `n yZ` -> add surround linewise
-- `n yZZ` -> add surround linewise to current line
-- `x Z` -> surround selection
+| Key | Action |
+|-----|--------|
+| `<leader>dd` | Workspace diagnostics |
+| `<leader>db` | Buffer diagnostics |
+| `<leader>dq` | Quickfix list |
+| `<leader>dl` | Location list |
+| `<leader>dt` | Trouble (workspace) |
+| `<leader>dT` | Trouble (buffer) |
+| `[d` / `]d` | Prev/next diagnostic |
 
-### mini.ai
-Text objects:
-- `a/i f` -> function (Treesitter)
-- `a/i g` -> whole buffer
+---
 
-### mini.move
-Keymaps (defaults):
-- Normal: `<M-h>` left, `<M-j>` move line down, `<M-k>` move line up, `<M-l>` right
-- Visual: `<M-h>`, `<M-j>`, `<M-k>`, `<M-l>` move selection left/down/up/right
+### Files (`<leader>f`)
 
-### mini.comment
-Keymaps (defaults):
-- Normal: `gc{motion}` toggle linewise, `gcc` toggle current line
-- Normal: `gb{motion}` toggle blockwise
-- Visual: `gc` toggle selection linewise, `gb` toggle selection blockwise
+| Key | Action |
+|-----|--------|
+| `<leader>ff` | Find files |
+| `<leader>fr` | Recent files |
+| `<leader>fc` | Config files |
+| `<leader>fg` | Git files |
+| `<leader>fp` | Projects |
+| `<leader>fR` | Rename file |
 
-### mini.clue
-- Shows hints for key sequences; does not create mappings.
-- Triggers: `g`, `` ` ``, `"`, `<C-r>` (normal/visual/insert/cmd), `<C-w>`, `i <C-x>`, `z`, `<leader>` (n/visual), `[` and `]`.
-- Displays groups: `+ai`, `+buffers`, `+code`, `+debug`, `+find`, `+lsp`, `+obsidian`, `+tests`, `+loclist/quickfix`, `+prev/+next`.
+---
 
-### DAP / dap-view
-Keymaps:
-- `n <leader>db` -> toggle breakpoint
-- `n <leader>dB` -> list breakpoints (FzfLua)
-- `n <leader>dc` -> set breakpoint condition
-- `n <F5>` -> continue
-- `n <F8>` -> step over
-- `n <F7>` -> step into
-- `n <F9>` -> step out
-- `n <leader>dl` -> launch Lua adapter (osv)
+### Git (`<leader>g`)
 
-Commands:
-- nvim-dap: `:DapContinue`, `:DapToggleBreakpoint`, `:DapTerminate`, `:DapStepOver`, `:DapStepInto`, `:DapStepOut`
+| Key | Action |
+|-----|--------|
+| `<leader>gg` | Lazygit |
+| `<leader>gs` | Git status |
+| `<leader>gl` | Git log |
+| `<leader>gL` | Git log (line) |
+| `<leader>gf` | Git log (file) |
+| `<leader>gd` | Git diff |
+| `<leader>gc` | Checkout branch |
+| `<leader>gb` | Blame line |
+| `<leader>gB` | Blame buffer |
+| `<leader>gD` | Diff HEAD |
+| `<leader>gR` | Reset buffer |
+| `<leader>gS` | Stage buffer |
+| `<leader>go` | Open in browser |
+| `<leader>gi` | Issues |
+| `<leader>gp` | Pull requests |
+| `<leader>ghp` | Preview hunk |
+| `<leader>ghP` | Preview hunk inline |
+| `<leader>ghs` | Stage hunk |
+| `<leader>ghu` | Undo stage hunk |
+| `<leader>ghr` | Reset hunk |
+| `]h` / `[h` | Next/prev hunk |
 
-### Treesitter & Context
-Keymaps:
-- Incremental selection: `<CR>` to init/increase, `<BS>` to decrease (scope incremental disabled)
-- Context jump: `n [c` (expr) -> in diff: previous change; otherwise: jump to upper context
+---
 
-Commands:
-- Treesitter core: `:TSUpdate`, `:TSInstall`, `:TSUninstall`, `:TSBufEnable`, `:TSBufDisable`
-- Treesitter Context: `:TSContextEnable`, `:TSContextDisable`, `:TSContextToggle`, `:TSContextGoToContext`
+### LSP (`<leader>l`)
 
-### Obsidian
-Keymaps (plugin):
-- `n <leader>oq` Quick Switch
-- `n <leader>og` Search
-- `n <leader>ot` Today
-- `n <leader>oy` Yesterday
-- `n <leader>ol` Follow Link
-- `n <leader>oL` Link New
-- In vault buffers: `gf` -> pass-through for markdown/wiki links
+| Key | Action |
+|-----|--------|
+| `<leader>li` | LSP info |
+| `<leader>lr` | LSP restart |
+| `<leader>lh` | Toggle inlay hints |
+| `<leader>ls` | Document symbols |
+| `<leader>lS` | Workspace symbols |
+| `<leader>lt` | LSP references (Trouble) |
+| `<leader>lT` | Symbols (Trouble) |
+| `gd` | Go to definition |
+| `gD` | Go to declaration |
+| `gr` | Go to references |
+| `gi` | Go to implementation |
+| `gy` | Go to type definition |
+| `gs` | Go to definition in split |
 
-Commands:
-- `:ObsidianQuickSwitch`, `:ObsidianSearch`, `:ObsidianToday`, `:ObsidianYesterday`, `:ObsidianNew`, `:ObsidianLink`, `:ObsidianLinkNew`, `:ObsidianTemplate`, `:ObsidianFollowLink`
+---
 
-Note: `<leader>on` is overridden by the custom template mapping, and `<leader>ot` is also bound by Overseer; whichever loads last will win.
+### Search (`<leader>s`)
 
-### Conform (formatting)
-Keymaps:
-- `n/v <leader>cf` -> format file or selection (async; LSP fallback enabled)
+| Key | Action |
+|-----|--------|
+| `<leader>sg` | Grep search |
+| `<leader>sw` | Grep word under cursor |
+| `<leader>sb` | Buffer lines |
+| `<leader>sB` | Grep open buffers |
+| `<leader>sh` | Help |
+| `<leader>sk` | Keymaps |
+| `<leader>sc` | Commands |
+| `<leader>sr` | Registers |
+| `<leader>sR` | Resume last search |
+| `<leader>sm` | Marks |
+| `<leader>sj` | Jumps |
+| `<leader>su` | Undo history |
+| `<leader>si` | Icons |
 
-Behavior:
-- Autoformat on save when `g.autoformat = true` (skips while mini.files explorer is open or when `g.skip_formatting` is set).
+---
 
-### Blink.cmp (completion)
-Keymaps:
-- Preset: `<CR>` confirms selection
-- List navigation: `<C-j>` next, `<C-k>` previous
-- Docs: `<C-b>` scroll up, `<C-f>` scroll down
+### Testing (`<leader>t`)
 
-### LuaSnip
-Keymaps:
-- `i <C-r>s` -> insert on-the-fly snippet
-- `i/s <C-c>` -> select choice node (when active)
+| Key | Action |
+|-----|--------|
+| `<leader>tt` | Run file tests |
+| `<leader>tT` | Run all tests |
+| `<leader>tr` | Run nearest test |
+| `<leader>tl` | Run last test |
+| `<leader>ts` | Toggle test summary |
+| `<leader>to` | Show test output |
+| `<leader>tO` | Toggle output panel |
+| `<leader>tS` | Stop tests |
+| `<leader>tw` | Toggle watch mode |
 
-### Markdown Preview
-Keymaps:
-- `markdown` only: `n <leader>cp` -> `:MarkdownPreviewToggle`
+---
 
-Commands:
-- `:MarkdownPreview`, `:MarkdownPreviewStop`, `:MarkdownPreviewToggle`
+### UI Toggles (`<leader>u`)
 
-### Venv Selector (Python)
-Keymaps:
-- `python` only: `n <leader>vv` -> `:VenvSelect`
+| Key | Action |
+|-----|--------|
+| `<leader>us` | Toggle spelling |
+| `<leader>uw` | Toggle wrap |
+| `<leader>ur` | Toggle relative numbers |
+| `<leader>ul` | Toggle line numbers |
+| `<leader>uD` | Toggle diagnostics |
+| `<leader>uc` | Toggle conceallevel |
+| `<leader>ub` | Toggle dark background |
+| `<leader>uh` | Toggle inlay hints |
+| `<leader>ui` | Toggle indent guides |
+| `<leader>ud` | Toggle dim |
+| `<leader>uz` | Zen mode |
+| `<leader>uZ` | Zoom window |
+| `<leader>uC` | Colorschemes |
+| `<leader>uN` | Neovim news |
 
-Commands:
-- `:VenvSelect`, `:VenvSelectCached`
+---
 
-### Overseer
-Keymaps:
-- `n <leader>ot` -> toggle task window
-- `n <leader>o<` -> restart last task
-- `n <leader>or` -> run task
+### Windows (`<leader>w`)
 
-Commands:
-- `:OverseerToggle`, `:OverseerRun`, `:OverseerOpen`, `:OverseerClose`
+| Key | Action |
+|-----|--------|
+| `<leader>wv` | Vertical split |
+| `<leader>ws` | Horizontal split |
+| `<leader>w=` | Equal window sizes |
+| `<leader>wd` | Close window |
+| `<leader>ww` | Switch to other window |
+| `<leader>wm` | Maximize window |
 
-### Quicker (quickfix/loclist)
-Keymaps:
-- `n <leader>xq` -> toggle quickfix
-- `n <leader>xl` -> toggle loclist
-- `n <leader>xd` -> toggle diagnostics quickfix
-- `n >` -> expand context
-- `n <` -> collapse context
+---
 
-### Yanky
-Keymaps:
-- `n/x p` -> put after (yank history aware)
-- `n/x P` -> put before (yank history aware)
-- `n =p` -> put linewise below
-- `n =P` -> put linewise above
-- `n [y` -> cycle forward through yank history
-- `n ]y` -> cycle backward through yank history
-- `n/x y` -> yank with history tracking
+### Obsidian (`<leader>o`)
 
-### Utilities
-- Tmux Navigator (defaults provided by plugin):
-  - `<C-h>`, `<C-j>`, `<C-k>`, `<C-l>` move between Vim splits and tmux panes
-  - `<C-\>` previous pane
-- Vimux common commands: `:VimuxRunCommand`, `:VimuxPromptCommand`, `:VimuxCloseRunner`
-- Ruby helpers:
-  - Rails: navigation helpers (e.g. `:A` for alternate file), enhanced `gf` in Rails projects
-  - Bundler: `:Bundle`
-  - Rake: `:Rake`
+| Key | Action |
+|-----|--------|
+| `<leader>on` | New note |
+| `<leader>oq` | Quick switch |
+| `<leader>og` | Search |
+| `<leader>ot` | Today (daily note) |
+| `<leader>oy` | Yesterday |
+| `<leader>ol` | Follow link |
+| `<leader>oL` | Link new |
+| `<leader>os` | Browse vault files |
+| `<leader>oz` | Grep vault |
+| `<leader>oN` | Add note template |
+| `<leader>oc` | Add class-note template |
+| `<leader>od` | Add daily template |
 
-## Filetype-specific
-- Python (`after/ftplugin/python.lua`):
-  - Local indent: 4 spaces
-  - Insert-mode abbreviations (buffer-local): `true->True`, `false->False`, `--->#`, `null/none/nil->None`, `function->def`
-- Ruby (`after/ftplugin/ruby.lua`):
-  - Local indent: 2 spaces
-  - Insert-mode abbreviations (buffer-local): `null/none/None->nil`, `elif/elseif->elsif`
+---
+
+### AI Assistant (`<leader>a`)
+
+| Key | Action |
+|-----|--------|
+| `<leader>at` | Toggle Claude (Sidekick) |
+| `<leader>av` | Send selection to Sidekick |
+
+---
+
+### Markdown (`<leader>m`)
+
+| Key | Action |
+|-----|--------|
+| `<leader>mp` | Toggle markdown preview |
+| `<leader>mr` | Toggle render markdown |
+
+---
+
+### Debugging (`<F*`)
+
+| Key | Action |
+|-----|--------|
+| `<F5>` | Continue |
+| `<F7>` | Step into |
+| `<F8>` | Step over |
+| `<F9>` | Step out |
+
+---
+
+### Completion (Insert Mode)
+
+| Key | Action |
+|-----|--------|
+| `<C-Space>` | Show/toggle completion |
+| `<C-j>` | Select next item |
+| `<C-k>` | Select previous item |
+| `<C-b>` | Scroll docs up |
+
+---
+
+### Yank History (Yanky)
+
+| Key | Action |
+|-----|--------|
+| `p` / `P` | Put after/before |
+| `[y` / `]y` | Cycle through yank history |
+| `<leader>y` | Copy to clipboard |
+| `<leader>Y` | Copy line to clipboard |
+| `<leader>d` | Delete to black hole |

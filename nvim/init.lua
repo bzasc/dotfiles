@@ -15,6 +15,20 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp = vim.opt.rtp ^ lazypath
 
+-- Bootstrap tree-sitter-cli if cargo is available
+if vim.fn.executable("tree-sitter") == 0 and vim.fn.executable("cargo") == 1 then
+  vim.notify("Installing tree-sitter-cli via cargo...", vim.log.levels.INFO)
+  vim.fn.jobstart({ "cargo", "install", "--locked", "tree-sitter-cli" }, {
+    on_exit = function(_, code)
+      if code == 0 then
+        vim.notify("tree-sitter-cli installed successfully!", vim.log.levels.INFO)
+      else
+        vim.notify("Failed to install tree-sitter-cli", vim.log.levels.WARN)
+      end
+    end,
+  })
+end
+
 ---@type LazySpec
 local plugins = "plugins"
 
@@ -23,21 +37,26 @@ require("options")
 require("keymaps")
 require("commands")
 require("autocmds")
---require("statusline")
-require("winbar")
+require("utils")
 require("marks")
-require("lsp")
 
 -- Configure plugins.
 require("lazy").setup(plugins, {
-  ui = { border = "rounded" },
+  ui = {
+    --border = "rounded"
+  },
   dev = { path = vim.g.projects_dir },
   install = {
-    -- Do not automatically install on startup.
-    missing = false,
+    missing = true,
   },
-  -- Don't bother me when tweaking plugins.
-  change_detection = { notify = false },
+  checker = {
+    enabled = true,
+    notify = false,
+  },
+  change_detection = {
+    enabled = true,
+    notify = false,
+  },
   -- None of my plugins use luarocks so disable this.
   rocks = {
     enabled = false,
