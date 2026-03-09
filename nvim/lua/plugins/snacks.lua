@@ -18,9 +18,9 @@ return {
       },
     },
     indent = {
-      enabled = true,
-      char = "│",
-      animate = { enabled = false },
+      enabled = false,
+      --char = "│",
+      --animate = { enabled = false },
     },
     input = { enabled = true },
     notifier = { enabled = true, timeout = 3000 },

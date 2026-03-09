@@ -68,7 +68,10 @@ return {
       },
       {
         "<leader>dB",
-        "<cmd>snacks picker dap_breakpoints<cr>",
+        function()
+          require("dap").list_breakpoints()
+          vim.cmd("copen")
+        end,
         desc = "List breakpoints",
       },
       {
@@ -310,7 +313,7 @@ return {
     },
     keys = {
       {
-        "<leader>ot",
+        "<leader>oT",
         "<cmd>OverseerToggle<cr>",
         desc = "Toggle task window",
       },

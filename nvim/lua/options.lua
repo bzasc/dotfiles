@@ -16,7 +16,7 @@ vim.opt.number = true -- Show absolute line numbers
 vim.opt.relativenumber = true -- Show relative line numbers (hybrid with number=true)
 vim.opt.numberwidth = 4 -- Minimum width of number column
 vim.opt.signcolumn = "yes:1" -- Always show sign column with width of 1
-vim.opt.cursorline = true -- Don't highlight the current line
+vim.opt.cursorline = true -- Highlight the current line
 vim.opt.wrap = false -- Don't wrap long lines
 vim.opt.breakindent = true -- Wrapped lines preserve indentation
 vim.opt.showmode = false -- Don't show mode in command line (shown in statusline)
@@ -58,6 +58,10 @@ vim.opt.swapfile = false -- Don't create swap files
 
 vim.opt.scrolloff = 8 -- minimum lines to keep above/below cursor
 vim.opt.sidescrolloff = 8 -- minimum columns to keep left/right of cursor
+
+vim.opt.foldmethod = "expr" -- use expression for folding
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- treesitter-based folding
+vim.opt.foldlevel = 99 -- start with all folds open
 
 vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.opt.completeopt = { "menu", "menuone", "noselect" } -- Completion menu options

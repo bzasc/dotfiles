@@ -143,11 +143,16 @@ return {
 
   {
     "numToStr/Comment.nvim",
-    opts = {},
     lazy = false,
+    dependencies = { "joosepalviste/nvim-ts-context-commentstring" },
+    config = function()
+      require("Comment").setup({
+        pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+      })
+    end,
   },
 
-  { "joosepalviste/nvim-ts-context-commentstring", lazy = true },
+  { "joosepalviste/nvim-ts-context-commentstring", lazy = true, opts = { enable_autocmd = false } },
 
   {
     "L3MON4D3/LuaSnip",

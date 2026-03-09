@@ -46,6 +46,12 @@ return {
           row = 0,
           col = 1,
         },
+        --on_highlights = function(hl, _)
+        --  hl.GitSignsAdd = { fg = "#3b4a3b" }
+        --  hl.GitSignsChange = { fg = "#3b3e4b" }
+        --  hl.GitSignsDelete = { fg = "#4b3b3b" }
+        --  hl.GitSignsUntracked = { fg = "#3b3e4b" }
+        --end,
         on_attach = function(bufnr)
           local gs = require("gitsigns")
           local map = function(mode, lhs, rhs, desc)

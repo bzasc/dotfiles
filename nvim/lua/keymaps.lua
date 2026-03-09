@@ -9,10 +9,22 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear Highlight", 
 vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit Insert" })
 vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
 
+vim.keymap.set("n", "j", function()
+  return vim.v.count == 0 and "gj" or "j"
+end, { expr = true, silent = true, desc = "Down (wrap-aware)" })
+vim.keymap.set("n", "k", function()
+  return vim.v.count == 0 and "gk" or "k"
+end, { expr = true, silent = true, desc = "Up (wrap-aware)" })
+
 vim.keymap.set("n", "n", "nzzzv", { desc = "Next Match (centered)" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev Match (centered)" })
 vim.keymap.set("n", "*", "*zzzv", { desc = "Search Word (centered)" })
 vim.keymap.set("n", "#", "#zzzv", { desc = "Search Word Back (centered)" })
+
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half Page Down (centered)" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half Page Up (centered)" })
+
+vim.keymap.set("n", "J", "mzJ`z", { desc = "Join Lines (keep cursor)" })
 vim.keymap.set("n", "x", '"_x')
 
 -- Window resizing
@@ -35,8 +47,7 @@ vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decr
 vim.keymap.set("v", "<", "<gv", { desc = "Indent Left" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent Right" })
 
--- Paste over selection without yanking
-vim.keymap.set("v", "p", '"_dP', { desc = "Paste (no yank)" })
+-- Paste over selection without yanking (visual `p` handled by yanky.nvim)
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])

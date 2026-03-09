@@ -156,7 +156,11 @@ return {
 
         ["intelephense"] = function()
           local get_license = function()
-            local f = assert(io.open(os.getenv("HOME") .. "/intelephense/license.txt", "rb"))
+            local path = os.getenv("HOME") .. "/intelephense/license.txt"
+            local f = io.open(path, "rb")
+            if not f then
+              return nil
+            end
             local content = f:read("*a")
             f:close()
             return string.gsub(content, "%s+", "")

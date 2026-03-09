@@ -43,7 +43,7 @@ return {
         { "<leader>l", group = "LSP" },
         { "<leader>m", group = "Markdown" },
         { "<leader>n", group = "Notifications" },
-        { "<leader>n", group = "Obsidian/overseer" },
+        { "<leader>o", group = "Obsidian/Overseer" },
         { "<leader>s", group = "Search" },
         { "<leader>u", group = "UI/Toggle" },
         { "<leader>w", group = "Windows" },
