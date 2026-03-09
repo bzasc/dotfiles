@@ -31,6 +31,16 @@ return {
           ["<C-k>"] = { "select_prev" },
           ["<C-b>"] = { "scroll_documentation_up", "fallback" },
           ["<C-f>"] = {},
+          ["<Tab>"] = {
+            "snippet_forward",
+            function() -- sidekick next edit suggestion
+              return require("sidekick").nes_jump_or_apply()
+            end,
+            function() -- if you are using Neovim's native inline completions
+              return vim.lsp.inline_completion.get()
+            end,
+            "fallback",
+          },
         },
         cmdline = {
           enabled = false,
@@ -234,17 +244,44 @@ return {
   {
     "folke/sidekick.nvim",
     opts = {
-      -- Disable next-edit suggestions.
-      -- TODO: Give this another chance?
-      nes = { enabled = false },
+      cli = {
+        mux = {
+          enabled = true,
+          backend = "tmux",
+        },
+      },
+      nes = { enabled = true },
     },
     keys = {
       {
-        "<leader>at",
+        "<leader>ac",
         function()
           require("sidekick.cli").toggle({ name = "claude", focus = true })
         end,
         desc = "Toggle Claude",
+      },
+      {
+        "<leader>ad",
+        function()
+          require("sidekick.cli").close()
+        end,
+        desc = "Detach a CLI Session",
+      },
+
+      {
+        "<leader>af",
+        function()
+          require("sidekick.cli").send({ msg = "{file}" })
+        end,
+        desc = "Send File",
+      },
+      {
+        "<leader>ap",
+        function()
+          require("sidekick.cli").prompt()
+        end,
+        mode = { "n", "x" },
+        desc = "Sidekick Select Prompt",
       },
       {
         "<leader>av",
