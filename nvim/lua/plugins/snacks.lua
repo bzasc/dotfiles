@@ -12,7 +12,7 @@ return {
       doc = {
         enabled = true,
         inline = true,
-        float = true,
+        float = false,
         max_width = 80,
         max_height = 40,
       },

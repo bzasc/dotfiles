@@ -11,8 +11,25 @@ return {
           use_nvim_cmp_as_default = false,
           nerd_font_variant = "normal",
         },
+        fuzzy = {
+          implementation = "prefer_rust",
+        },
+        --cmdline = {
+        --  enabled = false,
+        --  completion = { menu = { auto_show = true } },
+        --},
+        cmdline = {
+          keymap = { preset = "inherit" },
+          completion = {
+            menu = { auto_show = true },
+            ghost_text = { enabled = true },
+          },
+        },
         sources = {
-          default = { "lazydev", "lsp", "path", "buffer", "snippets" },
+          default = { "lsp", "path", "buffer", "snippets" },
+          per_filetype = {
+            lua = { inherit_defaults = true, "lazydev" },
+          },
           providers = {
             lazydev = {
               name = "LazyDev",
@@ -41,10 +58,6 @@ return {
             end,
             "fallback",
           },
-        },
-        cmdline = {
-          enabled = false,
-          completion = { menu = { auto_show = true } },
         },
         completion = {
           list = {
@@ -80,51 +93,74 @@ return {
       })
     end,
   },
-
+  {
+    "nvim-neorg/neorg",
+    ft = "norg", -- lazy load on filetype
+    cmd = "Neorg", -- lazy load on command, allows you to autocomplete :Neorg regardless of whether it's loaded yet
+    --  (you could also just remove both lazy loading things)
+    priority = 30, -- treesitter is on default priority of 50, neorg should load after it.
+    config = function()
+      require("neorg").setup({
+        load = {
+          ["core.defaults"] = {},
+        },
+      })
+    end,
+  },
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     lazy = false,
     config = function()
-      require("nvim-treesitter").setup({
-        ensure_installed = {
-          "bash",
-          "c",
-          "css",
-          "go",
-          "gomod",
-          "gosum",
-          "gowork",
-          "html",
-          "javascript",
-          "json",
-          "latex",
-          "lua",
-          "luadoc",
-          "luap",
-          "markdown",
-          "markdown_inline",
-          "php",
-          "proto",
-          "python",
-          "query",
-          "regex",
-          "ruby",
-          "rust",
-          "scss",
-          "svelte",
-          "swift",
-          "terraform",
-          "tsx",
-          "typescript",
-          "vim",
-          "vimdoc",
-          "vue",
-          "yaml",
-          "zig",
-        },
-        auto_install = true,
-      })
+      require("nvim-treesitter").setup()
+
+      -- ensure_installed is no longer handled by setup() in the new nvim-treesitter
+      local ensure_installed = {
+        "bash",
+        "c",
+        "css",
+        "go",
+        "gomod",
+        "gosum",
+        "gowork",
+        "html",
+        "javascript",
+        "json",
+        "latex",
+        "lua",
+        "luadoc",
+        "luap",
+        "markdown",
+        "markdown_inline",
+        "php",
+        "proto",
+        "python",
+        "query",
+        "regex",
+        "ruby",
+        "rust",
+        "scss",
+        "svelte",
+        "swift",
+        "terraform",
+        "tsx",
+        "typst",
+        "typescript",
+        "vim",
+        "vimdoc",
+        "vue",
+        "yaml",
+        "zig",
+      }
+
+      local installed = require("nvim-treesitter.config").get_installed()
+      local to_install = vim.tbl_filter(function(lang)
+        return not vim.list_contains(installed, lang)
+      end, ensure_installed)
+
+      if #to_install > 0 then
+        require("nvim-treesitter.install").install(to_install)
+      end
       -- Enable treesitter-based highlighting and indentation
       vim.api.nvim_create_autocmd("FileType", {
         callback = function()

@@ -1,3 +1,8 @@
+-- Luarocks path (needed for magick/image support).
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
+package.cpath = package.cpath .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/lib/lua/5.1/?.so"
+
 -- Global variables.
 vim.g.projects_dir = vim.env.HOME .. "/dev"
 

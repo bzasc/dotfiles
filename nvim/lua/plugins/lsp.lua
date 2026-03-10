@@ -197,6 +197,7 @@ return {
           "html",
           "jsonls",
           "yamlls",
+          "codelldb",
           -- Linters
           "eslint_d",
           "luacheck",
