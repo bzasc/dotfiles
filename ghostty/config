@@ -5,7 +5,7 @@ font-style = Regular
 
 # Theme
 term = xterm-kitty
-theme = custom-sonokai
+theme = kanagawa
 shell-integration = fish
 shell-integration-features = no-cursor,sudo,no-title
 

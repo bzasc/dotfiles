@@ -280,21 +280,22 @@ return {
   {
     "folke/sidekick.nvim",
     opts = {
-      cli = {
-        mux = {
-          enabled = true,
-          backend = "native",
-        },
-      },
       nes = { enabled = true },
     },
     keys = {
       {
-        "<leader>ac",
+        "<leader>aa",
         function()
           require("sidekick.cli").toggle({ name = "claude", focus = true })
         end,
         desc = "Toggle Claude",
+      },
+      {
+        "<leader>ao",
+        function()
+          require("sidekick.cli").toggle({ name = "opencode", focus = true })
+        end,
+        desc = "Toggle Codex",
       },
       {
         "<leader>ad",
@@ -303,7 +304,6 @@ return {
         end,
         desc = "Detach a CLI Session",
       },
-
       {
         "<leader>af",
         function()
