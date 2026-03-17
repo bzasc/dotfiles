@@ -23,7 +23,7 @@ vim.opt.showmode = false -- Don't show mode in command line (shown in statusline
 vim.opt.showcmd = false -- Don't show partial command in command line
 vim.opt.ruler = true -- Show cursor position in command line
 vim.opt.showtabline = 0 -- Never show the tab line
-vim.opt.cmdheight = 1 -- Height of command line area
+vim.opt.cmdheight = 0 -- Let Noice handle the command line UI
 vim.opt.pumheight = 10 -- Maximum height of popup menu
 vim.opt.fillchars = { eob = " " } -- Hide ~ characters on empty lines
 vim.opt.background = "dark" -- colorschemes that can be light or dark will be made dark

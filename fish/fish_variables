@@ -1,0 +1,37 @@
+# This file contains fish universal variable definitions.
+# VERSION: 3.0
+SETUVAR __fish_initialized:3800
+SETUVAR _fisher_jorgebucaran_2F_fisher_files:\x7e/\x2econfig/fish/functions/fisher\x2efish\x1e\x7e/\x2econfig/fish/completions/fisher\x2efish
+SETUVAR _fisher_plugins:jorgebucaran/fisher
+SETUVAR _fisher_upgraded_to_4_4:\x1d
+SETUVAR fish_color_autosuggestion:595f6f
+SETUVAR fish_color_cancel:fc5d7c
+SETUVAR fish_color_command:9ed072
+SETUVAR fish_color_comment:7f8490
+SETUVAR fish_color_cwd:76cce0
+SETUVAR fish_color_cwd_root:fc5d7c
+SETUVAR fish_color_end:fc5d7c
+SETUVAR fish_color_error:fc5d7c
+SETUVAR fish_color_escape:f39660
+SETUVAR fish_color_history_current:\x2d\x2dbold
+SETUVAR fish_color_host:b39df3
+SETUVAR fish_color_host_remote:e7c664
+SETUVAR fish_color_keyword:fc5d7c
+SETUVAR fish_color_normal:e2e2e3
+SETUVAR fish_color_operator:f39660
+SETUVAR fish_color_param:b39df3
+SETUVAR fish_color_quote:e7c664
+SETUVAR fish_color_redirection:76cce0
+SETUVAR fish_color_search_match:\x2d\x2dbackground\x3d363944
+SETUVAR fish_color_selection:\x2d\x2dbackground\x3d363944
+SETUVAR fish_color_status:fc5d7c
+SETUVAR fish_color_user:9ed072
+SETUVAR fish_color_valid_path:\x2d\x2dunderline
+SETUVAR fish_greeting:
+SETUVAR fish_key_bindings:fish_vi_key_bindings
+SETUVAR fish_pager_color_completion:e2e2e3
+SETUVAR fish_pager_color_description:7f8490
+SETUVAR fish_pager_color_prefix:9ed072\x1e\x2d\x2dbold
+SETUVAR fish_pager_color_progress:76cce0
+SETUVAR fish_pager_color_selected_background:\x2d\x2dbackground\x3d363944
+SETUVAR fish_user_paths:/Users/bzasc/\x2econfig/tmux/tmuxifier/bin

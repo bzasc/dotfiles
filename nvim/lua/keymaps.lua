@@ -1,8 +1,8 @@
 vim.keymap.set("n", "<C-s>", "<cmd>w<cr>", { desc = "Save File" })
 vim.keymap.set({ "i", "x" }, "<C-s>", "<Esc><cmd>w<cr>", { desc = "Save File" })
 
-vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
-vim.keymap.set("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
+--vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+--vim.keymap.set("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear Highlight", silent = true })
 
@@ -41,7 +41,6 @@ vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights
 
 vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
-
 
 -- Better indenting (stay in visual mode)
 vim.keymap.set("v", "<", "<gv", { desc = "Indent Left" })

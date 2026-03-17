@@ -14,17 +14,17 @@ return {
         fuzzy = {
           implementation = "prefer_rust",
         },
-        --cmdline = {
-        --  enabled = false,
-        --  completion = { menu = { auto_show = true } },
-        --},
         cmdline = {
-          keymap = { preset = "inherit" },
-          completion = {
-            menu = { auto_show = true },
-            ghost_text = { enabled = true },
-          },
+          enabled = false,
+          completion = { menu = { auto_show = true } },
         },
+        --cmdline = {
+        --  keymap = { preset = "inherit" },
+        --  completion = {
+        --    menu = { auto_show = true },
+        --    ghost_text = { enabled = true },
+        --  },
+        --},
         sources = {
           default = { "lsp", "path", "buffer", "snippets" },
           per_filetype = {
@@ -283,7 +283,7 @@ return {
       cli = {
         mux = {
           enabled = true,
-          backend = "tmux",
+          backend = "native",
         },
       },
       nes = { enabled = true },

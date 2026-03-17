@@ -1,0 +1,37 @@
+# Font
+font-family = Fira Code
+font-size = 13
+font-style = Regular
+
+# Theme
+term = xterm-kitty
+theme = custom-sonokai
+shell-integration = fish
+shell-integration-features = no-cursor,sudo,no-title
+
+# Window
+background-opacity = 1
+
+macos-titlebar-style = hidden
+macos-option-as-alt = true
+macos-titlebar-style=transparent
+macos-window-shadow = true
+
+gtk-tabs-location = hidden
+
+mouse-hide-while-typing = true
+mouse-scroll-multiplier = 2
+
+window-padding-balance = true 
+window-save-state = always
+window-colorspace = "display-p3"
+window-vsync=false
+window-decoration=none
+
+## Clipboard
+clipboard-read = "allow"
+clipboard-paste-protection = false
+
+#cursor-style = block
+#adjust-cell-width = 0
+#adjust-cell-height = 5%
