@@ -37,6 +37,7 @@ return {
         { "<leader>b", group = "Buffers" },
         { "<leader>c", group = "Code" },
         { "<leader>d", group = "Diagnostics" },
+        { "<leader>D", group = "Debug" },
         { "<leader>f", group = "Files" },
         { "<leader>g", group = "Git" },
         { "<leader>gh", group = "Hunks" },

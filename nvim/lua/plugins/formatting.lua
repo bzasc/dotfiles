@@ -29,8 +29,12 @@ return {
         scss = { "prettier" },
 
         -- Python
-        --python = { "isort", "black" },
         python = { "ruff_organise_imports", "ruff_fix", "ruff_format" },
+
+        -- ruby
+        ruby = { "rubocop" },
+        eruby = { "erb_format" },
+        erb = { "erb_format" },
 
         -- PHP/Laravel
         php = { "pint" },

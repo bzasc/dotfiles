@@ -38,9 +38,6 @@ return {
         -- <leader>l = LSP
         map("n", "<leader>li", "<cmd>LspInfo<cr>", "LSP Info")
         map("n", "<leader>lr", "<cmd>LspRestart<cr>", "LSP Restart")
-        map("n", "<leader>lh", function()
-          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
-        end, "Toggle Inlay Hints")
       end
 
       -- LSP Attach Handler
@@ -198,6 +195,8 @@ return {
           "jsonls",
           "yamlls",
           "codelldb",
+          "ruby-lsp",
+          "copilot",
           -- Linters
           "eslint_d",
           "luacheck",
@@ -210,12 +209,14 @@ return {
           "phpstan",
           "ruff",
           "mypy",
+          "rubocop",
           -- Formatters
           "stylua",
           "goimports",
           "prettier",
           "shfmt",
           "pint",
+          "erb-formatter",
         },
       })
     end,

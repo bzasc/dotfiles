@@ -109,7 +109,7 @@ return {
         desc = "Reset Buffer",
       },
       {
-        "<leader>gS",
+        "<leader>ghS",
         function()
           require("gitsigns").stage_buffer()
         end,

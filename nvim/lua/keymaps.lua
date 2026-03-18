@@ -37,8 +37,6 @@ vim.keymap.set("c", "<CR>", function()
   return vim.fn.getcmdtype() == "/" and "<CR>zzzv" or "<CR>"
 end, { expr = true })
 
-vim.keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
-
 vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
 vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
 
@@ -96,16 +94,6 @@ end, { desc = "Locate files in the Obsidian vault" })
 vim.keymap.set("n", "<leader>oz", function()
   Snacks.picker.live_grep({ cwd = obsidian_vault })
 end, { desc = "Search with ripgrep (rg) in the Obsidian vault" })
-
-function _G.toggle_wrap()
-  vim.wo.wrap = not vim.wo.wrap
-  if vim.wo.wrap then
-    print("Wrap: ON")
-  else
-    print("Wrap: OFF")
-  end
-end
-vim.keymap.set("n", "<leader>Tw", ":lua toggle_wrap()<CR>", { desc = "Toggle line wrap" })
 
 vim.keymap.set("n", "gs", function()
   vim.cmd("vsplit")

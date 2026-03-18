@@ -1,28 +1,8 @@
 if status is-interactive
-    # Starship prompt
-    set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
-    starship init fish | source
-
-    # Shell integrations
-    fzf --fish | source
-    zoxide init fish | source
-    mise activate fish | source
-    uv generate-shell-completion fish | source
-
-    # Docker: start if not running
-    if not docker info >/dev/null 2>&1
+    # Docker: start if not running (skip inside tmux to avoid delay)
+    if not set -q TMUX; and not docker info >/dev/null 2>&1
         echo "⛴️ Initializing Docker..."
         open --background -a Docker
-    end
-
-    # Kitty terminfo
-    if not infocmp xterm-kitty >/dev/null 2>&1
-        echo "xterm-kitty terminfo not found. Installing..."
-        set tempfile (mktemp)
-        if curl -o "$tempfile" https://raw.githubusercontent.com/kovidgoyal/kitty/master/terminfo/kitty.terminfo
-            tic -x -o ~/.terminfo "$tempfile"
-        end
-        rm "$tempfile"
     end
 
     # Vi mode

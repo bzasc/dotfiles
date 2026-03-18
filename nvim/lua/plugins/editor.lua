@@ -88,6 +88,18 @@ return {
     opts = {},
     lazy = true,
   },
+  {
+    "echasnovski/mini.splitjoin",
+    keys = {
+      {
+        "<leader>cj",
+        function()
+          require("mini.splitjoin").toggle()
+        end,
+        desc = "Join/split code block",
+      },
+    },
+  },
 
   {
     "folke/persistence.nvim",

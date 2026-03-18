@@ -47,7 +47,7 @@ return {
         "jbyuki/one-small-step-for-vimkind",
         keys = {
           {
-            "<leader>dl",
+            "<leader>Dl",
             function()
               require("osv").launch({ port = 8086 })
             end,
@@ -60,14 +60,14 @@ return {
     },
     keys = {
       {
-        "<leader>db",
+        "<leader>Db",
         function()
           require("dap").toggle_breakpoint()
         end,
         desc = "Toggle breakpoint",
       },
       {
-        "<leader>dB",
+        "<leader>DB",
         function()
           require("dap").list_breakpoints()
           vim.cmd("copen")
@@ -75,7 +75,7 @@ return {
         desc = "List breakpoints",
       },
       {
-        "<leader>dc",
+        "<leader>Dc",
         function()
           require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
         end,

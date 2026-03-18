@@ -3,6 +3,9 @@ return {
   {
     "saghen/blink.cmp",
     version = "*",
+    dependencies = {
+      "fang2hou/blink-copilot",
+    },
     config = function()
       require("blink.cmp").setup({
         snippets = { preset = "luasnip" },
@@ -26,7 +29,7 @@ return {
         --  },
         --},
         sources = {
-          default = { "lsp", "path", "buffer", "snippets" },
+          default = { "lsp", "path", "buffer", "snippets", "copilot" },
           per_filetype = {
             lua = { inherit_defaults = true, "lazydev" },
           },
@@ -35,6 +38,11 @@ return {
               name = "LazyDev",
               module = "lazydev.integrations.blink",
               score_offset = 100,
+            },
+            copilot = {
+              name = "copilot",
+              module = "blink-copilot",
+              async = true,
             },
             cmdline = {
               min_keyword_length = 2,
@@ -277,10 +285,27 @@ return {
     dependencies = "mattn/webapi-vim",
   },
 
+  -- {
+  --   "zbirenbaum/copilot.lua",
+  --   --dependencies = { "copilotlsp-nvim/copilot-lsp" }, -- Required for NES
+  --   config = function()
+  --     require("copilot").setup({
+  --       nes = { enabled = false }, -- The feature causing the error
+  --     })
+  --   end,
+  -- },
+
   {
     "folke/sidekick.nvim",
     opts = {
-      nes = { enabled = true },
+      cli = {
+        picker = "snacks",
+        mux = {
+          enabled = true,
+          create = "terminal",
+        },
+      },
+      nes = { enabled = false },
     },
     keys = {
       {

@@ -1,12 +1,17 @@
 # Neovim
 
-## Install dependencies (Arch Linux):
+Modular config using [lazy.nvim](https://github.com/folke/lazy.nvim) as plugin manager.
+
+## Install dependencies
+
+### Arch Linux
 
 ```shell
-sudo pacman -S --noconfirm --needed gcc make ripgrep fd neovim
+sudo pacman -S --needed gcc make ripgrep fd neovim lazygit lua luajit luarocks nodejs npm tree-sitter-cli imagemagick
+sudo pacman -S --needed ttf-jetbrains-mono-nerd
 ```
 
-## Install dependencies (MacOs):
+### macOS
 
 ```shell
 # Core requirements
@@ -32,12 +37,55 @@ npm install -g @mermaid-js/mermaid-cli
 brew install tectonic
 ```
 
-## Documentation
+## Plugins
 
-- Keybinds and plugin defaults: [KEYBINDS.md](KEYBINDS.md)
+### Coding
+
+blink.cmp, nvim-treesitter, LuaSnip, Comment.nvim, nvim-ts-autotag, lazydev.nvim, neorg, sidekick.nvim (Claude AI), rustaceanvim, vim-rails, vim-bundler, vim-rake
+
+### LSP
+
+nvim-lspconfig, mason.nvim, mason-lspconfig.nvim, mason-tool-installer.nvim
+
+Configured servers: `lua_ls`, `gopls`, `zls`, `ts_ls`, `rust-analyzer`, `intelephense`, `bashls`, `ruff`, `pyright`, `ruby-lsp`, `cssls`, `html`, `jsonls`, `yamlls`
+
+### UI
+
+which-key.nvim, noice.nvim, trouble.nvim, tiny-inline-diagnostic.nvim, fidget.nvim, render-markdown.nvim, markdown-preview.nvim, checkmate.nvim, nvim-web-devicons
+
+### Editor
+
+mini.nvim (ai, surround, pairs, statusline, icons, files), persistence.nvim, obsidian.nvim, yanky.nvim
+
+### Snacks.nvim
+
+Dashboard, Explorer, Picker, Lazygit, Terminal, Zen Mode, Image, Notifier, Rename
+
+### Formatting
+
+conform.nvim — Go, Lua, TypeScript, JavaScript, JSON, YAML, Markdown, HTML, CSS, Python, PHP, Rust, Shell
+
+### Testing
+
+neotest + adapters: Python, Jest, Vitest, RSpec, Minitest
+
+### Debugging
+
+nvim-dap, nvim-dap-view, nvim-dap-virtual-text, nvim-dap-go, nvim-dap-python, overseer.nvim
+
+### Git
+
+gitsigns.nvim, diffview.nvim
+
+### Theme
+
+sonokai, nvim-colorizer.lua
 
 ## Quick Usage
 
-- Install/update plugins: `:Lazy sync`
-- Health checks: `:checkhealth`
-- Update Treesitter parsers: `:TSUpdate`
+| Command        | Description               |
+| -------------- | ------------------------- |
+| `:Lazy sync`   | Install/update plugins    |
+| `:Mason`       | Manage LSPs and tools     |
+| `:checkhealth` | Check installation health |
+| `:TSUpdate`    | Update Treesitter parsers |
