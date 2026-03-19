@@ -4,7 +4,6 @@ font-size = 13
 font-style = Regular
 
 # Theme
-#term = xterm-kitty
 theme = kanagawa
 shell-integration = fish
 shell-integration-features = no-cursor,sudo,no-title
@@ -31,7 +30,3 @@ window-decoration=none
 ## Clipboard
 clipboard-read = "allow"
 clipboard-paste-protection = false
-
-#cursor-style = block
-#adjust-cell-width = 0
-#adjust-cell-height = 5%

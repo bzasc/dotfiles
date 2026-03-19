@@ -43,15 +43,6 @@ truncate_to_repo = false
 "Developer" = "󰲋 "
 "Others" = " "
 
-#[git_branch]
-#style = 'fg:green'
-#symbol = ' '
-#format = '[on](white) [$symbol$branch ]($style)'
-
-#[git_status]
-#style = 'fg:green'
-#format = '([$all_status$ahead_behind]($style) )'
-
 [custom.giturl]
 description = "Display symbol for remote Git server"
 command = """
@@ -79,13 +70,6 @@ shell = ["bash", "--noprofile", "--norc"]
 symbol = "[](base) "
 style = "fg:lavender bg:base"
 format =  " [$symbol$branch]($style)[](base)"
-
-# [git_status] 
-# MINIMAL git status 
-# format = " [($all_status$ahead_behind )]($style)"
-# ahead    = "⇡${count} "
-# behind   = "⇣${count} "
-# diverged = "⇕⇡${ahead_count}⇣${behind_count} "
 
 [git_status]
 format = "[$staged$modified$renamed$conflicted$ahead_behind]($style)"
@@ -118,9 +102,6 @@ format = " ([$output ]($style))"
 style = "bold green"
 require_repo = true
 ignore_timeout = true
-
-#[fill]
-#symbol = ' '
 
 [os]
 disabled = true
@@ -263,8 +244,8 @@ red = '#ff6188'
 peach = "#fe8019"
 yellow = '#ffd866'
 sapphire = "#83a598"
-base = "#181825" # git branch bg
-lavender = "#61AFEF"   # git branch fg
+base = "#181825"
+lavender = "#61AFEF"
 
 [palettes.rose_pine]
 fg0 = '#e0def4'
