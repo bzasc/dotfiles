@@ -65,6 +65,7 @@ set -gx OBSIDIAN_VAULT "$HOME/annotations/bzasc_brain"
 set -gx ZETTELKASTEN "$HOME/annotations/bzasc_brain"
 set -gx DAILY_NOTES_TEMPLATE_PATH "$HOME/annotations/bzasc_brain/templates/daily-note.md"
 set -gx SDKMAN_DIR "$HOME/.sdkman"
+set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
 
 # PATH
 fish_add_path "$HOME/.config/tmux/tmuxifier/bin"

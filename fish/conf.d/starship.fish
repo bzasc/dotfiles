@@ -1,5 +1,3 @@
-set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
-
 function __starship_set_job_count --description 'Set STARSHIP_JOBS using fish job groups (or legacy PIDs if toggled)'
     # To force legacy behavior (process PIDs), set this variable to "false":
     #   set -g __starship_fish_use_job_groups "false"

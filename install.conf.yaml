@@ -1,0 +1,22 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+
+- clean:
+    - "~/.config"
+
+- link:
+    ~/.config/fish: fish
+    ~/.config/ghostty: ghostty
+    ~/.config/kitty: kitty
+    ~/.config/wezterm: wezterm
+    ~/.config/nvim: nvim
+    ~/.config/tmux: tmux
+    ~/.config/fastfetch: fastfetch
+    ~/.config/starship: starship
+    # ~/.config/hypr: hypr
+
+- shell:
+    - command: echo "Dotfiles linked!"
+      stdout: true

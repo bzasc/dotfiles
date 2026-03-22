@@ -47,3 +47,4 @@ lazy-lock.json
 tmux/plugins
 tmux/tpm
 nvim/lazy
+tmux/tmuxifier
