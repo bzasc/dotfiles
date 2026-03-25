@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
   "runtime": {
-    "version": "LuaJIT"
+    "version": "LuaJIT",
   },
   "workspace": {
     "checkThirdParty": false,
@@ -33,7 +33,7 @@
       "$XDG_DATA_HOME/nvim/lazy/nvim-jdtls/lua",
       "$XDG_DATA_HOME/nvim/lazy/nvim-treesitter-context/lua",
       "$XDG_DATA_HOME/nvim/lazy/overseer.nvim/lua/overseer/init.lua",
-      "$XDG_DATA_HOME/nvim/lazy/quicker.nvim/lua"
-    ]
-  }
+      "$XDG_DATA_HOME/nvim/lazy/quicker.nvim/lua",
+    ],
+  },
 }
