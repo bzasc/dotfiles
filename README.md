@@ -21,7 +21,7 @@ Minhas configurações pessoais.
 ## Instalação
 
 ```bash
-git clone https://github.com/brunoln/dotfiles.git ~/dotfiles
+git clone https://github.com/bzasc/dotfiles.git ~/dotfiles
 cd ~/dotfiles
 ```
 
