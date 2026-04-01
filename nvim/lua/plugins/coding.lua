@@ -302,7 +302,7 @@ return {
         picker = "snacks",
         mux = {
           enabled = true,
-          create = "terminal",
+          backend = "tmux",
         },
       },
       nes = { enabled = false },

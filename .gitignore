@@ -43,7 +43,6 @@ luac.out
 
 plugin/packer_compiled.lua
 nvim/AGENTS.md
-lazy-lock.json
 tmux/plugins
 tmux/tpm
 nvim/lazy
