@@ -189,7 +189,6 @@ return {
           "rust-analyzer",
           "intelephense",
           "bashls",
-          "pyright",
           "cssls",
           "html",
           "jsonls",
