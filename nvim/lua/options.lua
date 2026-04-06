@@ -35,7 +35,7 @@ vim.opt.ignorecase = true -- Ignore case in search patterns
 vim.opt.smartcase = true -- Override ignorecase if pattern contains uppercase
 
 vim.opt.list = true
-vim.opt.listchars = { space = "⋅", trail = "⋅", tab = "  ↦" }
+vim.opt.listchars = { space = " ", trail = "⋅", tab = "  ↦" }
 
 vim.opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
