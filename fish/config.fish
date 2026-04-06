@@ -68,4 +68,5 @@ set -gx SDKMAN_DIR "$HOME/.sdkman"
 set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
 
 # PATH
-fish_add_path "$HOME/.config/tmux/tmuxifier/bin"
+set -gx PATH (string match -v "$HOME/.config/tmux/tmuxifier/libexec" $PATH)
+set -gx PATH (string match -v "$HOME/.config/tmux/tmuxifier/bin" $PATH)

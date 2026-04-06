@@ -40,12 +40,24 @@ uv tool install dotbot
 
 Com `--backup`, diretórios existentes (não-symlinks) são movidos para `~/.config-backup/<timestamp>/`.
 
-### Tmuxifier
+### Tmux
 
-O [tmuxifier](https://github.com/jimeh/tmuxifier) não é versionado neste repositório. Após rodar o `install.sh`, clone manualmente:
+Este setup usa a função `devsession` do `fish` para criar ou reanexar uma sessão `tmux` com:
+
+```text
+code
+|- shell
+|- shell
+`- shell
+
+annotation
+```
+
+Use no diretório do projeto:
 
 ```bash
-git clone https://github.com/jimeh/tmuxifier.git ~/.config/tmux/tmuxifier
+devsession           # usa o nome da pasta atual como nome da sessão
+devsession workspace    # usa um nome de sessão explícito
 ```
 
 ### macOS (Homebrew)

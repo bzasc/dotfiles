@@ -175,6 +175,7 @@ disabled = false
 symbol = '󰏗 '
 
 [aws]
+disabled = true
 symbol = ' '
 style = 'yellow'
 format = '[$symbol($profile )(\[$duration\] )]($style)'
