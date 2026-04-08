@@ -44,49 +44,26 @@ return {
   --},
 
   {
-    "echasnovski/mini.nvim",
-    --keys = {
-    --  {
-    --    "<leader>cj",
-    --    function()
-    --      require("mini.splitjoin").toggle()
-    --    end,
-    --    desc = "Join/split code block",
-    --  },
-    --},
-    config = function()
-      -- Better Around/Inside textobjects
-      -- Examples:
-      --  - va)  - [V]isually select [A]round [)]paren
-      --  - yinq - [Y]ank [I]nside [N]ext [']quote
-      --  - ci'  - [C]hange [I]nside [']quote
-      require("mini.ai").setup({ n_lines = 500 })
-
-      -- Add/delete/replace surroundings (brackets, quotes, etc.)
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-      -- - sd'   - [S]urround [D]elete [']quotes
-      -- - sr)'  - [S]urround [R]eplace [)] [']
-      require("mini.surround").setup()
-
-      require("mini.pairs").setup()
-
-      local statusline = require("mini.statusline")
-      statusline.setup({
-        use_icons = vim.g.have_nerd_font,
-        set_vim_settings = false,
-      })
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return "%2l:%-2v"
-      end
-    end,
+    --  - va)  - [V]isually select [A]round [)]paren
+    --  - yinq - [Y]ank [I]nside [N]ext [']quote
+    --  - ci'  - [C]hange [I]nside [']quote
+    "echasnovski/mini.ai",
+    event = "VeryLazy",
+    opts = { n_lines = 500 },
   },
-
   {
-    "echasnovski/mini.icons",
-    enabled = true,
-    opts = {},
-    lazy = true,
+    -- Add/delete/replace surroundings (brackets, quotes, etc.)
+    -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+    -- - sd'   - [S]urround [D]elete [']quotes
+    -- - sr)'  - [S]urround [R]eplace [)] [']
+    "echasnovski/mini.surround",
+    event = "VeryLazy",
+    config = true,
+  },
+  {
+    "echasnovski/mini.pairs",
+    event = "VeryLazy",
+    config = true,
   },
   {
     "echasnovski/mini.splitjoin",
@@ -159,7 +136,20 @@ return {
     end,
   },
 
-  { "b0o/SchemaStore.nvim", lazy = true },
+  {
+    "nvim-neorg/neorg",
+    ft = "norg", -- lazy load on filetype
+    cmd = "Neorg", -- lazy load on command, allows you to autocomplete :Neorg regardless of whether it's loaded yet
+    --  (you could also just remove both lazy loading things)
+    priority = 30, -- treesitter is on default priority of 50, neorg should load after it.
+    config = function()
+      require("neorg").setup({
+        load = {
+          ["core.defaults"] = {},
+        },
+      })
+    end,
+  },
 
   {
     "echasnovski/mini.files",

@@ -34,7 +34,6 @@ if vim.fn.executable("tree-sitter") == 0 and vim.fn.executable("cargo") == 1 the
   })
 end
 
----@type LazySpec
 local plugins = "plugins"
 
 -- General setup and goodies (order matters here).
@@ -48,7 +47,7 @@ require("marks")
 -- Configure plugins.
 require("lazy").setup(plugins, {
   ui = {
-    --border = "rounded"
+    border = "rounded",
   },
   dev = { path = vim.g.projects_dir },
   install = {
