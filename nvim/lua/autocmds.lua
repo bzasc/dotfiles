@@ -4,15 +4,14 @@ local api = vim.api
 api.nvim_create_autocmd("BufEnter", { command = [[set formatoptions-=cro]] })
 
 -- wrap words "softly" (no carriage return) in mail buffer
-api.nvim_create_autocmd("Filetype", {
+api.nvim_create_autocmd("FileType", {
   pattern = "mail",
   callback = function()
-    vim.opt.textwidth = 0
-    vim.opt.wrapmargin = 0
-    vim.opt.wrap = true
-    vim.opt.linebreak = true
-    vim.opt.columns = 80
-    vim.opt.colorcolumn = "80"
+    vim.opt_local.textwidth = 0
+    vim.opt_local.wrapmargin = 0
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.colorcolumn = "80"
   end,
 })
 
@@ -51,7 +50,7 @@ api.nvim_create_autocmd(
 api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.txt", "*.md", "*.tex" },
   callback = function()
-    vim.opt_local.spell = false
+    vim.opt_local.spell = true
     vim.opt_local.spelllang = "en"
     vim.opt_local.wrap = true
     vim.opt_local.linebreak = true

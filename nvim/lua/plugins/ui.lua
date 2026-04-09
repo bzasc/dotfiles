@@ -80,7 +80,7 @@ return {
     config = function()
       local statusline = require("mini.statusline")
       statusline.setup({
-        use_icons = vim.g.have_nerd_font,
+        use_icons = vim.g.have_nerd_font ~= false,
         set_vim_settings = false,
       })
       ---@diagnostic disable-next-line: duplicate-set-field
@@ -313,7 +313,6 @@ return {
     },
     dependencies = {
       "MunifTanjim/nui.nvim",
-      "rcarriga/nvim-notify",
     },
   },
 }

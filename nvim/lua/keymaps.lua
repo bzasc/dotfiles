@@ -1,8 +1,8 @@
 vim.keymap.set("n", "<C-s>", "<cmd>w<cr>", { desc = "Save File" })
 vim.keymap.set({ "i", "x" }, "<C-s>", "<Esc><cmd>w<cr>", { desc = "Save File" })
 
---vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
---vim.keymap.set("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
+vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+vim.keymap.set("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
 
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear Highlight", silent = true })
 
@@ -50,7 +50,7 @@ vim.keymap.set("x", "<leader>p", [["_dP]])
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
-vim.keymap.set({ "n", "v" }, "<leader>d", '"_d')
+vim.keymap.set({ "n", "v" }, "<leader>x", '"_d', { desc = "Delete Without Yanking" })
 
 -- Yank block
 vim.keymap.set("n", "YY", "va{Vy", { desc = "Yank Block {}" })

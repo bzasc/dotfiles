@@ -6,11 +6,11 @@ return {
   opts = {
     bigfile = { enabled = true },
     dashboard = { enabled = true },
-    explorer = { enabled = true },
+    explorer = { enabled = false },
     image = {
       enabled = true,
       doc = {
-        enabled = true,
+        enabled = false,
         inline = true,
         float = true,
         max_width = 80,
@@ -79,13 +79,6 @@ return {
         Snacks.scratch()
       end,
       desc = "Scratch Buffer",
-    },
-    {
-      "<leader>E",
-      function()
-        Snacks.explorer()
-      end,
-      desc = "Explorer",
     },
     {
       "<leader>,",
