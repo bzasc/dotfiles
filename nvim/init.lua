@@ -15,11 +15,6 @@ package.cpath = package.cpath .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/li
 -- Global variables.
 vim.g.projects_dir = vim.env.HOME .. "/dev"
 
--- Enable bytecode cache for faster startup (Neovim >= 0.9).
-if vim.loader then
-  vim.loader.enable()
-end
-
 -- Install Lazy.
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
