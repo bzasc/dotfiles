@@ -258,6 +258,7 @@ return {
           "zls",
           "ts_ls",
           "rust-analyzer",
+          "basedpyright",
           "intelephense",
           "bashls",
           "cssls",
