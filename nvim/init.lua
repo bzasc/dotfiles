@@ -1,6 +1,10 @@
 -- Enable bytecode cache for faster startup (Neovim >= 0.9).
-if vim.loader then
-  vim.loader.enable()
+vim.loader.enable()
+
+if vim.fn.has("nvim-0.12") == 1 and true then
+  require("vim._core.ui2").enable({})
+else
+  require("modules.router")
 end
 
 -- Luarocks path (needed for magick/image support).

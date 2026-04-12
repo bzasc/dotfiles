@@ -278,41 +278,53 @@ return {
       },
     },
   },
-
   {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    opts = {
-      lsp = {
-        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-        hover = {
-          silent = true,
-        },
-        override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
-        },
-      },
-      -- Use snacks for notifications
-      routes = {
-        {
-          filter = {
-            event = "msg_show",
-            kind = "",
-            find = "written",
-          },
-          opts = { skip = true },
-        },
-      },
-      presets = {
-        bottom_search = false,
-        command_palette = true,
-        long_message_to_split = true,
-        inc_rename = true,
-      },
-    },
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-    },
+    "rachartier/tiny-cmdline.nvim",
+    config = function()
+      require("tiny-cmdline").setup({
+        on_reposition = require("tiny-cmdline").adapters.blink,
+      })
+      local function fix_hl()
+        vim.api.nvim_set_hl(0, "TinyCmdlineNormal", { link = "NormalFloat" })
+      end
+      fix_hl()
+      vim.api.nvim_create_autocmd("ColorScheme", { callback = fix_hl })
+    end,
   },
+  --  {
+  --    "folke/noice.nvim",
+  --    event = "VeryLazy",
+  --    opts = {
+  --      lsp = {
+  --        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+  --        hover = {
+  --          silent = true,
+  --        },
+  --        override = {
+  --          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+  --          ["vim.lsp.util.stylize_markdown"] = true,
+  --        },
+  --      },
+  --      -- Use snacks for notifications
+  --      routes = {
+  --        {
+  --          filter = {
+  --            event = "msg_show",
+  --            kind = "",
+  --            find = "written",
+  --          },
+  --          opts = { skip = true },
+  --        },
+  --      },
+  --      presets = {
+  --        bottom_search = false,
+  --        command_palette = true,
+  --        long_message_to_split = true,
+  --        inc_rename = true,
+  --      },
+  --    },
+  --    dependencies = {
+  --      "MunifTanjim/nui.nvim",
+  --    },
+  --  },
 }
