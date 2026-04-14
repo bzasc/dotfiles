@@ -41,12 +41,14 @@ vim.opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line
 
 vim.opt.mouse = "a" -- Enable mouse support in all modes
 vim.opt.clipboard = "unnamedplus" -- Use system clipboard for all yank/paste operations
-vim.opt.undofile = true -- Persist undo history to disk between sessions
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undo" -- Directory to store undo files
-vim.opt.updatetime = 100 -- Time in ms before CursorHold event triggers (affects plugins)
+
+vim.opt.updatetime = 500 -- Time in ms before CursorHold event triggers (affects plugins)
+vim.opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
+vim.opt.ttimeoutlen = 0 -- Key code timeout
 vim.opt.timeoutlen = 1000 -- Time in ms to wait for a mapped key sequence to complete
-vim.opt.confirm = true -- Prompt for confirmation instead of failing on unsaved changes
 vim.opt.autoread = true -- Automatically reload files changed outside of Neovim
+vim.opt.autowrite = true -- Auto save
+vim.opt.confirm = true -- Prompt for confirmation instead of failing on unsaved changes
 
 vim.opt.splitright = true -- split vertical window to the right
 vim.opt.splitbelow = true -- split horizontal window to the bottom
@@ -54,7 +56,12 @@ vim.opt.splitbelow = true -- split horizontal window to the bottom
 vim.opt.fileencoding = "utf-8" -- File encoding for new files
 vim.opt.backup = false -- Don't create backup files before overwriting
 vim.opt.writebackup = false -- Don't create backup while editing
+vim.opt.backup = false -- Don't create backup files
+vim.opt.writebackup = false -- Don't create backup before writing
 vim.opt.swapfile = false -- Don't create swap files
+vim.opt.undofile = true -- Persistent undo
+vim.opt.undolevels = 10000
+vim.opt.undodir = vim.fn.expand("~/.vim/undodir") -- Undo directory
 
 vim.opt.scrolloff = 8 -- minimum lines to keep above/below cursor
 vim.opt.sidescrolloff = 8 -- minimum columns to keep left/right of cursor
@@ -67,10 +74,20 @@ vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpo
 vim.opt.completeopt = { "menu", "menuone", "noselect" } -- Completion menu options
 vim.opt.conceallevel = 0 -- Show all text normally (no concealment)
 
+-- Performance improvements
+vim.opt.redrawtime = 10000
+vim.opt.maxmempattern = 20000
+
+local undodir = vim.fn.expand("~/.vim/undodir")
+if vim.fn.isdirectory(undodir) == 0 then
+  vim.fn.mkdir(undodir, "p")
+end
+
 -- Filetype Detection
 vim.filetype.add({
   extension = {
     env = "dotenv", -- Treat .env extension as dotenv filetype
+    txt = "markdown",
   },
   filename = {
     [".env"] = "dotenv", -- Treat .env file as dotenv filetype

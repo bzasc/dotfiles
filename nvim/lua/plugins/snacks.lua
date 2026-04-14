@@ -4,8 +4,32 @@ return {
   lazy = false,
   ---@type snacks.Config
   opts = {
-    bigfile = { enabled = true },
-    dashboard = { enabled = true },
+    animate = { enabled = true },
+    bigfile = {
+      enabled = true,
+      size = 1.5 * 1024 * 1024, -- 1.5MB threshold
+      setup = function(ctx)
+        -- Disable treesitter (disables highlights, folds, indentexpr)
+        vim.cmd("syntax clear")
+        vim.treesitter.stop(ctx.buf)
+        vim.wo[0].foldmethod = "manual"
+        vim.wo[0].foldexpr = ""
+
+        -- Disable LSP features that are expensive on large files
+        vim.schedule(function()
+          vim.lsp.inlay_hint.enable(false, { bufnr = ctx.buf })
+          vim.lsp.document_color.enable(false, { bufnr = ctx.buf })
+        end)
+
+        -- Keep diagnostics off for huge files
+        vim.diagnostic.enable(false, { bufnr = ctx.buf })
+
+        -- Disable indent guides
+        vim.b[ctx.buf].snacks_indent = false
+      end,
+    },
+    dashboard = { enabled = false },
+    dim = { enabled = true },
     explorer = { enabled = false },
     image = {
       enabled = true,
@@ -27,7 +51,37 @@ return {
     picker = {
       enabled = true,
       sources = {
-        files = { hidden = true },
+        files = {
+          hidden = true,
+          ignore = true,
+          exclude = {
+            "**/.git/*",
+            "**/node_modules/*",
+            "**/.yarn/cache/*",
+            "**/.yarn/install*",
+            "**/.yarn/releases/*",
+            "**/.idea/*",
+            "**/.DS_Store",
+            "**/.venv/**",
+            "build/*",
+            "coverage/*",
+            "dist/*",
+            "**/target/*",
+            "**/public/*",
+            "**/claude/debug",
+            "**/claude/file-history",
+            "**/claude/plans",
+            "**/claude/plugins",
+            "**/claude/projects",
+            "**/claude/session-env",
+            "**/claude/shell-snapshots",
+            "**/claude/statsig",
+            "**/claude/telemetry",
+            "**/claude/todos",
+            "**/claude/history.jsonl",
+            "**/claude/*cache*",
+          },
+        },
         gh_issue = {},
         gh_pr = {},
       },
@@ -49,11 +103,11 @@ return {
     },
     quickfile = { enabled = true },
     scope = { enabled = true },
-    scroll = { enabled = false },
+    scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
     styles = { notification = {} },
-    gh = {},
+    toogle = { enabled = true },
   },
   keys = {
     -- ════════════════════════════════════════════════════════════════════
