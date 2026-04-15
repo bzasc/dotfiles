@@ -11,7 +11,11 @@ end
 # A copy of fish's internal cd function. This makes it possible to use
 # `alias cd=z` without causing an infinite loop.
 if ! builtin functions --query __zoxide_cd_internal
-    string replace --regex -- '^function cd\s' 'function __zoxide_cd_internal ' <$__fish_data_dir/functions/cd.fish | source
+    if status list-files functions/cd.fish &>/dev/null
+        status get-file functions/cd.fish | string replace --regex -- '^function cd\s' 'function __zoxide_cd_internal ' | source
+    else
+        string replace --regex -- '^function cd\s' 'function __zoxide_cd_internal ' <$__fish_data_dir/functions/cd.fish | source
+    end
 end
 
 # cd + custom logic based on the value of _ZO_ECHO.
@@ -87,9 +91,11 @@ end
 #
 
 abbr --erase z &>/dev/null
+complete --erase --command z
 alias z=__zoxide_z
 
 abbr --erase zi &>/dev/null
+complete --erase --command zi
 alias zi=__zoxide_zi
 
 # =============================================================================

@@ -1,4 +1,5 @@
-set -gx PATH /Users/bzasc/.config/tmux/tmuxifier/libexec /opt/homebrew/opt/mise/bin /Users/bzasc/.local/bin /Users/bzasc/.cargo/bin /Users/bzasc/.config/tmux/tmuxifier/bin /usr/local/bin /System/Cryptexes/App/usr/bin /usr/bin /bin /usr/sbin /sbin /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin /opt/pmk/env/global/bin /Library/Apple/usr/bin /opt/homebrew/bin /Applications/Ghostty.app/Contents/MacOS
+set -e JAVA_HOME
+set -gx PATH /opt/homebrew/opt/mise/bin /Users/bzasc/.local/bin /Users/bzasc/.cargo/bin /usr/local/bin /System/Cryptexes/App/usr/bin /usr/bin /bin /usr/sbin /sbin /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin /var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin /opt/pmk/env/global/bin /Library/Apple/usr/bin /opt/homebrew/bin /Applications/Ghostty.app/Contents/MacOS
 functions --erase __mise_env_eval
 functions --erase __mise_env_eval_2
 functions --erase __mise_cd_hook

@@ -5,7 +5,6 @@
 #  / __/ / /_/ __/
 # /_/   /___/_/ key-bindings.fish
 #
-# - $FZF_TMUX_OPTS
 # - $FZF_CTRL_T_COMMAND
 # - $FZF_CTRL_T_OPTS
 # - $FZF_CTRL_R_COMMAND
@@ -13,35 +12,29 @@
 # - $FZF_ALT_C_COMMAND
 # - $FZF_ALT_C_OPTS
 
-
 # Key bindings
 # ------------
-# The oldest supported fish version is 3.1b1. To maintain compatibility, the
-# command substitution syntax $(cmd) should never be used, even behind a version
-# check, otherwise the source command will fail on fish versions older than 3.4.0.
 function fzf_key_bindings
 
-  # Check fish version
-  if set -l -- fish_ver (string match -r '^(\d+)\.(\d+)' $version 2>/dev/null)
-  and test "$fish_ver[2]" -lt 3 -o "$fish_ver[2]" -eq 3 -a "$fish_ver[3]" -lt 1
-    echo "This script requires fish version 3.1b1 or newer." >&2
+  # The oldest supported fish version is 3.4.0. For this message being able to be
+  # displayed on older versions, the command substitution syntax $() should not
+  # be used anywhere in the script, otherwise the source command will fail.
+  if string match -qr -- '^[12]\\.|^3\\.[0-3]' $version
+    echo "fzf key bindings script requires fish version 3.4.0 or newer." >&2
     return 1
-  else if not type -q fzf
+  else if not command -q fzf
     echo "fzf was not found in path." >&2
     return 1
   end
 
-#----BEGIN INCLUDE common.fish
-# NOTE: Do not directly edit this section, which is copied from "common.fish".
-# To modify it, one can edit "common.fish" and run "./update.sh" to apply
-# the changes. See code comments in "common.fish" for the implementation details.
-
   function __fzf_defaults
+    # $argv[1]: Prepend to FZF_DEFAULT_OPTS_FILE and FZF_DEFAULT_OPTS
+    # $argv[2..]: Append to FZF_DEFAULT_OPTS_FILE and FZF_DEFAULT_OPTS
     test -n "$FZF_TMUX_HEIGHT"; or set -l FZF_TMUX_HEIGHT 40%
     string join ' ' -- \
       "--height $FZF_TMUX_HEIGHT --min-height=20+ --bind=ctrl-z:ignore" $argv[1] \
       (test -r "$FZF_DEFAULT_OPTS_FILE"; and string join -- ' ' <$FZF_DEFAULT_OPTS_FILE) \
-      $FZF_DEFAULT_OPTS $argv[2..-1]
+      $FZF_DEFAULT_OPTS $argv[2..]
   end
 
   function __fzfcmd
@@ -55,107 +48,59 @@ function fzf_key_bindings
     end
   end
 
-  function __fzf_cmd_tokens -d 'Return command line tokens, skipping leading env assignments and command prefixes'
-    set -l tokens
-    if test (string match -r -- '^\d+' $version) -ge 4
-      set -- tokens (commandline -xpc)
-    else
-      set -- tokens (commandline -opc)
-    end
-
-    set -l -- var_count 0
-    for i in $tokens
-      if string match -qr -- '^[\w]+=' $i
-        set var_count (math $var_count + 1)
-      else
-        break
-      end
-    end
-    set -e -- tokens[0..$var_count]
-
-    while true
-      switch "$tokens[1]"
-        case builtin command
-          set -e -- tokens[1]
-          test "$tokens[1]" = "--"; and set -e -- tokens[1]
-        case env
-          set -e -- tokens[1]
-          test "$tokens[1]" = "--"; and set -e -- tokens[1]
-          while string match -qr -- '^[\w]+=' "$tokens[1]"
-            set -e -- tokens[1]
-          end
-        case '*'
-          break
-      end
-    end
-
-    string escape -n -- $tokens
-  end
-
   function __fzf_parse_commandline -d 'Parse the current command line token and return split of existing filepath, fzf query, and optional -option= prefix'
     set -l fzf_query ''
     set -l prefix ''
     set -l dir '.'
 
-    set -l -- fish_major (string match -r -- '^\d+' $version)
-    set -l -- fish_minor (string match -r -- '^\d+\.(\d+)' $version)[2]
+    set -l -- match_regex '(?<fzf_query>[\\s\\S]*?(?=\\n?$)$)'
+    set -l -- prefix_regex '^-[^\\s=]+=|^-(?!-)\\S'
 
-    set -l -- match_regex '(?<fzf_query>[\s\S]*?(?=\n?$)$)'
-    set -l -- prefix_regex '^-[^\s=]+=|^-(?!-)\S'
-    if test "$fish_major" -eq 3 -a "$fish_minor" -lt 3
-    or string match -q -v -- '* -- *' (string sub -l (commandline -Cp) -- (commandline -p))
-      set -- match_regex "(?<prefix>$prefix_regex)?$match_regex"
-    end
+    # Don't use option prefix if " -- " is preceded.
+    string match -qv -- '* -- *' (string sub -l (commandline -Cp) -- (commandline -p))
+    and set -- match_regex "(?<prefix>$prefix_regex)?$match_regex"
 
-    if test "$fish_major" -ge 4
+    # Set $prefix and expanded $fzf_query with preserved trailing newlines.
+    if string match -qr -- '^\\d\\d+|^[4-9]' $version
+      # fish v4.0.0 and newer
       string match -q -r -- $match_regex (commandline --current-token --tokens-expanded | string collect -N)
-    else if test "$fish_major" -eq 3 -a "$fish_minor" -ge 2
-      string match -q -r -- $match_regex (commandline --current-token --tokenize | string collect -N)
-      eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r -a '^\\\(?=~)|\\\(?=\$\w)' '')
     else
-      set -l -- cl_token (commandline --current-token --tokenize | string collect -N)
-      set -- prefix (string match -r -- $prefix_regex $cl_token)
-      set -- fzf_query (string replace -- "$prefix" '' $cl_token | string collect -N)
-      eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r -a '^\\\(?=~)|\\\(?=\$\w)|\\\n\\\n$' '')
+      string match -q -r -- $match_regex (commandline --current-token --tokenize | string collect -N)
+      eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r -a '^\\\\(?=~)|\\\\(?=\\$\\w)' '')
     end
 
     if test -n "$fzf_query"
-      if test \( "$fish_major" -ge 4 \) -o \( "$fish_major" -eq 3 -a "$fish_minor" -ge 5 \)
+      # Normalize path in $fzf_query, set $dir to the longest existing directory.
+      if string match -qr -- '^\\d\\d+|^4|^3\\.[5-9]' $version
+        # fish v3.5.0 and newer
         set -- fzf_query (path normalize -- $fzf_query)
         set -- dir $fzf_query
         while not path is -d $dir
           set -- dir (path dirname $dir)
         end
       else
-        if test "$fish_major" -eq 3 -a "$fish_minor" -ge 2
-          string match -q -r -- '(?<fzf_query>^[\s\S]*?(?=\n?$)$)' \
-            (string replace -r -a -- '(?<=/)/|(?<!^)/+(?!\n)$' '' $fzf_query | string collect -N)
-        else
-          set -- fzf_query (string replace -r -a -- '(?<=/)/|(?<!^)/+(?!\n)$' '' $fzf_query | string collect -N)
-          eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r '\\\n$' '')
-        end
+        string match -q -r -- '(?<fzf_query>^[\\s\\S]*?(?=\\n?$)$)' \
+          (string replace -r -a -- '(?<=/)/|(?<!^)/+(?!\\n)$' '' $fzf_query | string collect -N)
         set -- dir $fzf_query
         while not test -d "$dir"
           set -- dir (dirname -z -- "$dir" | string split0)
         end
       end
 
-      if not string match -q -- '.' $dir; or string match -q -r -- '^\./|^\.$' $fzf_query
-        if test "$fish_major" -ge 4
-          string match -q -r -- '^'(string escape --style=regex -- $dir)'/?(?<fzf_query>[\s\S]*)' $fzf_query
-        else if test "$fish_major" -eq 3 -a "$fish_minor" -ge 2
-          string match -q -r -- '^/?(?<fzf_query>[\s\S]*?(?=\n?$)$)' \
-            (string replace -- "$dir" '' $fzf_query | string collect -N)
+      if not string match -q -- '.' $dir; or string match -qr -- '^\\.(/|$)' $fzf_query
+        # Strip $dir from $fzf_query - preserve trailing newlines.
+        if string match -qr -- '^\\d\\d+|^[4-9]' $version
+          # fish v4.0.0 and newer
+          string match -q -r -- '^'(string escape --style=regex -- $dir)'/?(?<fzf_query>[\\s\\S]*)' $fzf_query
         else
-          set -- fzf_query (string replace -- "$dir" '' $fzf_query | string collect -N)
-          eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r -a '^/?|\\\n$' '')
+          string match -q -r -- '^/?(?<fzf_query>[\\s\\S]*?(?=\\n?$)$)' \
+            (string replace -- "$dir" '' $fzf_query | string collect -N)
         end
       end
     end
 
     string escape -n -- "$dir" "$fzf_query" "$prefix"
   end
-#----END INCLUDE
 
   # Store current token in $dir as root for the 'find' command
   function fzf-file-widget -d "List files and folders"
@@ -172,7 +117,7 @@ function fzf_key_bindings
     set -lx FZF_DEFAULT_OPTS_FILE
 
     set -l result (eval (__fzfcmd) --walker-root=$dir --query=$fzf_query | string split0)
-    and commandline -rt -- (string join -- ' ' $prefix(string escape --no-quoted -- $result))' '
+    and commandline -rt -- (string join -- ' ' $prefix(string escape -n -- $result))' '
 
     commandline -f repaint
   end
@@ -184,45 +129,33 @@ function fzf_key_bindings
     set -l -- fzf_query (string escape -- $command_line[$current_line])
 
     set -lx -- FZF_DEFAULT_OPTS (__fzf_defaults '' \
-      '--nth=2..,.. --scheme=history --multi --no-multi-line --no-wrap --wrap-sign="\t\t\t↳ " --preview-wrap-sign="↳ "' \
-      '--bind=\'shift-delete:execute-silent(for i in (string split0 -- <{+f}); eval builtin history delete --exact --case-sensitive -- (string escape -n -- $i | string replace -r "^\d*\\\\\\t" ""); end)+reload(eval $FZF_DEFAULT_COMMAND)\'' \
-      '--bind="alt-enter:become(string join0 -- (string collect -- {+2..} | fish_indent -i))"' \
+      '--with-nth=2.. --nth=2..,.. --scheme=history --multi --no-multi-line' \
+      '--no-wrap --wrap-sign="\t\t\t↳ " --preview-wrap-sign="↳ " --freeze-left=1' \
+      '--bind="alt-enter:become(set -g fzf_temp {+sf3..}; string join0 -- (string split0 -- <$fzf_temp | fish_indent -i); unlink $fzf_temp &>/dev/null)"' \
+      '--bind="alt-t:change-with-nth(1,3..|3..|2..)"' \
+      '--bind="shift-delete:execute-silent(eval builtin history delete -Ce -- (string escape -n -- (string split0 -- <{+sf3..})))+reload(eval $FZF_DEFAULT_COMMAND)"' \
       "--bind=ctrl-r:toggle-sort,alt-r:toggle-raw --highlight-line $FZF_CTRL_R_OPTS" \
-      '--accept-nth=2.. --delimiter="\t" --tabstop=4 --read0 --print0 --with-shell='(status fish-path)\\ -c)
+      '--accept-nth=3.. --delimiter="\t" --tabstop=4 --read0 --print0 --with-shell='(status fish-path)\\ -c)
 
     # Add dynamic preview options if preview command isn't already set by user
     if string match -qvr -- '--preview[= ]' "$FZF_DEFAULT_OPTS"
-      # Convert the highlighted timestamp using the date command if available
-      set -l -- date_cmd '{1}'
-      if type -q date
-        if date -d @0 '+%s' 2>/dev/null | string match -q 0
-          # GNU date
-          set -- date_cmd '(date -d @{1} \\"+%F %a %T\\")'
-        else if date -r 0 '+%s' 2>/dev/null | string match -q 0
-          # BSD date
-          set -- date_cmd '(date -r {1} \\"+%F %a %T\\")'
-        end
-      end
-
-      # Prepend the options to allow user customizations
+      # Prepend the options to allow user overrides
       set -p -- FZF_DEFAULT_OPTS \
-        '--bind="focus,resize:bg-transform:if test \\"$FZF_COLUMNS\\" -gt 100 -a \\\\( \\"$FZF_SELECT_COUNT\\" -gt 0 -o \\\\( -z \\"$FZF_WRAP\\" -a (string length -- {}) -gt (math $FZF_COLUMNS - 4) \\\\) -o (string collect -- {2..} | fish_indent | count) -gt 1 \\\\); echo show-preview; else echo hide-preview; end"' \
-        '--preview="string collect -- (test \\"$FZF_SELECT_COUNT\\" -gt 0; and string collect -- {+2..}) \\"\\n# \\"'$date_cmd' {2..} | fish_indent --ansi"' \
+        '--bind="focus,multi,resize:bg-transform:if test \\"$FZF_COLUMNS\\" -gt 100 -a \\\\( \\"$FZF_SELECT_COUNT\\" -gt 0 -o \\\\( -z \\"$FZF_WRAP\\" -a (string join0 -- <{f3..} | string length) -gt (math $FZF_COLUMNS - (switch $FZF_WITH_NTH; case 2..; echo 13; case 1,3..; echo 25; case 3..; echo 1; end)) \\\\) -o (string split0 -- <{sf3..} | fish_indent | count) -gt 1 \\\\); echo show-preview; else; echo hide-preview; end"' \
+        '--preview="test \\"$FZF_SELECT_COUNT\\" -gt 0; and string split0 -- <{+sf3..} | fish_indent (string match -q -- 3.\\\\* $version; or echo -- --only-indent) --ansi; and echo -n \\\\n; string collect -- \\\\#\\\\ {1} (string split0 -- <{sf3..}) | fish_indent --ansi"' \
         '--preview-window="right,50%,wrap-word,follow,info,hidden"'
     end
 
     set -lx FZF_DEFAULT_OPTS_FILE
 
-    set -lx -- FZF_DEFAULT_COMMAND 'builtin history -z --show-time="%s%t"'
+    set -lx -- FZF_DEFAULT_COMMAND 'builtin history -z'
 
     # Enable syntax highlighting colors on fish v4.3.3 and newer
-    if set -l -- v (string match -r -- '^(\d+)\.(\d+)(?:\.(\d+))?' $version)
-    and test "$v[2]" -gt 4 -o "$v[2]" -eq 4 -a \
-      \( "$v[3]" -gt 3 -o "$v[3]" -eq 3 -a \
-      \( -n "$v[4]" -a "$v[4]" -ge 3 \) \)
-
+    if string match -qr -- '^\\d\\d+|^4\\.[4-9]|^4\\.3\\.[3-9]' $version
       set -a -- FZF_DEFAULT_OPTS '--ansi'
-      set -a -- FZF_DEFAULT_COMMAND '--color=always'
+      set -a -- FZF_DEFAULT_COMMAND '--color=always --show-time=(set_color $fish_color_comment)"%F %a %T%t%s%t"(set_color $fish_color_normal)'
+    else
+      set -a -- FZF_DEFAULT_COMMAND '--show-time="%F %a %T%t%s%t"'
     end
 
     # Merge history from other sessions before searching
@@ -293,239 +226,167 @@ fzf_key_bindings
 #  / __/ / /_/ __/
 # /_/   /___/_/ completion.fish
 #
-# - $FZF_COMPLETION_OPTS                  (default: empty)
+# - $FZF_COMPLETION_OPTS
+# - $FZF_EXPANSION_OPTS
 
-function fzf_completion_setup
-
-#----BEGIN INCLUDE common.fish
-# NOTE: Do not directly edit this section, which is copied from "common.fish".
-# To modify it, one can edit "common.fish" and run "./update.sh" to apply
-# the changes. See code comments in "common.fish" for the implementation details.
-
-  function __fzf_defaults
-    test -n "$FZF_TMUX_HEIGHT"; or set -l FZF_TMUX_HEIGHT 40%
-    string join ' ' -- \
-      "--height $FZF_TMUX_HEIGHT --min-height=20+ --bind=ctrl-z:ignore" $argv[1] \
-      (test -r "$FZF_DEFAULT_OPTS_FILE"; and string join -- ' ' <$FZF_DEFAULT_OPTS_FILE) \
-      $FZF_DEFAULT_OPTS $argv[2..-1]
-  end
-
-  function __fzfcmd
-    test -n "$FZF_TMUX_HEIGHT"; or set -l FZF_TMUX_HEIGHT 40%
-    if test -n "$FZF_TMUX_OPTS"
-      echo "fzf-tmux $FZF_TMUX_OPTS -- "
-    else if test "$FZF_TMUX" = "1"
-      echo "fzf-tmux -d$FZF_TMUX_HEIGHT -- "
-    else
-      echo "fzf"
-    end
-  end
-
-  function __fzf_cmd_tokens -d 'Return command line tokens, skipping leading env assignments and command prefixes'
-    set -l tokens
-    if test (string match -r -- '^\d+' $version) -ge 4
-      set -- tokens (commandline -xpc)
-    else
-      set -- tokens (commandline -opc)
-    end
-
-    set -l -- var_count 0
-    for i in $tokens
-      if string match -qr -- '^[\w]+=' $i
-        set var_count (math $var_count + 1)
-      else
-        break
-      end
-    end
-    set -e -- tokens[0..$var_count]
-
-    while true
-      switch "$tokens[1]"
-        case builtin command
-          set -e -- tokens[1]
-          test "$tokens[1]" = "--"; and set -e -- tokens[1]
-        case env
-          set -e -- tokens[1]
-          test "$tokens[1]" = "--"; and set -e -- tokens[1]
-          while string match -qr -- '^[\w]+=' "$tokens[1]"
-            set -e -- tokens[1]
-          end
-        case '*'
-          break
-      end
-    end
-
-    string escape -n -- $tokens
-  end
-
-  function __fzf_parse_commandline -d 'Parse the current command line token and return split of existing filepath, fzf query, and optional -option= prefix'
-    set -l fzf_query ''
-    set -l prefix ''
-    set -l dir '.'
-
-    set -l -- fish_major (string match -r -- '^\d+' $version)
-    set -l -- fish_minor (string match -r -- '^\d+\.(\d+)' $version)[2]
-
-    set -l -- match_regex '(?<fzf_query>[\s\S]*?(?=\n?$)$)'
-    set -l -- prefix_regex '^-[^\s=]+=|^-(?!-)\S'
-    if test "$fish_major" -eq 3 -a "$fish_minor" -lt 3
-    or string match -q -v -- '* -- *' (string sub -l (commandline -Cp) -- (commandline -p))
-      set -- match_regex "(?<prefix>$prefix_regex)?$match_regex"
-    end
-
-    if test "$fish_major" -ge 4
-      string match -q -r -- $match_regex (commandline --current-token --tokens-expanded | string collect -N)
-    else if test "$fish_major" -eq 3 -a "$fish_minor" -ge 2
-      string match -q -r -- $match_regex (commandline --current-token --tokenize | string collect -N)
-      eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r -a '^\\\(?=~)|\\\(?=\$\w)' '')
-    else
-      set -l -- cl_token (commandline --current-token --tokenize | string collect -N)
-      set -- prefix (string match -r -- $prefix_regex $cl_token)
-      set -- fzf_query (string replace -- "$prefix" '' $cl_token | string collect -N)
-      eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r -a '^\\\(?=~)|\\\(?=\$\w)|\\\n\\\n$' '')
-    end
-
-    if test -n "$fzf_query"
-      if test \( "$fish_major" -ge 4 \) -o \( "$fish_major" -eq 3 -a "$fish_minor" -ge 5 \)
-        set -- fzf_query (path normalize -- $fzf_query)
-        set -- dir $fzf_query
-        while not path is -d $dir
-          set -- dir (path dirname $dir)
-        end
-      else
-        if test "$fish_major" -eq 3 -a "$fish_minor" -ge 2
-          string match -q -r -- '(?<fzf_query>^[\s\S]*?(?=\n?$)$)' \
-            (string replace -r -a -- '(?<=/)/|(?<!^)/+(?!\n)$' '' $fzf_query | string collect -N)
-        else
-          set -- fzf_query (string replace -r -a -- '(?<=/)/|(?<!^)/+(?!\n)$' '' $fzf_query | string collect -N)
-          eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r '\\\n$' '')
-        end
-        set -- dir $fzf_query
-        while not test -d "$dir"
-          set -- dir (dirname -z -- "$dir" | string split0)
-        end
-      end
-
-      if not string match -q -- '.' $dir; or string match -q -r -- '^\./|^\.$' $fzf_query
-        if test "$fish_major" -ge 4
-          string match -q -r -- '^'(string escape --style=regex -- $dir)'/?(?<fzf_query>[\s\S]*)' $fzf_query
-        else if test "$fish_major" -eq 3 -a "$fish_minor" -ge 2
-          string match -q -r -- '^/?(?<fzf_query>[\s\S]*?(?=\n?$)$)' \
-            (string replace -- "$dir" '' $fzf_query | string collect -N)
-        else
-          set -- fzf_query (string replace -- "$dir" '' $fzf_query | string collect -N)
-          eval set -- fzf_query (string escape -n -- $fzf_query | string replace -r -a '^/?|\\\n$' '')
-        end
-      end
-    end
-
-    string escape -n -- "$dir" "$fzf_query" "$prefix"
-  end
-#----END INCLUDE
-
-  # Use complete builtin for specific commands
-  function __fzf_complete_native
-    set -l -- token (commandline -t)
-    set -l -- completions (eval complete -C \"$argv[1]\")
-    test -n "$completions"; or begin commandline -f repaint; return; end
-
-    # Calculate tabstop based on longest completion item (sample first 500 for performance)
-    set -l -- tabstop 20
-    set -l -- sample_size (math "min(500, "(count $completions)")")
-    for c in $completions[1..$sample_size]
-      set -l -- len (string length -V -- (string split -- \t $c))
-      test -n "$len[2]" -a "$len[1]" -gt "$tabstop"
-      and set -- tabstop $len[1]
-    end
-    # limit to 120 to prevent long lines
-    set -- tabstop (math "min($tabstop + 4, 120)")
-
-    set -l result
-    set -lx -- FZF_DEFAULT_OPTS (__fzf_defaults \
-      "--reverse --delimiter=\\t --nth=1 --tabstop=$tabstop --color=fg:dim,nth:regular" \
-      $FZF_COMPLETION_OPTS $argv[2..-1] --accept-nth=1 --read0 --print0)
-    set -- result (string join0 -- $completions | eval (__fzfcmd) | string split0)
-    and begin
-      set -l -- tail ' '
-      # Append / to bare ~username results (fish omits it unlike other shells)
-      set -- result (string replace -r -- '^(~\w+)\s?$' '$1/' $result)
-      # Don't add trailing space if single result is a directory
-      test (count $result) -eq 1
-      and string match -q -- '*/' "$result"; and set -- tail ''
-
-      set -l -- result (string escape -n -- $result)
-
-      string match -q -- '~*' "$token"
-      and set result (string replace -r -- '^\\\\~' '~' $result)
-
-      string match -q -- '$*' "$token"
-      and set result (string replace -r -- '^\\\\\$' '\$' $result)
-
-      commandline -rt -- (string join ' ' -- $result)$tail
-    end
-    commandline -f repaint
-  end
-
-  function _fzf_complete
-    set -l -- args (string escape -- $argv | string join ' ' | string split -- ' -- ')
-    set -l -- post_func (status function)_(string split -- ' ' $args[2])[1]_post
-    set -lx -- FZF_DEFAULT_OPTS (__fzf_defaults --reverse $FZF_COMPLETION_OPTS $args[1])
-    set -lx FZF_DEFAULT_OPTS_FILE
-    set -lx FZF_DEFAULT_COMMAND
-    set -l -- fzf_query (commandline -t | string escape)
-    set -l result
-    eval (__fzfcmd) --query=$fzf_query | while read -l r; set -a -- result $r; end
-    and if functions -q $post_func
-      commandline -rt -- (string collect -- $result | eval $post_func $args[2] | string join ' ')' '
-    else
-      commandline -rt -- (string join -- ' ' (string escape -- $result))' '
-    end
-    commandline -f repaint
-  end
-
-  # Kill completion (process selection)
-  function _fzf_complete_kill
-    set -l -- fzf_query (commandline -t | string escape)
-    set -lx -- FZF_DEFAULT_OPTS (__fzf_defaults --reverse $FZF_COMPLETION_OPTS \
-    --accept-nth=2 -m --header-lines=1 --no-preview --wrap)
-    set -lx FZF_DEFAULT_OPTS_FILE
-    if type -q ps
-      set -l -- ps_cmd 'begin command ps -eo user,pid,ppid,start,time,command 2>/dev/null;' \
-      'or command ps -eo user,pid,ppid,time,args 2>/dev/null;' \
-      'or command ps --everyone --full --windows 2>/dev/null; end'
-      set -l -- result (eval $ps_cmd \| (__fzfcmd) --query=$fzf_query)
-      and commandline -rt -- (string join ' ' -- $result)" "
-    else
-      __fzf_complete_native "kill " --multi --query=$fzf_query
-    end
-    commandline -f repaint
-  end
-
-  # Main completion function
-  function fzf-completion
-    set -l -- tokens (__fzf_cmd_tokens)
-    set -l -- current_token (commandline -t)
-    set -l -- cmd_name $tokens[1]
-
-    # Route to appropriate completion function
-    if test -n "$tokens"; and functions -q _fzf_complete_$cmd_name
-      _fzf_complete_$cmd_name $tokens
-    else
-      set -l -- fzf_opt --query=$current_token --multi
-      __fzf_complete_native "$tokens $current_token" $fzf_opt
-    end
-  end
-
-  # Bind Shift-Tab to fzf-completion (Tab retains native Fish behavior)
-  if test (string match -r -- '^\d+' $version) -ge 4
-    bind shift-tab fzf-completion
-    bind -M insert shift-tab fzf-completion
-  else
-    bind -k btab fzf-completion
-    bind -M insert -k btab fzf-completion
-  end
+# The oldest supported fish version is 3.4.0. For this message being able to be
+# displayed on older versions, the command substitution syntax $() should not
+# be used anywhere in the script, otherwise the source command will fail.
+if string match -qr -- '^[12]\\.|^3\\.[0-3]' $version
+  echo "fzf completion script requires fish version 3.4.0 or newer." >&2
+  return 1
+else if not command -q fzf
+  echo "fzf was not found in path." >&2
+  return 1
 end
 
-# Run setup
-fzf_completion_setup
+function fzf_complete -w fzf -d 'fzf command completion and wildcard expansion search'
+  # Restore the default shift-tab behavior on tab completions
+  if commandline --paging-mode
+    commandline -f complete-and-search
+    return
+  end
+
+  # Remove any trailing unescaped backslash from token and update command line
+  set -l -- token (string replace -r -- '(?<!\\\\)(?:\\\\\\\\)*\\K\\\\$' '' (commandline -t | string collect) | string collect)
+  commandline -rt -- $token
+
+  # Remove any line breaks from token
+  set -- token (string replace -ra -- '\\\\\\n' '' $token | string collect)
+
+  # regex: Match token with unescaped/unquoted glob character
+  set -l -- r_glob '^(?:[^\'"\\\\*]|\\\\[\\S\\s]|\'(?:\\\\[\\S\\s]|[^\'\\\\])*\'|"(?:\\\\[\\S\\s]|[^"\\\\])*")*\\*[\\S\\s]*$'
+
+  # regex: Match any unbalanced quote character
+  set -l -- r_quote '^(?>(?:\\\\[\\s\\S]|"(?:[^"\\\\]|\\\\[\\s\\S])*"|\'(?:[^\'\\\\]|\\\\[\\s\\S])*\'|[^\'"\\\\]+)*)\\K[\'"]'
+
+  # The expansion pattern is the token with any open quote closed, or is empty.
+  set -l -- glob_pattern (string match -r -- $r_glob $token | string collect)(string match -r -- $r_quote $token | string collect -a)
+
+  set -l -- cl_tokenize_opt '--tokens-expanded'
+  string match -q -- '3.*' $version
+  and set -- cl_tokenize_opt '--tokenize'
+
+  # Set command line tokens without any leading variable definitions or launcher
+  # commands (including their options, but not any option arguments).
+  set -l -- r_cmd '^(?:(?:builtin|command|doas|env|sudo|\\w+=\\S*|-\\S+)\\s+)*\\K[\\s\\S]+'
+  set -l -- cmd (commandline $cl_tokenize_opt --input=(commandline -pc | string match -r $r_cmd))
+  test -z "$token"
+  and set -a -- cmd ''
+
+  # Set fzf options
+  test -z "$FZF_TMUX_HEIGHT"
+  and set -l -- FZF_TMUX_HEIGHT 40%
+
+  set -lax -- FZF_DEFAULT_OPTS \
+    "--height=$FZF_TMUX_HEIGHT --min-height=20+ --bind=ctrl-z:ignore" \
+    (test -r "$FZF_DEFAULT_OPTS_FILE"; and string join -- ' ' <$FZF_DEFAULT_OPTS_FILE) \
+    $FZF_DEFAULT_OPTS '--bind=alt-r:toggle-raw --multi --wrap=word --reverse' \
+    (if test -n "$glob_pattern"; string collect -- $FZF_EXPANSION_OPTS; else;
+      string collect -- $FZF_COMPLETION_OPTS; end; string escape -n -- $argv) \
+    --with-shell=(status fish-path)\\ -c
+
+  set -lx FZF_DEFAULT_OPTS_FILE
+
+  set -l -- fzf_cmd fzf
+  test "$FZF_TMUX" = 1
+  and set -- fzf_cmd fzf-tmux $FZF_TMUX_OPTS -d$FZF_TMUX_HEIGHT --
+
+  set -l result
+
+  # Get the completion list from stdin when it's not a tty
+  if not isatty stdin
+    set -l -- custom_post_func _fzf_post_complete_$cmd[1]
+    functions -q $custom_post_func
+    or set -- custom_post_func _fzf_complete_$cmd[1]_post
+
+    if functions -q $custom_post_func
+      $fzf_cmd | $custom_post_func $cmd | while read -l r; set -a -- result $r; end
+    else if string match -q -- '*--print0*' "$FZF_DEFAULT_OPTS"
+      $fzf_cmd | while read -lz r; set -a -- result $r; end
+    else
+      $fzf_cmd | while read -l r; set -a -- result $r; end
+    end
+
+  # Wildcard expansion
+  else if test -n "$glob_pattern"
+    # Set the command to be run by fzf, so there is a visual indicator and an
+    # easy way to abort on long recursive searches.
+    set -lx -- FZF_DEFAULT_COMMAND "for i in $glob_pattern;" \
+      'test -d "$i"; and string match -qv -- "*/" $i; and set -- i $i/;' \
+      'string join0 -- $i; end'
+
+    set -- result (string escape -n -- ($fzf_cmd --read0 --print0 --scheme=path --no-multi-line | string split0))
+
+  # Command completion
+  else
+    # Call custom function if defined
+    set -l -- custom_func _fzf_complete_$cmd[1]
+    if functions -q $custom_func; and not set -q __fzf_no_custom_complete
+      set -lx __fzf_no_custom_complete
+      $custom_func $cmd
+      return
+    end
+
+    # Workaround for complete not having newlines in results
+    if string match -qr -- '\\n' $token
+      set -- token (string replace -ra -- '(?<!\\\\)(?:\\\\\\\\)*\\K\\\\\$' '\\\\\\\\\$' $token | string collect)
+      set -- token (string unescape -- $token | string collect)
+      set -- token (string replace -ra -- '\\n' '\\\\n' $token | string collect)
+    end
+
+    set -- list (complete -C --escape -- (string join -- ' ' (commandline -pc $cl_tokenize_opt) $token | string collect))
+    if test -n "$list"
+      # Get the initial tabstop value
+      if set -l -- tabstop (string match -rga -- '--tabstop[= ](?:0*)([1-9]\\d+|[4-9])' "$FZF_DEFAULT_OPTS")[-1]
+        set -- tabstop (math $tabstop - 4)
+      else
+        set -- tabstop 4
+      end
+
+      # Determine the tabstop length for description alignment
+      set -l -- max_columns (math $COLUMNS - 40)
+      for i in $list[1..500]
+        set -l -- item (string split -f 1 -- \t $i)
+        and set -l -- len (string length -V -- $item)
+        and test "$len" -gt "$tabstop" -a "$len" -lt "$max_columns"
+        and set -- tabstop $len
+      end
+      set -- tabstop (math $tabstop + 4)
+
+      set -- result (string collect -- $list | $fzf_cmd --delimiter="\t" --tabstop=$tabstop --wrap-sign=\t"↳ " --accept-nth=1)
+    end
+  end
+
+  # Update command line
+  if test -n "$result"
+    # No extra space after single selection that ends with path separator
+    set -l -- tail ' '
+    test (count $result) -eq 1
+    and string match -q -- '*/' "$result"
+    and set -- tail ''
+
+    commandline -rt -- (string join -- ' ' $result)$tail
+  end
+
+  commandline -f repaint
+end
+
+function _fzf_complete
+  set -l fzf_args
+  for i in $argv
+    string match -q -- '--' $i; and break
+    set -a -- fzf_args $i
+  end
+  fzf_complete $fzf_args
+end
+
+# Bind to shift-tab
+if string match -qr -- '^\\d\\d+|^[4-9]' $version
+  bind shift-tab fzf_complete
+  bind -M insert shift-tab fzf_complete
+else
+  bind -k btab fzf_complete
+  bind -M insert -k btab fzf_complete
+end
 ### end: completion.fish ###
