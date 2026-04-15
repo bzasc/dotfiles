@@ -1,12 +1,6 @@
 -- Enable bytecode cache for faster startup (Neovim >= 0.9).
 vim.loader.enable()
 
-if vim.fn.has("nvim-0.12") == 1 and true then
-  require("vim._core.ui2").enable({})
-else
-  require("modules.router")
-end
-
 -- Luarocks path (needed for magick/image support).
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
 package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
@@ -51,6 +45,7 @@ require("keymaps")
 require("commands")
 require("autocmds")
 require("marks")
+require("lsp")
 
 -- Configure plugins.
 require("lazy").setup(plugins, {
@@ -88,3 +83,6 @@ require("lazy").setup(plugins, {
     },
   },
 })
+
+-- Enable the new experimental command-line features.
+require("vim._core.ui2").enable({})

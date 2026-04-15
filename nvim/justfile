@@ -22,4 +22,136 @@ fmt-check:
 	@stylua --check .
 	@echo "✅ Formatting valid!"
 
+lsp-check:
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	check_cmd() {
+		local name="$1"
+		local bin="$2"
+		if command -v "$bin" >/dev/null 2>&1; then
+			local resolved
+			resolved="$(command -v "$bin")"
+			echo "✅ $name -> $bin ($resolved)"
+		else
+			echo "❌ $name -> $bin (missing)"
+			return 1
+		fi
+	}
+
+	status=0
+
+	echo "🔍 Checking configured LSP servers..."
+	check_cmd "lua_ls" "lua-language-server" || status=1
+	check_cmd "gopls" "gopls" || status=1
+	check_cmd "zls" "zls" || status=1
+	check_cmd "ts_ls" "typescript-language-server" || status=1
+	check_cmd "basedpyright" "basedpyright-langserver" || status=1
+	check_cmd "intelephense" "intelephense" || status=1
+	check_cmd "bashls" "bash-language-server" || status=1
+	check_cmd "cssls" "vscode-css-language-server" || status=1
+	check_cmd "html" "vscode-html-language-server" || status=1
+	check_cmd "jsonls" "vscode-json-language-server" || status=1
+	check_cmd "yamlls" "yaml-language-server" || status=1
+	check_cmd "ruby_lsp" "ruby-lsp" || status=1
+
+	echo
+	echo "🔍 Checking companion tools..."
+	check_cmd "blink-copilot backend" "copilot-language-server" || status=1
+
+	if [ "$status" -ne 0 ]; then
+		echo
+		echo "❌ Some required language tools are missing"
+		exit 1
+	fi
+
+	echo
+	echo "✅ All configured LSP binaries are available"
+
+lsp-doctor:
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	check_cmd() {
+		local name="$1"
+		local bin="$2"
+		if command -v "$bin" >/dev/null 2>&1; then
+			local resolved
+			resolved="$(command -v "$bin")"
+			echo "OK|$name|$bin|$resolved"
+		else
+			echo "MISSING|$name|$bin|"
+		fi
+	}
+
+	results=()
+	while IFS= read -r line; do
+		results+=("$line")
+	done < <(
+		check_cmd "lua_ls" "lua-language-server"
+		check_cmd "gopls" "gopls"
+		check_cmd "zls" "zls"
+		check_cmd "ts_ls" "typescript-language-server"
+		check_cmd "basedpyright" "basedpyright-langserver"
+		check_cmd "intelephense" "intelephense"
+		check_cmd "bashls" "bash-language-server"
+		check_cmd "cssls" "vscode-css-language-server"
+		check_cmd "html" "vscode-html-language-server"
+		check_cmd "jsonls" "vscode-json-language-server"
+		check_cmd "yamlls" "yaml-language-server"
+		check_cmd "ruby_lsp" "ruby-lsp"
+		check_cmd "blink-copilot backend" "copilot-language-server"
+	)
+
+	missing=()
+
+	echo "🩺 LSP doctor"
+	echo
+	for row in "${results[@]}"; do
+		IFS='|' read -r status name bin resolved <<< "$row"
+		if [ "$status" = "OK" ]; then
+			echo "✅ $name -> $bin ($resolved)"
+		else
+			echo "❌ $name -> $bin (missing)"
+			missing+=("$bin")
+		fi
+	done
+
+	echo
+	if [ "${#missing[@]}" -eq 0 ]; then
+		echo "✅ Environment looks consistent with the native LSP config"
+		exit 0
+	fi
+
+	echo "Suggested installs for missing tools:"
+	for bin in "${missing[@]}"; do
+		case "$bin" in
+			zls)
+				echo "- zls: install via your Zig/ZLS distribution method"
+				;;
+			intelephense)
+				echo "- intelephense: npm install -g intelephense"
+				;;
+			lua-language-server|gopls)
+				echo "- $bin: install with Homebrew or your system package manager"
+				;;
+			typescript-language-server|bash-language-server|vscode-css-language-server|vscode-html-language-server|vscode-json-language-server|yaml-language-server|copilot-language-server)
+				echo "- $bin: npm install -g ${bin}"
+				;;
+			basedpyright-langserver)
+				echo "- $bin: uv tool install basedpyright"
+				;;
+			ruby-lsp)
+				echo "- $bin: gem install ruby-lsp"
+				;;
+			*)
+				echo "- $bin: install it and ensure it is available on PATH"
+				;;
+		esac
+	done
+
+	echo
+	echo "Run 'just lsp-check' for a strict CI-style failure, or rerun 'just lsp-doctor' after installing."
+	exit 1
+
 validate: check fmt-check

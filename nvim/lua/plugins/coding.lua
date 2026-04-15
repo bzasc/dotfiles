@@ -42,6 +42,7 @@ return {
             copilot = {
               name = "copilot",
               module = "blink-copilot",
+              score_offset = 100,
               async = true,
             },
             cmdline = {
@@ -263,16 +264,15 @@ return {
     lazy = false, -- This plugin is already lazy
     dependencies = "mattn/webapi-vim",
   },
-
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   --dependencies = { "copilotlsp-nvim/copilot-lsp" }, -- Required for NES
-  --   config = function()
-  --     require("copilot").setup({
-  --       nes = { enabled = false }, -- The feature causing the error
-  --     })
-  --   end,
-  -- },
+  {
+    "zbirenbaum/copilot.lua",
+    --dependencies = { "copilotlsp-nvim/copilot-lsp" }, -- Required for NES
+    config = function()
+      require("copilot").setup({
+        nes = { enabled = false }, -- The feature causing the error
+      })
+    end,
+  },
 
   {
     "folke/sidekick.nvim",

@@ -1,5 +1,21 @@
 local arrows = require("icons").arrows
 
+local function js_debug_adapter_path()
+  local candidates = {
+    vim.env.HOME .. "/dev/dotfiles/js-debug/dapDebugServer.js",
+    vim.env.JS_DEBUG_ADAPTER,
+    vim.env.HOME .. "/dev/dotfiles/js-debug/dist/src/dapDebugServer.js",
+    vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+    vim.env.HOME .. "/dev/vscode-js-debug/src/dapDebugServer.js",
+  }
+
+  for _, candidate in ipairs(candidates) do
+    if candidate and candidate ~= "" and vim.uv.fs_stat(candidate) then
+      return candidate
+    end
+  end
+end
+
 -- Set up icons.
 local icons = {
   Stopped = { "", "DiagnosticWarn", "DapStoppedLine" },
@@ -113,6 +129,7 @@ return {
     config = function()
       local dap = require("dap")
       local dv = require("dap-view")
+      local js_debug = js_debug_adapter_path()
       vim.api.nvim_create_autocmd("FileType", {
         group = vim.api.nvim_create_augroup("bzasc/dap_options", { clear = true }),
         desc = "Set options for DAP UI",
@@ -209,19 +226,28 @@ return {
       }
 
       -- javascript and typescript configurations
-      for _, adapter in ipairs({ "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" }) do
-        dap.adapters[adapter] = {
-          type = "server",
-          host = "localhost",
-          port = "${port}",
-          executable = {
-            command = "node",
-            args = {
-              vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
-              "${port}",
+      if js_debug then
+        for _, adapter in ipairs({ "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" }) do
+          dap.adapters[adapter] = {
+            type = "server",
+            host = "localhost",
+            port = "${port}",
+            executable = {
+              command = "node",
+              args = {
+                js_debug,
+                "${port}",
+              },
             },
-          },
-        }
+          }
+        end
+      else
+        vim.schedule(function()
+          vim.notify(
+            "js-debug-adapter not found. Set $JS_DEBUG_ADAPTER or install vscode-js-debug.",
+            vim.log.levels.WARN
+          )
+        end)
       end
 
       for _, language in ipairs({ "typescript", "javascript" }) do

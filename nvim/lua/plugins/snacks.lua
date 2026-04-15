@@ -4,7 +4,7 @@ return {
   lazy = false,
   ---@type snacks.Config
   opts = {
-    animate = { enabled = true },
+    animate = { enabled = false },
     bigfile = {
       enabled = true,
       size = 1.5 * 1024 * 1024, -- 1.5MB threshold
