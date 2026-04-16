@@ -1,5 +1,3 @@
-local arrows = require("icons").arrows
-
 local function js_debug_adapter_path()
   local candidates = {
     vim.env.HOME .. "/dev/dotfiles/js-debug/dapDebugServer.js",
@@ -22,7 +20,7 @@ local icons = {
   Breakpoint = "",
   BreakpointCondition = "",
   BreakpointRejected = { "", "DiagnosticError" },
-  LogPoint = arrows.right,
+  LogPoint = "",
 }
 for name, sign in pairs(icons) do
   sign = type(sign) == "table" and sign or { sign }

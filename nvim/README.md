@@ -51,7 +51,7 @@ Configured servers: `lua_ls`, `gopls`, `zls`, `ts_ls`, `rust-analyzer`, `intelep
 
 ### UI
 
-which-key.nvim, noice.nvim, trouble.nvim, tiny-inline-diagnostic.nvim, fidget.nvim, render-markdown.nvim, markdown-preview.nvim, checkmate.nvim, nvim-web-devicons
+which-key.nvim, noice.nvim, trouble.nvim, tiny-inline-diagnostic.nvim, fidget.nvim, render-markdown.nvim, markdown-preview.nvim, checkmate.nvim, mini.icons
 
 ### Editor
 

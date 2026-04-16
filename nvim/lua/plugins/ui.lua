@@ -92,9 +92,17 @@ return {
 
   {
     "echasnovski/mini.icons",
-    enabled = true,
-    opts = {},
-    lazy = true,
+    lazy = false,
+    priority = 900,
+    opts = {
+      extension = {
+        scm = { glyph = "󰘧", hl = "MiniIconsGrey" },
+      },
+    },
+    config = function(_, opts)
+      require("mini.icons").setup(opts)
+      MiniIcons.mock_nvim_web_devicons()
+    end,
   },
 
   {
@@ -249,23 +257,6 @@ return {
         command = "call highlighturl#disable_local()",
       })
     end,
-  },
-
-  {
-    "nvim-tree/nvim-web-devicons",
-    -- Lots of plugins will require this later.
-    lazy = true,
-    opts = {
-      -- Make the icon for query files more visible.
-      override = {
-        scm = {
-          icon = "󰘧",
-          color = "#A9ABAC",
-          cterm_color = "16",
-          name = "Scheme",
-        },
-      },
-    },
   },
 
   {
