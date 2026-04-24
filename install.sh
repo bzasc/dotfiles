@@ -32,3 +32,12 @@ fi
 
 echo "Running dotbot..."
 dotbot -d "$DOTFILES_DIR" -c "$DOTFILES_DIR/install.conf.yaml"
+
+# Link custom catppuccin-tmux themes into plugin dir (survives TPM reinstall)
+catppuccin_plugin_dir="$HOME/.config/tmux/plugins/catppuccin-tmux"
+if [ -d "$catppuccin_plugin_dir" ]; then
+  for theme in "$DOTFILES_DIR"/tmux/custom/catppuccin-*.tmuxtheme; do
+    [ -e "$theme" ] || continue
+    ln -sf "$theme" "$catppuccin_plugin_dir/$(basename "$theme")"
+  done
+fi

@@ -4,7 +4,7 @@ font-size = 13
 font-style = Regular
 
 # Theme
-theme = kanagawa
+theme = nordic
 shell-integration = fish
 shell-integration-features = no-cursor,sudo,no-title
 

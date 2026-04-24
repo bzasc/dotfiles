@@ -21,7 +21,7 @@ right_format = """
 $all
 """
 
-palette = 'kanagawa'
+palette = 'nordic'
 
 [time]
 disabled = true
@@ -287,3 +287,23 @@ lavender = '#9cabca'
 teal = '#6a9589'
 mauve = '#957fb8'
 gray = '#727169'
+
+[palettes.nordic]
+fg0 = '#d8dee9'
+bg0 = '#242933'
+bg1 = '#3b4252'
+bg3 = '#4c566a'
+blue = '#81a1c1'
+aqua = '#8fbcbb'
+green = '#a3be8c'
+orange = '#d08770'
+purple = '#b48ead'
+red = '#bf616a'
+peach = '#d08770'
+yellow = '#ebcb8b'
+sapphire = '#88c0d0'
+base = '#242831'
+lavender = '#88c0d0'
+teal = '#8fbcbb'
+mauve = '#b48ead'
+gray = '#4c566a'

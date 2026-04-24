@@ -1,0 +1,17 @@
+# NOTE: vars with $<var> need double quotes
+# WARNING: hex colors lowercase only
+
+# --> Nordic (AlexvZyl)
+thm_bg="#242933"
+thm_fg="#d8dee9"
+thm_cyan="#8fbcbb"
+thm_black="#191d24"
+thm_gray="#3b4252"
+thm_magenta="#b48ead"
+thm_pink="#b48ead"
+thm_red="#bf616a"
+thm_green="#a3be8c"
+thm_yellow="#ebcb8b"
+thm_blue="#81a1c1"
+thm_orange="#d08770"
+thm_black4="#4c566a"

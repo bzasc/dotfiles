@@ -1,23 +1,23 @@
 return {
+  -- {
+  --   "sainnhe/sonokai",
+  --   priority = 1000,
+  --   lazy = false,
+  --   config = function()
+  --     vim.g.sonokai_enable_italic = true
+  --     --vim.g.sonokai_colors_override = { bg0 = { "#1C2021", "235" } }
+  --     vim.cmd.colorscheme("sonokai")
+  --   end,
+  -- },
   {
-    "sainnhe/sonokai",
-    priority = 1000,
+    "AlexvZyl/nordic.nvim",
     lazy = false,
+    priority = 1000,
     config = function()
-      vim.g.sonokai_enable_italic = true
-      --vim.g.sonokai_colors_override = { bg0 = { "#1C2021", "235" } }
-      vim.cmd.colorscheme("sonokai")
+      require("nordic").load()
+      vim.cmd.colorscheme("nordic")
     end,
   },
-  --{
-  --  "AlexvZyl/nordic.nvim",
-  --  lazy = false,
-  --  priority = 1000,
-  --  config = function()
-  --    require("nordic").load()
-  --    vim.cmd.colorscheme("nordic")
-  --  end,
-  --},
   --{
   --  "sainnhe/gruvbox-material",
   --  --priority = 1000,
