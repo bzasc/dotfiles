@@ -24,8 +24,11 @@ mouse-scroll-multiplier = 2
 window-padding-balance = true 
 window-save-state = always
 window-colorspace = "display-p3"
-window-vsync=false
+window-vsync=true
 window-decoration=none
+
+# Shaders
+custom-shader = shaders/cursor_warp.glsl
 
 ## Clipboard
 clipboard-read = "allow"

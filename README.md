@@ -18,6 +18,10 @@ Minhas configurações pessoais.
 | `wezterm/`   | Terminal WezTerm                              |
 | `zsh/`       | Configuração do Zsh                           |
 
+## Créditos
+
+- Shaders do cursor do Ghostty (`ghostty/shaders/`) vêm de [sahaj-b/ghostty-cursor-shaders](https://github.com/sahaj-b/ghostty-cursor-shaders).
+
 ## Instalação
 
 ```bash
