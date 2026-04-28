@@ -30,8 +30,8 @@ function devsession --description 'Create or attach a tmux coding cockpit'
     tmux new-session -d -s "$session_name" -n code -c "$workspace" -x "$cols" -y "$lines"
 
     set -l main_pane (tmux display-message -p -t "$session_name":code '#{pane_id}')
-    set -l bottom_pane (tmux split-window -v -P -F '#{pane_id}' -t "$main_pane" -c "$workspace" -l 20%)
     set -l right_pane (tmux split-window -h -P -F '#{pane_id}' -t "$main_pane" -c "$workspace" -l 30%)
+    set -l bottom_pane (tmux split-window -v -P -F '#{pane_id}' -t "$main_pane" -c "$workspace" -l 20%)
 
     #tmux send-keys -t "$main_pane" 'nvim' C-m
     #tmux send-keys -t "$right_pane" 'claude' C-m
