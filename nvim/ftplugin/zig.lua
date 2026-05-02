@@ -1,5 +1,3 @@
--- Zig Tools - Custom commands for Zig development
-
 local function notify(msg, level)
   vim.notify(msg, level or vim.log.levels.INFO)
 end
@@ -29,32 +27,24 @@ local function get_project_root()
 end
 
 -- Build & Run
-
--- ZigBuild: zig build
 vim.api.nvim_buf_create_user_command(0, "ZigBuild", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "zig build " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig build " .. args)
 end, { nargs = "?", desc = "zig build" })
 
--- ZigBuildRelease: zig build -Doptimize=ReleaseFast
 vim.api.nvim_buf_create_user_command(0, "ZigBuildRelease", function()
   vim.cmd("split | terminal zig build -Doptimize=ReleaseFast")
 end, { desc = "zig build -Doptimize=ReleaseFast" })
 
--- ZigBuildSafe: zig build -Doptimize=ReleaseSafe
 vim.api.nvim_buf_create_user_command(0, "ZigBuildSafe", function()
   vim.cmd("split | terminal zig build -Doptimize=ReleaseSafe")
 end, { desc = "zig build -Doptimize=ReleaseSafe" })
 
--- ZigRun: zig build run
 vim.api.nvim_buf_create_user_command(0, "ZigRun", function(opts)
   local args = opts.args ~= "" and " -- " .. opts.args or ""
-  local cmd_str = "zig build run" .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig build run" .. args)
 end, { nargs = "?", desc = "zig build run" })
 
--- ZigRunFile: zig run <current file>
 vim.api.nvim_buf_create_user_command(0, "ZigRunFile", function(opts)
   local filepath = vim.api.nvim_buf_get_name(0)
   if filepath == "" then
@@ -62,43 +52,33 @@ vim.api.nvim_buf_create_user_command(0, "ZigRunFile", function(opts)
     return
   end
   local args = opts.args ~= "" and " -- " .. opts.args or ""
-  local cmd_str = "zig run " .. filepath .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig run " .. filepath .. args)
 end, { nargs = "?", desc = "zig run <current file>" })
 
 -- Testing
-
--- ZigTest: zig build test
 vim.api.nvim_buf_create_user_command(0, "ZigTest", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "zig build test " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig build test " .. args)
 end, { nargs = "?", desc = "zig build test" })
 
--- ZigTestFile: zig test <current file>
 vim.api.nvim_buf_create_user_command(0, "ZigTestFile", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   if filepath == "" then
     notify("Buffer has no file path", vim.log.levels.ERROR)
     return
   end
-  local cmd_str = "zig test " .. filepath
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig test " .. filepath)
 end, { desc = "zig test <current file>" })
 
--- ZigTestFilter: zig build test with filter
 vim.api.nvim_buf_create_user_command(0, "ZigTestFilter", function(opts)
   if opts.args == "" then
     notify("Usage: ZigTestFilter <test_name>", vim.log.levels.WARN)
     return
   end
-  local cmd_str = "zig build test -- --test-filter " .. opts.args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig build test -- --test-filter " .. opts.args)
 end, { nargs = 1, desc = "zig build test with filter" })
 
 -- Code Quality
-
--- ZigFmt: zig fmt
 vim.api.nvim_buf_create_user_command(0, "ZigFmt", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   if filepath == "" then
@@ -118,7 +98,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigFmt", function()
   })
 end, { desc = "zig fmt <current file>" })
 
--- ZigFmtAll: zig fmt on all .zig files
 vim.api.nvim_buf_create_user_command(0, "ZigFmtAll", function()
   notify("Running: zig fmt on project")
   run_cmd({ "zig", "fmt", "." }, {
@@ -134,7 +113,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigFmtAll", function()
   })
 end, { desc = "zig fmt on project" })
 
--- ZigFmtCheck: zig fmt --check
 vim.api.nvim_buf_create_user_command(0, "ZigFmtCheck", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   if filepath == "" then
@@ -154,8 +132,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigFmtCheck", function()
 end, { desc = "zig fmt --check" })
 
 -- Project Management
-
--- ZigInit: zig init
 vim.api.nvim_buf_create_user_command(0, "ZigInit", function()
   notify("Running: zig init")
   run_cmd({ "zig", "init" }, {
@@ -170,7 +146,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigInit", function()
   })
 end, { desc = "zig init" })
 
--- ZigFetch: zig fetch (for build.zig.zon dependencies)
 vim.api.nvim_buf_create_user_command(0, "ZigFetch", function(opts)
   if opts.args == "" then
     notify("Usage: ZigFetch <url>", vim.log.levels.WARN)
@@ -183,7 +158,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigFetch", function(opts)
       if result.code == 0 then
         local hash = result.stdout:gsub("%s+", "")
         notify("Hash: " .. hash)
-        -- Copy to clipboard
         vim.fn.setreg("+", hash)
         notify("Hash copied to clipboard")
       else
@@ -194,8 +168,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigFetch", function(opts)
 end, { nargs = 1, desc = "zig fetch <url>" })
 
 -- Documentation & Help
-
--- ZigDoc: open Zig documentation
 vim.api.nvim_buf_create_user_command(0, "ZigDoc", function(opts)
   local query = opts.args ~= "" and opts.args or ""
   local url = "https://ziglang.org/documentation/master/"
@@ -207,7 +179,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigDoc", function(opts)
   notify("Opening: " .. url)
 end, { nargs = "?", desc = "Open Zig documentation" })
 
--- ZigStdDoc: open Zig std lib documentation
 vim.api.nvim_buf_create_user_command(0, "ZigStdDoc", function(opts)
   local query = opts.args ~= "" and opts.args or ""
   local url = "https://ziglang.org/documentation/master/std/"
@@ -219,14 +190,11 @@ vim.api.nvim_buf_create_user_command(0, "ZigStdDoc", function(opts)
   notify("Opening: " .. url)
 end, { nargs = "?", desc = "Open Zig std lib documentation" })
 
--- ZigHelp: zig help
 vim.api.nvim_buf_create_user_command(0, "ZigHelp", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "zig help " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig help " .. args)
 end, { nargs = "?", desc = "zig help" })
 
--- ZigVersion: zig version
 vim.api.nvim_buf_create_user_command(0, "ZigVersion", function()
   run_cmd({ "zig", "version" }, {
     on_exit = function(result)
@@ -240,56 +208,43 @@ vim.api.nvim_buf_create_user_command(0, "ZigVersion", function()
 end, { desc = "zig version" })
 
 -- Compilation & Analysis
-
--- ZigAst: show AST of current file
 vim.api.nvim_buf_create_user_command(0, "ZigAst", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   if filepath == "" then
     notify("Buffer has no file path", vim.log.levels.ERROR)
     return
   end
-  local cmd_str = "zig ast-check " .. filepath
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig ast-check " .. filepath)
 end, { desc = "zig ast-check <current file>" })
 
--- ZigTranslateC: translate C header to Zig
 vim.api.nvim_buf_create_user_command(0, "ZigTranslateC", function(opts)
   if opts.args == "" then
     notify("Usage: ZigTranslateC <header.h>", vim.log.levels.WARN)
     return
   end
-  local cmd_str = "zig translate-c " .. opts.args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig translate-c " .. opts.args)
 end, { nargs = 1, desc = "zig translate-c <header>" })
 
 -- Build Steps
-
--- ZigBuildSteps: show available build steps
 vim.api.nvim_buf_create_user_command(0, "ZigBuildSteps", function()
   vim.cmd("split | terminal zig build --help")
 end, { desc = "Show available build steps" })
 
--- ZigBuildStep: run specific build step
 vim.api.nvim_buf_create_user_command(0, "ZigBuildStep", function(opts)
   if opts.args == "" then
     notify("Usage: ZigBuildStep <step>", vim.log.levels.WARN)
     return
   end
-  local cmd_str = "zig build " .. opts.args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal zig build " .. opts.args)
 end, { nargs = 1, desc = "zig build <step>" })
 
 -- Navigation
-
--- ZigAlt: switch to/from test file
 vim.api.nvim_buf_create_user_command(0, "ZigAlt", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   local filename = vim.fn.fnamemodify(filepath, ":t:r")
   local dir = vim.fn.fnamemodify(filepath, ":h")
 
-  -- Check if we're in a test file
   if filename:match("_test$") or filename == "test" then
-    -- Try to find the source file
     local source = filepath:gsub("_test%.zig$", ".zig")
     if source == filepath then
       source = dir .. "/main.zig"
@@ -300,7 +255,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigAlt", function()
       notify("Source file not found", vim.log.levels.WARN)
     end
   else
-    -- Try to find the test file
     local test_file = filepath:gsub("%.zig$", "_test.zig")
     local test_dir = dir .. "/test.zig"
     if vim.fn.filereadable(test_file) == 1 then
@@ -313,7 +267,6 @@ vim.api.nvim_buf_create_user_command(0, "ZigAlt", function()
   end
 end, { desc = "Switch between source and test file" })
 
--- ZigAltV: switch in vertical split
 vim.api.nvim_buf_create_user_command(0, "ZigAltV", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   local filename = vim.fn.fnamemodify(filepath, ":t:r")

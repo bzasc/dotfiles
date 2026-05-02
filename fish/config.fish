@@ -60,6 +60,7 @@ end
 set -gx LANG "en_US.UTF-8"
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 set -gx DOCKER_DEFAULT_PLATFORM "linux/amd64"
+set -gx EDITOR nvim
 set -gx SNACKS_GHOSTTY true
 set -gx OBSIDIAN_VAULT "$HOME/annotations/bzasc_brain"
 set -gx ZETTELKASTEN "$HOME/annotations/bzasc_brain"

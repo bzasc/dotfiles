@@ -1,7 +1,5 @@
 vim.opt_local.tabstop = 4
 
--- Go Tools - Custom commands for Go development
-
 local function notify(msg, level)
   vim.notify(msg, level or vim.log.levels.INFO)
 end
@@ -39,8 +37,6 @@ local function get_module_root()
 end
 
 -- Build & Run
-
--- GoBuild: go build
 vim.api.nvim_buf_create_user_command(0, "GoBuild", function(opts)
   local args = opts.args ~= "" and opts.args or "./..."
   notify("Building: go build " .. args)
@@ -56,15 +52,11 @@ vim.api.nvim_buf_create_user_command(0, "GoBuild", function(opts)
   })
 end, { nargs = "?", desc = "go build" })
 
--- GoRun: go run
 vim.api.nvim_buf_create_user_command(0, "GoRun", function(opts)
   local args = opts.args ~= "" and opts.args or "."
-  local cmd_str = "go run " .. args
-  -- Use terminal for interactive output
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal go run " .. args)
 end, { nargs = "?", desc = "go run" })
 
--- GoGenerate: go generate
 vim.api.nvim_buf_create_user_command(0, "GoGenerate", function(opts)
   local args = opts.args ~= "" and opts.args or "./..."
   notify("Running: go generate " .. args)
@@ -82,18 +74,13 @@ vim.api.nvim_buf_create_user_command(0, "GoGenerate", function(opts)
 end, { nargs = "?", desc = "go generate" })
 
 -- Testing
-
--- GoTest: go test
 vim.api.nvim_buf_create_user_command(0, "GoTest", function(opts)
   local args = opts.args ~= "" and opts.args or "./..."
-  local cmd_str = "go test -v " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal go test -v " .. args)
 end, { nargs = "?", desc = "go test" })
 
--- GoTestFunc: test function under cursor
 vim.api.nvim_buf_create_user_command(0, "GoTestFunc", function()
   local func_name = nil
-  -- Find the test function name using treesitter
   local node = vim.treesitter.get_node()
   while node do
     if node:type() == "function_declaration" then
@@ -112,27 +99,19 @@ vim.api.nvim_buf_create_user_command(0, "GoTestFunc", function()
   end
 
   local pkg = get_package_path()
-  local cmd_str = string.format("go test -v -run ^%s$ %s", func_name, pkg)
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal " .. string.format("go test -v -run ^%s$ %s", func_name, pkg))
 end, { desc = "Test function under cursor" })
 
--- GoTestFile: test current file
 vim.api.nvim_buf_create_user_command(0, "GoTestFile", function()
-  local pkg = get_package_path()
-  local cmd_str = "go test -v " .. pkg
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal go test -v " .. get_package_path())
 end, { desc = "Test current package" })
 
--- GoTestCover: test with coverage
 vim.api.nvim_buf_create_user_command(0, "GoCoverage", function(opts)
   local args = opts.args ~= "" and opts.args or "./..."
-  local cmd_str = "go test -coverprofile=coverage.out " .. args .. " && go tool cover -html=coverage.out"
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal go test -coverprofile=coverage.out " .. args .. " && go tool cover -html=coverage.out")
 end, { nargs = "?", desc = "go test with coverage" })
 
 -- Module Management
-
--- GoModTidy: go mod tidy
 vim.api.nvim_buf_create_user_command(0, "GoModTidy", function()
   notify("Running: go mod tidy")
   run_cmd({ "go", "mod", "tidy" }, {
@@ -148,7 +127,6 @@ vim.api.nvim_buf_create_user_command(0, "GoModTidy", function()
   })
 end, { desc = "go mod tidy" })
 
--- GoModInit: go mod init
 vim.api.nvim_buf_create_user_command(0, "GoModInit", function(opts)
   if opts.args == "" then
     notify("Usage: GoModInit <module-name>", vim.log.levels.WARN)
@@ -167,7 +145,6 @@ vim.api.nvim_buf_create_user_command(0, "GoModInit", function(opts)
   })
 end, { nargs = 1, desc = "go mod init <module>" })
 
--- GoGet: go get
 vim.api.nvim_buf_create_user_command(0, "GoGet", function(opts)
   if opts.args == "" then
     notify("Usage: GoGet <package>", vim.log.levels.WARN)
@@ -188,8 +165,6 @@ vim.api.nvim_buf_create_user_command(0, "GoGet", function(opts)
 end, { nargs = 1, desc = "go get <package>" })
 
 -- Code Tools
-
--- GoVet: go vet
 vim.api.nvim_buf_create_user_command(0, "GoVet", function(opts)
   local args = opts.args ~= "" and opts.args or "./..."
   notify("Running: go vet " .. args)
@@ -205,7 +180,6 @@ vim.api.nvim_buf_create_user_command(0, "GoVet", function(opts)
   })
 end, { nargs = "?", desc = "go vet" })
 
--- GoLint: golangci-lint run
 vim.api.nvim_buf_create_user_command(0, "GoLint", function(opts)
   local args = opts.args ~= "" and opts.args or "./..."
   notify("Running: golangci-lint run " .. args)
@@ -221,10 +195,8 @@ vim.api.nvim_buf_create_user_command(0, "GoLint", function(opts)
   })
 end, { nargs = "?", desc = "golangci-lint run" })
 
--- GoDoc: open go doc in a split
 vim.api.nvim_buf_create_user_command(0, "GoDoc", function(opts)
   if opts.args == "" then
-    -- Try to get word under cursor
     local word = vim.fn.expand("<cword>")
     if word == "" then
       notify("Usage: GoDoc <symbol>", vim.log.levels.WARN)
@@ -235,7 +207,6 @@ vim.api.nvim_buf_create_user_command(0, "GoDoc", function(opts)
   vim.cmd("split | terminal go doc " .. opts.args)
 end, { nargs = "?", desc = "go doc <symbol>" })
 
--- GoImpl: generate interface implementation stubs
 vim.api.nvim_buf_create_user_command(0, "GoImpl", function(opts)
   if opts.args == "" then
     notify("Usage: GoImpl <recv> <interface> (e.g., GoImpl 's *Service' io.Reader)", vim.log.levels.WARN)
@@ -257,31 +228,26 @@ vim.api.nvim_buf_create_user_command(0, "GoImpl", function(opts)
   end
 end, { nargs = "+", desc = "Generate interface implementation" })
 
--- GoIfErr: insert if err != nil block
 vim.api.nvim_buf_create_user_command(0, "GoIfErr", function()
   local iferr = vim.fn.exepath("iferr")
   if iferr == "" then
-    -- Fallback: insert basic template
     local row = vim.api.nvim_win_get_cursor(0)[1]
     local lines = { "if err != nil {", "\treturn err", "}" }
     vim.api.nvim_buf_set_lines(0, row, row, false, lines)
     return
   end
-  -- Use iferr tool for smarter generation
   local pos = vim.fn.getcurpos()
   local result = vim.fn.system(string.format("iferr -pos %d", vim.fn.line2byte(pos[2]) + pos[3] - 1))
   if vim.v.shell_error == 0 and result ~= "" then
     local lines = vim.split(result, "\n")
     vim.api.nvim_buf_set_lines(0, pos[2], pos[2], false, lines)
   else
-    -- Fallback
     local row = vim.api.nvim_win_get_cursor(0)[1]
     local lines = { "if err != nil {", "\treturn err", "}" }
     vim.api.nvim_buf_set_lines(0, row, row, false, lines)
   end
 end, { desc = "Insert if err != nil block" })
 
--- GoModernize: runs gopls modernize analyzer
 vim.api.nvim_buf_create_user_command(0, "GoModernize", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   if filepath == "" then
@@ -308,7 +274,6 @@ vim.api.nvim_buf_create_user_command(0, "GoModernize", function()
   })
 end, { desc = "Run gopls modernize -fix on current buffer" })
 
--- GoFillStruct: fill struct with default values (uses gopls code action)
 vim.api.nvim_buf_create_user_command(0, "GoFillStruct", function()
   vim.lsp.buf.code_action({
     filter = function(action)
@@ -318,7 +283,6 @@ vim.api.nvim_buf_create_user_command(0, "GoFillStruct", function()
   })
 end, { desc = "Fill struct with default values" })
 
--- GoAddTags: add struct tags (requires gomodifytags)
 vim.api.nvim_buf_create_user_command(0, "GoAddTags", function(opts)
   local tags = opts.args ~= "" and opts.args or "json"
   local gomodifytags = vim.fn.exepath("gomodifytags")
@@ -341,7 +305,6 @@ vim.api.nvim_buf_create_user_command(0, "GoAddTags", function(opts)
   end
 end, { nargs = "?", desc = "Add struct tags (default: json)" })
 
--- GoRemoveTags: remove struct tags
 vim.api.nvim_buf_create_user_command(0, "GoRemoveTags", function(opts)
   local tags = opts.args ~= "" and opts.args or "json"
   local gomodifytags = vim.fn.exepath("gomodifytags")
@@ -361,7 +324,7 @@ vim.api.nvim_buf_create_user_command(0, "GoRemoveTags", function(opts)
   end
 end, { nargs = "?", desc = "Remove struct tags (default: json)" })
 
--- GoAlt: switch between test and source file
+-- Navigation
 vim.api.nvim_buf_create_user_command(0, "GoAlt", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   local alt
@@ -377,7 +340,6 @@ vim.api.nvim_buf_create_user_command(0, "GoAlt", function()
   end
 end, { desc = "Switch between test and source file" })
 
--- GoAltV: switch in vertical split
 vim.api.nvim_buf_create_user_command(0, "GoAltV", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   local alt
@@ -394,7 +356,6 @@ vim.api.nvim_buf_create_user_command(0, "GoAltV", function()
 end, { desc = "Switch to alt file in vsplit" })
 
 -- Binary Installation
-
 local go_tools = {
   { name = "goimports", url = "golang.org/x/tools/cmd/goimports@latest" },
   { name = "gomodifytags", url = "github.com/fatih/gomodifytags@latest" },
@@ -407,7 +368,6 @@ local go_tools = {
   { name = "govulncheck", url = "golang.org/x/vuln/cmd/govulncheck@latest" },
 }
 
--- Helper to install tools sequentially with async
 local function install_tools_async(tools, index, action, on_complete)
   index = index or 1
   if index > #tools then
@@ -428,7 +388,6 @@ local function install_tools_async(tools, index, action, on_complete)
   end)
 end
 
--- GoInstallBinaries: install all go tools
 vim.api.nvim_buf_create_user_command(0, "GoInstallBinaries", function()
   notify("Installing Go binaries (this may take a minute)...")
   install_tools_async(go_tools, 1, "Installing", function()
@@ -436,7 +395,6 @@ vim.api.nvim_buf_create_user_command(0, "GoInstallBinaries", function()
   end)
 end, { desc = "Install all Go tool binaries" })
 
--- GoUpdateBinaries: update all go tools
 vim.api.nvim_buf_create_user_command(0, "GoUpdateBinaries", function()
   notify("Updating Go binaries (this may take a minute)...")
   install_tools_async(go_tools, 1, "Updating", function()
@@ -444,7 +402,6 @@ vim.api.nvim_buf_create_user_command(0, "GoUpdateBinaries", function()
   end)
 end, { desc = "Update all Go tool binaries" })
 
--- GoInstallBinary: install a specific binary
 vim.api.nvim_buf_create_user_command(0, "GoInstallBinary", function(opts)
   if opts.args == "" then
     notify("Available tools: " .. table.concat(

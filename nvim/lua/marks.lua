@@ -1,4 +1,5 @@
 -- Borrowed from https://github.com/lewis6991/dotfiles/blob/0071d6f1a97f8f6080eb592c4838d92f77901e84/config/nvim/lua/gizmos/marksigns.lua
+
 local ns = vim.api.nvim_create_namespace("bzasc/marks")
 
 ---@param bufnr integer
@@ -10,9 +11,9 @@ local function decor_mark(bufnr, mark)
   })
 end
 
+-- Mark signs in signcolumn
 vim.api.nvim_set_decoration_provider(ns, {
   on_win = function(_, _, bufnr, top_row, bot_row)
-    -- Only enable mark signs for buffers with a filename.
     if vim.api.nvim_buf_get_name(bufnr) == "" then
       return
     end
@@ -40,7 +41,7 @@ vim.api.nvim_set_decoration_provider(ns, {
   end,
 })
 
--- Redraw screen when marks are changed via `m` commands
+-- Redraw screen when marks change via `m`
 vim.on_key(function(_, typed)
   if typed:sub(1, 1) ~= "m" then
     return

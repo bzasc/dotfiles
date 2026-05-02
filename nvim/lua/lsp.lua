@@ -2,6 +2,7 @@ local function del(mode, lhs)
   pcall(vim.keymap.del, mode, lhs)
 end
 
+-- Compat user commands matching old nvim-lspconfig surface
 local function create_compat_commands()
   vim.api.nvim_create_user_command("LspInfo", function()
     vim.cmd("checkhealth vim.lsp")
@@ -22,6 +23,7 @@ local function create_compat_commands()
   end, { desc = "Retry attaching builtin LSP for the current buffer" })
 end
 
+-- Buffer-local keymaps on attach
 local function setup_keymaps(bufnr)
   local function map(mode, lhs, rhs, desc)
     vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc, silent = true })
@@ -39,48 +41,51 @@ local function setup_keymaps(bufnr)
     end
   end
 
+  -- Hover & signature
   map("n", "K", function()
     vim.lsp.buf.hover({ border = "rounded", max_height = 25, max_width = 120 })
   end, "Hover")
   map("n", "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
 
+  -- Navigation
   map("n", "gd", vim.lsp.buf.definition, "Definition")
   map("n", "gD", vim.lsp.buf.declaration, "Declaration")
   map("n", "gr", snacks_picker("lsp_references", vim.lsp.buf.references), "References")
   map("n", "gi", snacks_picker("lsp_implementations", vim.lsp.buf.implementation), "Implementation")
   map("n", "gy", snacks_picker("lsp_type_definitions", vim.lsp.buf.type_definition), "Type Definition")
 
+  -- Diagnostics
   map("n", "[d", function()
     vim.diagnostic.jump({ count = -1 })
   end, "Prev Diagnostic")
   map("n", "]d", function()
     vim.diagnostic.jump({ count = 1 })
   end, "Next Diagnostic")
+  map("n", "<leader>cd", vim.diagnostic.open_float, "Line Diagnostic")
 
+  -- Code actions
   map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code Action")
   map("n", "<leader>cr", vim.lsp.buf.rename, "Rename Symbol")
-  map("n", "<leader>cd", vim.diagnostic.open_float, "Line Diagnostic")
   map("n", "<leader>cv", function()
     vim.cmd("vsplit")
     vim.lsp.buf.definition()
   end, "Definition in Vsplit")
 
+  -- LSP control
   map("n", "<leader>li", "<cmd>LspInfo<cr>", "LSP Info")
   map("n", "<leader>lr", "<cmd>LspRestart<cr>", "LSP Restart")
 end
 
-local group = vim.api.nvim_create_augroup("bzasc/native_lsp", { clear = true })
+-- Capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 local has_blink, blink = pcall(require, "blink.cmp")
 
 if capabilities.workspace then
   capabilities.workspace.didChangeWatchedFiles = nil
 end
-
 if capabilities.textDocument then
   capabilities.textDocument.diagnostic = nil
 end
-
 if has_blink then
   capabilities = blink.get_lsp_capabilities(capabilities)
   if capabilities.textDocument then
@@ -88,7 +93,7 @@ if has_blink then
   end
 end
 
--- Keep the current surface area stable by removing builtin global defaults.
+-- Remove builtin global default keymaps (keep surface area stable)
 del({ "n", "x" }, "gra")
 del("n", "gri")
 del("n", "grn")
@@ -104,6 +109,7 @@ vim.lsp.config("*", {
   capabilities = capabilities,
 })
 
+-- Diagnostics UI
 vim.diagnostic.config({
   virtual_text = true,
   underline = true,
@@ -124,6 +130,8 @@ vim.diagnostic.config({
   },
 })
 
+-- Attach: keymaps + document highlight
+local group = vim.api.nvim_create_augroup("bzasc/native_lsp", { clear = true })
 vim.api.nvim_create_autocmd("LspAttach", {
   group = group,
   callback = function(args)
@@ -152,6 +160,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
+-- Enabled servers
 for _, name in ipairs({
   "lua_ls",
   "gopls",

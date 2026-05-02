@@ -1,0 +1,45 @@
+// Zed keymap — mirrors common nvim bindings (leader = space).
+[
+  // Insert mode escape: jj / jk.
+  {
+    "context": "Editor && vim_mode == insert && !menu",
+    "bindings": {
+      "j j": "vim::NormalBefore",
+      "j k": "vim::NormalBefore"
+    }
+  },
+
+  // Normal mode — leader maps (Space).
+  {
+    "context": "Editor && vim_mode == normal && !menu",
+    "bindings": {
+      "space q": ["workspace::CloseActiveItem", { "save_intent": "save_all" }],
+      "shift-q": "workspace::CloseWindow",
+      "space y": "editor::Copy",
+      "space p": "editor::Paste",
+      "space c f": "editor::Format",
+      "space space": "file_finder::Toggle",
+      "space /": "pane::DeploySearch",
+      "space e": "project_panel::ToggleFocus",
+      "escape": ["vim::SearchSubmit", { "regex": false }]
+    }
+  },
+
+  // Save with Ctrl-S in normal/insert/visual.
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-s": "workspace::Save"
+    }
+  },
+
+  // Centered scrolling — <C-d> / <C-u> equivalent already vim-default in Zed.
+  // Better visual indent (stay in selection).
+  {
+    "context": "Editor && vim_mode == visual",
+    "bindings": {
+      "<": "editor::Outdent",
+      ">": "editor::Indent"
+    }
+  }
+]

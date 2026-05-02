@@ -15,6 +15,7 @@ macos-titlebar-style = hidden
 macos-option-as-alt = true
 macos-titlebar-style=transparent
 macos-window-shadow = true
+minimum-contrast = 1.1
 
 gtk-tabs-location = hidden
 
@@ -25,7 +26,7 @@ window-padding-balance = true
 window-save-state = always
 window-colorspace = "display-p3"
 window-vsync=true
-window-decoration=none
+window-decoration=false
 
 # Shaders
 custom-shader = shaders/cursor_warp.glsl
@@ -33,3 +34,70 @@ custom-shader = shaders/cursor_warp.glsl
 ## Clipboard
 clipboard-read = "allow"
 clipboard-paste-protection = false
+
+# ============================================================================
+# Tmux-equivalent keybinds (transitioning to ghostty + session manager)
+# Enable gradually as tmux is removed. Tmux prefix C-s → chord ctrl+s>...
+# ============================================================================
+
+# --- Splits (tmux: bind '"' split -v / bind % split -h) ---
+# keybind = ctrl+s>shift+apostrophe=new_split:down
+# keybind = ctrl+s>shift+5=new_split:right
+# keybind = ctrl+s>s=new_split:down
+# keybind = ctrl+s>v=new_split:right
+
+# --- Navigate splits (tmux: bind h/j/k/l select-pane) ---
+# keybind = ctrl+s>h=goto_split:left
+# keybind = ctrl+s>j=goto_split:bottom
+# keybind = ctrl+s>k=goto_split:top
+# keybind = ctrl+s>l=goto_split:right
+
+# --- Resize splits without prefix (tmux: bind -n M-Left/Down/Up/Right resize-pane) ---
+# keybind = alt+left=resize_split:left,10
+# keybind = alt+down=resize_split:down,10
+# keybind = alt+up=resize_split:up,10
+# keybind = alt+right=resize_split:right,10
+
+# --- Resize with prefix (tmux reset: , . - =) ---
+# keybind = ctrl+s>comma=resize_split:left,20
+# keybind = ctrl+s>period=resize_split:right,20
+# keybind = ctrl+s>minus=resize_split:down,7
+# keybind = ctrl+s>equal=resize_split:up,7
+
+# --- Zoom split (tmux: bind z resize-pane -Z) ---
+# keybind = ctrl+s>z=toggle_split_zoom
+
+# --- Tabs ≈ tmux windows (tmux: S-Left/Right, M-H/L previous/next-window) ---
+# keybind = shift+left=previous_tab
+# keybind = shift+right=next_tab
+# keybind = alt+shift+h=previous_tab
+# keybind = alt+shift+l=next_tab
+# keybind = ctrl+s>c=new_tab
+# keybind = ctrl+s>n=next_tab
+# keybind = ctrl+s>p=previous_tab
+
+# --- Reload config (tmux: bind r source-file) ---
+# keybind = ctrl+s>r=reload_config
+
+# --- Kill pane/window (tmux reset: bind c kill-pane) ---
+# keybind = ctrl+s>x=close_surface
+# keybind = ctrl+s>shift+x=close_tab
+
+# --- Copy mode (tmux: copy-mode-vi v/y) ---
+# Ghostty has ctrl+shift+c / cmd+c natively; vi-style scroll:
+# keybind = ctrl+s>open_bracket=scroll_page_up
+# keybind = ctrl+s>close_bracket=scroll_page_down
+
+# --- No direct ghostty equivalent (need external session manager) ---
+# bind i display-popup -E "fish"          → use zellij/wezterm-mux/sesh
+# bind S-Z display-popup pane_current_path → ditto
+# bind d display-menu Dotfiles            → ditto
+# bind S choose-session                   → sesh + fzf
+# bind-key -n C-n nvim ObsidianNew        → external wrapper script
+# bind-key -n C-q nvim ObsidianSearch     → external wrapper script
+
+# --- Last window/session (tmux reset: bind ^A last-window) ---
+# keybind = ctrl+s>ctrl+a=last_tab
+
+# --- Detach (tmux reset: bind ^D detach) ---
+# No equivalent — mux feature. Evaluate zellij/sesh.

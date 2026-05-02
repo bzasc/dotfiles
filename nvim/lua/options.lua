@@ -1,83 +1,93 @@
+-- Leader
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
-vim.g.loaded_netrw = 1 -- Disable netrw file explorer (using a different file explorer)
-vim.g.loaded_netrwPlugin = 1 -- Disable netrw plugin component
-vim.g.loaded_node_provider = 0 -- Disable Node.js provider
-vim.g.loaded_perl_provider = 0 -- Disable Perl provider
+-- Disabled built-ins & providers
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
 
-vim.opt.tabstop = 2 -- 2 spaces for tabs (prettier default)
-vim.opt.shiftwidth = 2 -- 2 spaces for indent width
-vim.opt.expandtab = true -- expand tab to spaces
-vim.opt.autoindent = true -- copy indent from current line when starting new one
+-- Indent
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.opt.autoindent = true
 
-vim.opt.termguicolors = true -- Enable 24-bit RGB colors in the terminal
-vim.opt.number = true -- Show absolute line numbers
-vim.opt.relativenumber = true -- Show relative line numbers (hybrid with number=true)
-vim.opt.numberwidth = 4 -- Minimum width of number column
-vim.opt.signcolumn = "yes:1" -- Always show sign column with width of 1
-vim.opt.cursorline = true -- Highlight the current line
-vim.opt.wrap = false -- Don't wrap long lines
-vim.opt.breakindent = true -- Wrapped lines preserve indentation
-vim.opt.showmode = false -- Don't show mode in command line (shown in statusline)
-vim.opt.showcmd = false -- Don't show partial command in command line
-vim.opt.ruler = true -- Show cursor position in command line
-vim.opt.showtabline = 0 -- Never show the tab line
-vim.opt.cmdheight = 0 -- Let Noice handle the command line UI
-vim.opt.pumheight = 10 -- Maximum height of popup menu
-vim.opt.fillchars = { eob = " " } -- Hide ~ characters on empty lines
-vim.opt.background = "dark" -- colorschemes that can be light or dark will be made dark
-vim.o.winborder = "rounded" -- Use rounded borders for floating windows
+-- UI
+vim.opt.termguicolors = true
+vim.opt.background = "dark"
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.numberwidth = 4
+vim.opt.signcolumn = "yes:1"
+vim.opt.cursorline = true
+vim.opt.wrap = false
+vim.opt.breakindent = true
+vim.opt.showmode = false
+vim.opt.showcmd = false
+vim.opt.ruler = true
+vim.opt.showtabline = 0
+vim.opt.cmdheight = 0 -- Noice handles cmdline
+vim.opt.pumheight = 10
+vim.opt.fillchars = { eob = " " }
+vim.o.winborder = "rounded"
 
-vim.opt.hlsearch = true -- Highlight all search matches
-vim.opt.incsearch = true -- Show search matches as you type
-vim.opt.ignorecase = true -- Ignore case in search patterns
-vim.opt.smartcase = true -- Override ignorecase if pattern contains uppercase
+-- Search
+vim.opt.hlsearch = true
+vim.opt.incsearch = true
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
 
+-- Whitespace display
 vim.opt.list = true
 vim.opt.listchars = { space = " ", trail = "⋅", tab = "  ↦" }
 
-vim.opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
+-- Editing
+vim.opt.backspace = "indent,eol,start"
+vim.opt.mouse = "a"
+vim.opt.clipboard = "unnamedplus"
+vim.opt.autoread = true
+vim.opt.autowrite = true
+vim.opt.confirm = true
 
-vim.opt.mouse = "a" -- Enable mouse support in all modes
-vim.opt.clipboard = "unnamedplus" -- Use system clipboard for all yank/paste operations
+-- Timing
+vim.opt.updatetime = 500
+vim.opt.ttimeoutlen = 0
+vim.opt.timeoutlen = vim.g.vscode and 1000 or 300
 
-vim.opt.updatetime = 500 -- Time in ms before CursorHold event triggers (affects plugins)
-vim.opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
-vim.opt.ttimeoutlen = 0 -- Key code timeout
-vim.opt.timeoutlen = 1000 -- Time in ms to wait for a mapped key sequence to complete
-vim.opt.autoread = true -- Automatically reload files changed outside of Neovim
-vim.opt.autowrite = true -- Auto save
-vim.opt.confirm = true -- Prompt for confirmation instead of failing on unsaved changes
+-- Splits
+vim.opt.splitright = true
+vim.opt.splitbelow = true
 
-vim.opt.splitright = true -- split vertical window to the right
-vim.opt.splitbelow = true -- split horizontal window to the bottom
-
-vim.opt.fileencoding = "utf-8" -- File encoding for new files
-vim.opt.backup = false -- Don't create backup files before overwriting
-vim.opt.writebackup = false -- Don't create backup while editing
-vim.opt.backup = false -- Don't create backup files
-vim.opt.writebackup = false -- Don't create backup before writing
-vim.opt.swapfile = false -- Don't create swap files
-vim.opt.undofile = true -- Persistent undo
+-- Files, Backup, Undo
+vim.opt.fileencoding = "utf-8"
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.swapfile = false
+vim.opt.undofile = true
 vim.opt.undolevels = 10000
-vim.opt.undodir = vim.fn.expand("~/.vim/undodir") -- Undo directory
+vim.opt.undodir = vim.fn.expand("~/.vim/undodir")
 
-vim.opt.scrolloff = 8 -- minimum lines to keep above/below cursor
-vim.opt.sidescrolloff = 8 -- minimum columns to keep left/right of cursor
+-- Scroll
+vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 8
 
-vim.opt.foldmethod = "expr" -- use expression for folding
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- treesitter-based folding
-vim.opt.foldlevel = 99 -- start with all folds open
+-- Folding (treesitter)
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99
 
+-- Session & Completion
 vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
-vim.opt.completeopt = { "menu", "menuone", "noselect" } -- Completion menu options
-vim.opt.conceallevel = 0 -- Show all text normally (no concealment)
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
+vim.opt.conceallevel = 0
 
--- Performance improvements
+-- Performance
 vim.opt.redrawtime = 10000
 vim.opt.maxmempattern = 20000
 
+-- Ensure undodir exists
 local undodir = vim.fn.expand("~/.vim/undodir")
 if vim.fn.isdirectory(undodir) == 0 then
   vim.fn.mkdir(undodir, "p")
@@ -86,15 +96,15 @@ end
 -- Filetype Detection
 vim.filetype.add({
   extension = {
-    env = "dotenv", -- Treat .env extension as dotenv filetype
+    env = "dotenv",
     txt = "markdown",
   },
   filename = {
-    [".env"] = "dotenv", -- Treat .env file as dotenv filetype
-    ["env"] = "dotenv", -- Treat env file as dotenv filetype
+    [".env"] = "dotenv",
+    ["env"] = "dotenv",
   },
   pattern = {
-    ["[jt]sconfig.*.json"] = "jsonc", -- Treat tsconfig/jsconfig files as JSONC (allows comments)
-    ["%.env%.[%w_.-]+"] = "dotenv", -- Treat .env.* files as dotenv filetype
+    ["[jt]sconfig.*.json"] = "jsonc",
+    ["%.env%.[%w_.-]+"] = "dotenv",
   },
 })

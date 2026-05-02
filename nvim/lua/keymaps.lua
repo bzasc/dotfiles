@@ -1,102 +1,106 @@
-vim.keymap.set("n", "<C-s>", "<cmd>w<cr>", { desc = "Save File" })
-vim.keymap.set({ "i", "x" }, "<C-s>", "<Esc><cmd>w<cr>", { desc = "Save File" })
+local map = vim.keymap.set
 
-vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
-vim.keymap.set("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
+-- File & Session
+map("n", "<C-s>", "<cmd>w<cr>", { desc = "Save File" })
+map({ "i", "x" }, "<C-s>", "<Esc><cmd>w<cr>", { desc = "Save File" })
+map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+map("n", "<leader>Q", "<cmd>qa<cr>", { desc = "Quit All" })
 
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear Highlight", silent = true })
+-- Insert Mode
+map("i", "jj", "<Esc>", { desc = "Exit Insert" })
+map("i", "jk", "<Esc>", { desc = "Exit Insert" })
 
-vim.keymap.set("i", "jj", "<Esc>", { desc = "Exit Insert" })
-vim.keymap.set("i", "jk", "<ESC>", { desc = "Exit insert mode with jk" })
-
-vim.keymap.set("n", "j", function()
+-- Movement
+map("n", "j", function()
   return vim.v.count == 0 and "gj" or "j"
 end, { expr = true, silent = true, desc = "Down (wrap-aware)" })
-vim.keymap.set("n", "k", function()
+map("n", "k", function()
   return vim.v.count == 0 and "gk" or "k"
 end, { expr = true, silent = true, desc = "Up (wrap-aware)" })
 
-vim.keymap.set("n", "n", "nzzzv", { desc = "Next Match (centered)" })
-vim.keymap.set("n", "N", "Nzzzv", { desc = "Prev Match (centered)" })
-vim.keymap.set("n", "*", "*zzzv", { desc = "Search Word (centered)" })
-vim.keymap.set("n", "#", "#zzzv", { desc = "Search Word Back (centered)" })
+map("n", "<C-d>", "<C-d>zz", { desc = "Half Page Down (centered)" })
+map("n", "<C-u>", "<C-u>zz", { desc = "Half Page Up (centered)" })
 
-vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Half Page Down (centered)" })
-vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half Page Up (centered)" })
+-- Search
+map("n", "<Esc>", "<cmd>nohlsearch<cr>", { desc = "Clear Highlight", silent = true })
+map("n", "n", "nzzzv", { desc = "Next Match (centered)" })
+map("n", "N", "Nzzzv", { desc = "Prev Match (centered)" })
+map("n", "*", "*zzzv", { desc = "Search Word (centered)" })
+map("n", "#", "#zzzv", { desc = "Search Word Back (centered)" })
 
-vim.keymap.set("n", "J", "mzJ`z", { desc = "Join Lines (keep cursor)" })
-vim.keymap.set("n", "x", '"_x')
-
--- Window resizing
-vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Height" })
-vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Height" })
-vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Width" })
-vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Width" })
-
-vim.keymap.set("c", "<CR>", function()
+map("c", "<CR>", function()
   return vim.fn.getcmdtype() == "/" and "<CR>zzzv" or "<CR>"
 end, { expr = true })
 
-vim.keymap.set("n", "<leader>+", "<C-a>", { desc = "Increment number" }) -- increment
-vim.keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" }) -- decrement
-
--- Better indenting (stay in visual mode)
-vim.keymap.set("v", "<", "<gv", { desc = "Indent Left" })
-vim.keymap.set("v", ">", ">gv", { desc = "Indent Right" })
-
--- Paste over selection without yanking (visual `p` handled by yanky.nvim)
-vim.keymap.set("x", "<leader>p", [["_dP]])
-
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
-vim.keymap.set("n", "<leader>Y", [["+Y]])
-
-vim.keymap.set({ "n", "v" }, "<leader>x", '"_d', { desc = "Delete Without Yanking" })
-
--- Yank block
-vim.keymap.set("n", "YY", "va{Vy", { desc = "Yank Block {}" })
-
--- Split line (opposite of J)
-vim.keymap.set(
+-- Editing
+map("n", "J", "mzJ`z", { desc = "Join Lines (keep cursor)" })
+map(
   "n",
   "X",
   ":keeppatterns substitute/\\s*\\%#\\s*/\\r/e <bar> normal! ==^<cr>",
   { desc = "Split Line", silent = true }
 )
+map("n", "x", '"_x')
 
--- Select all
-vim.keymap.set("n", "<C-a>", "ggVG", { desc = "Select All" })
+map("v", "<", "<gv", { desc = "Indent Left" })
+map("v", ">", ">gv", { desc = "Indent Right" })
 
-vim.keymap.set(
+map("n", "<leader>+", "<C-a>", { desc = "Increment number" })
+map("n", "<leader>-", "<C-x>", { desc = "Decrement number" })
+
+-- Yank, Paste, Delete
+map({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to System" })
+map("n", "<leader>Y", [["+Y]], { desc = "Yank Line to System" })
+map("n", "YY", "va{Vy", { desc = "Yank Block {}" })
+map("x", "<leader>p", [["_dP]], { desc = "Paste Without Yank" })
+map({ "n", "v" }, "<leader>x", '"_d', { desc = "Delete Without Yanking" })
+
+-- Selection
+map("n", "<C-a>", "ggVG", { desc = "Select All" })
+
+-- Windows
+map("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase Height" })
+map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease Height" })
+map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Width" })
+map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Width" })
+
+-- LSP
+map("n", "gs", function()
+  vim.cmd("vsplit")
+  vim.cmd("wincmd l")
+  vim.lsp.buf.definition()
+end, { noremap = true, silent = true, desc = "Go to definition split" })
+
+-- Marks
+map("n", "dm", function()
+  local mark = vim.fn.getcharstr("Delete mark: ")
+  vim.cmd("delmarks " .. mark)
+end, { desc = "Delete mark" })
+
+-- Obsidian
+local obsidian_vault = vim.env.HOME .. "/annotations/bzasc_brain"
+
+map(
   "n",
   "<leader>oN",
   ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>",
   { desc = "Add note ObsidianTemplate" }
 )
-vim.keymap.set(
+map(
   "n",
   "<leader>oc",
   ":ObsidianTemplate class-note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>",
   { desc = "Add class-note ObsidianTemplate" }
 )
-vim.keymap.set(
+map(
   "n",
   "<leader>od",
   ":ObsidianTemplate daily<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>",
   { desc = "Add daily ObsidianTemplate" }
 )
-
-local obsidian_vault = vim.env.HOME .. "/annotations/bzasc_brain"
-
-vim.keymap.set("n", "<leader>os", function()
+map("n", "<leader>os", function()
   Snacks.picker.files({ cwd = obsidian_vault })
-end, { desc = "Locate files in the Obsidian vault" })
-
-vim.keymap.set("n", "<leader>oz", function()
+end, { desc = "Locate files in Obsidian vault" })
+map("n", "<leader>oz", function()
   Snacks.picker.live_grep({ cwd = obsidian_vault })
-end, { desc = "Search with ripgrep (rg) in the Obsidian vault" })
-
-vim.keymap.set("n", "gs", function()
-  vim.cmd("vsplit")
-  vim.cmd("wincmd l")
-  vim.lsp.buf.definition()
-end, { noremap = true, silent = true, desc = "Go to definition split" })
+end, { desc = "Ripgrep in Obsidian vault" })

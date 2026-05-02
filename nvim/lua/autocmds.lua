@@ -1,9 +1,55 @@
 local api = vim.api
 
--- don't auto comment new line
+-- General
 api.nvim_create_autocmd("BufEnter", { command = [[set formatoptions-=cro]] })
 
--- wrap words "softly" (no carriage return) in mail buffer
+api.nvim_create_autocmd("VimResized", {
+  callback = function()
+    vim.cmd("wincmd =")
+  end,
+})
+
+-- Reload buffer when file changes externally (works with Claude Code)
+api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
+  callback = function()
+    if vim.fn.mode() ~= "c" then
+      vim.cmd("checktime")
+    end
+  end,
+})
+
+-- Highlight on yank
+api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.hl.on_yank()
+  end,
+})
+
+-- Restore last cursor position
+api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local lcount = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
+-- Cursorline only in active window
+local cursorGrp = api.nvim_create_augroup("CursorLine", { clear = true })
+api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
+  pattern = "*",
+  command = "set cursorline",
+  group = cursorGrp,
+})
+api.nvim_create_autocmd({ "InsertEnter", "WinLeave" }, {
+  pattern = "*",
+  command = "set nocursorline",
+  group = cursorGrp,
+})
+
+-- FileType: mail (soft wrap)
 api.nvim_create_autocmd("FileType", {
   pattern = "mail",
   callback = function()
@@ -15,38 +61,7 @@ api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Highlight on yank
-api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    vim.hl.on_yank()
-  end,
-})
-
--- go to last loc when opening a buffer
--- this mean that when you open a file, you will be at the last position
-api.nvim_create_autocmd("BufReadPost", {
-  callback = function()
-    local mark = vim.api.nvim_buf_get_mark(0, '"')
-    local lcount = vim.api.nvim_buf_line_count(0)
-    if mark[1] > 0 and mark[1] <= lcount then
-      pcall(vim.api.nvim_win_set_cursor, 0, mark)
-    end
-  end,
-})
-
--- show cursor line only in active window
-local cursorGrp = api.nvim_create_augroup("CursorLine", { clear = true })
-api.nvim_create_autocmd({ "InsertLeave", "WinEnter" }, {
-  pattern = "*",
-  command = "set cursorline",
-  group = cursorGrp,
-})
-api.nvim_create_autocmd(
-  { "InsertEnter", "WinLeave" },
-  { pattern = "*", command = "set nocursorline", group = cursorGrp }
-)
-
--- Enable spell checking and soft wrap for prose file types
+-- FileType: prose (spell + soft wrap)
 api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.txt", "*.md", "*.tex" },
   callback = function()
@@ -57,7 +72,7 @@ api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   end,
 })
 
--- close some filetypes with <q>
+-- FileType: close with <q>
 api.nvim_create_autocmd("FileType", {
   group = api.nvim_create_augroup("close_with_q", { clear = true }),
   pattern = {
@@ -81,14 +96,7 @@ api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Resize neovim split when terminal is resized
-api.nvim_create_autocmd("VimResized", {
-  callback = function()
-    vim.cmd("wincmd =")
-  end,
-})
-
--- Fix terraform and hcl comment string
+-- FileType: terraform/hcl comment string
 api.nvim_create_autocmd("FileType", {
   group = api.nvim_create_augroup("FixTerraformCommentString", { clear = true }),
   pattern = { "terraform", "hcl" },
@@ -97,18 +105,10 @@ api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Check for external file changes (works with Claude Code)
-api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, { -- CursorHold
-  callback = function()
-    if vim.fn.mode() ~= "c" then
-      vim.cmd("checktime")
-    end
-  end,
-})
+-- Terminal
+local terminal_group = api.nvim_create_augroup("BzascTerminal", { clear = true })
 
-local terminal_group = vim.api.nvim_create_augroup("BzascTerminal", { clear = true })
-
-vim.api.nvim_create_autocmd("TermClose", {
+api.nvim_create_autocmd("TermClose", {
   group = terminal_group,
   callback = function()
     if vim.v.event.status == 0 then
@@ -117,9 +117,8 @@ vim.api.nvim_create_autocmd("TermClose", {
   end,
 })
 
-vim.api.nvim_create_autocmd("TermOpen", {
+api.nvim_create_autocmd("TermOpen", {
   group = terminal_group,
-
   callback = function()
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
@@ -127,6 +126,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
   end,
 })
 
+-- Floating terminal
 local terminal_state = { buf = nil, win = nil, is_open = false }
 
 local function FloatingTerminal()
@@ -176,7 +176,7 @@ local function FloatingTerminal()
   terminal_state.is_open = true
   vim.cmd("startinsert")
 
-  vim.api.nvim_create_autocmd("BufLeave", {
+  api.nvim_create_autocmd("BufLeave", {
     buffer = terminal_state.buf,
     callback = function()
       if terminal_state.is_open and terminal_state.win and vim.api.nvim_win_is_valid(terminal_state.win) then
@@ -200,40 +200,3 @@ vim.keymap.set("t", "<Esc>", function()
     terminal_state.is_open = false
   end
 end, { noremap = true, silent = true, desc = "Close floating terminal" })
-
---vim.api.nvim_create_autocmd("CmdwinEnter", {
---  group = vim.api.nvim_create_augroup("bzasc/execute_cmd_and_stay", { clear = true }),
---  desc = "Execute command and stay in the command-line window",
---  callback = function(args)
---    vim.keymap.set({ "n", "i" }, "<S-CR>", "<cr>q:", { buffer = args.buf })
---  end,
---})
-
---vim.api.nvim_create_autocmd("FileType", {
---  group = vim.api.nvim_create_augroup("bzasc/big_file", { clear = true }),
---  desc = "Disable features in big files",
---  pattern = "bigfile",
---  callback = function(args)
---    vim.schedule(function()
---      vim.bo[args.buf].syntax = vim.filetype.match({ buf = args.buf }) or ""
---    end)
---  end,
---})
-
---vim.api.nvim_create_autocmd("FileType", {
---  group = vim.api.nvim_create_augroup("bzasc/treesitter_folding", { clear = true }),
---  desc = "Enable Treesitter folding",
---  callback = function(args)
---    local bufnr = args.buf
---
---    -- Enable Treesitter folding when not in huge files and when Treesitter
---    -- is working.
---    if vim.bo[bufnr].filetype ~= "bigfile" and pcall(vim.treesitter.start, bufnr) then
---      vim.api.nvim_buf_call(bufnr, function()
---        vim.wo[0][0].foldmethod = "expr"
---        vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
---        vim.cmd.normal("zx")
---      end)
---    end
---  end,
---})

@@ -1,5 +1,3 @@
--- Rust Tools - Custom commands for Rust development
-
 local function notify(msg, level)
   vim.notify(msg, level or vim.log.levels.INFO)
 end
@@ -29,43 +27,31 @@ local function get_crate_root()
 end
 
 -- Build & Run
-
--- CargoBuild: cargo build
 vim.api.nvim_buf_create_user_command(0, "CargoBuild", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "cargo build " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal cargo build " .. args)
 end, { nargs = "?", desc = "cargo build" })
 
--- CargoBuildRelease: cargo build --release
 vim.api.nvim_buf_create_user_command(0, "CargoBuildRelease", function()
   vim.cmd("split | terminal cargo build --release")
 end, { desc = "cargo build --release" })
 
--- CargoRun: cargo run
 vim.api.nvim_buf_create_user_command(0, "CargoRun", function(opts)
   local args = opts.args ~= "" and " -- " .. opts.args or ""
-  local cmd_str = "cargo run" .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal cargo run" .. args)
 end, { nargs = "?", desc = "cargo run" })
 
--- CargoRunRelease: cargo run --release
 vim.api.nvim_buf_create_user_command(0, "CargoRunRelease", function(opts)
   local args = opts.args ~= "" and " -- " .. opts.args or ""
-  local cmd_str = "cargo run --release" .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal cargo run --release" .. args)
 end, { nargs = "?", desc = "cargo run --release" })
 
 -- Testing
-
--- CargoTest: cargo test
 vim.api.nvim_buf_create_user_command(0, "CargoTest", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "cargo test " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal cargo test " .. args)
 end, { nargs = "?", desc = "cargo test" })
 
--- CargoTestFunc: test function under cursor
 vim.api.nvim_buf_create_user_command(0, "CargoTestFunc", function()
   local func_name = nil
   local node = vim.treesitter.get_node()
@@ -85,13 +71,10 @@ vim.api.nvim_buf_create_user_command(0, "CargoTestFunc", function()
     return
   end
 
-  local cmd_str = string.format("cargo test %s -- --exact --nocapture", func_name)
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal " .. string.format("cargo test %s -- --exact --nocapture", func_name))
 end, { desc = "Test function under cursor" })
 
 -- Code Quality
-
--- CargoCheck: cargo check
 vim.api.nvim_buf_create_user_command(0, "CargoCheck", function()
   notify("Running: cargo check")
   run_cmd({ "cargo", "check", "--message-format=short" }, {
@@ -106,14 +89,11 @@ vim.api.nvim_buf_create_user_command(0, "CargoCheck", function()
   })
 end, { desc = "cargo check" })
 
--- CargoClippy: cargo clippy
 vim.api.nvim_buf_create_user_command(0, "CargoClippy", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "cargo clippy " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal cargo clippy " .. args)
 end, { nargs = "?", desc = "cargo clippy" })
 
--- CargoFmt: cargo fmt
 vim.api.nvim_buf_create_user_command(0, "CargoFmt", function()
   notify("Running: cargo fmt")
   run_cmd({ "cargo", "fmt" }, {
@@ -129,7 +109,6 @@ vim.api.nvim_buf_create_user_command(0, "CargoFmt", function()
   })
 end, { desc = "cargo fmt" })
 
--- CargoFmtCheck: cargo fmt --check
 vim.api.nvim_buf_create_user_command(0, "CargoFmtCheck", function()
   notify("Running: cargo fmt --check")
   run_cmd({ "cargo", "fmt", "--check" }, {
@@ -145,8 +124,6 @@ vim.api.nvim_buf_create_user_command(0, "CargoFmtCheck", function()
 end, { desc = "cargo fmt --check" })
 
 -- Dependencies
-
--- CargoAdd: cargo add
 vim.api.nvim_buf_create_user_command(0, "CargoAdd", function(opts)
   if opts.args == "" then
     notify("Usage: CargoAdd <crate>", vim.log.levels.WARN)
@@ -166,7 +143,6 @@ vim.api.nvim_buf_create_user_command(0, "CargoAdd", function(opts)
   })
 end, { nargs = "+", desc = "cargo add <crate>" })
 
--- CargoRemove: cargo remove
 vim.api.nvim_buf_create_user_command(0, "CargoRemove", function(opts)
   if opts.args == "" then
     notify("Usage: CargoRemove <crate>", vim.log.levels.WARN)
@@ -186,7 +162,6 @@ vim.api.nvim_buf_create_user_command(0, "CargoRemove", function(opts)
   })
 end, { nargs = 1, desc = "cargo remove <crate>" })
 
--- CargoUpdate: cargo update
 vim.api.nvim_buf_create_user_command(0, "CargoUpdate", function()
   notify("Running: cargo update")
   run_cmd({ "cargo", "update" }, {
@@ -202,16 +177,12 @@ vim.api.nvim_buf_create_user_command(0, "CargoUpdate", function()
   })
 end, { desc = "cargo update" })
 
--- CargoTree: cargo tree
 vim.api.nvim_buf_create_user_command(0, "CargoTree", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "cargo tree " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal cargo tree " .. args)
 end, { nargs = "?", desc = "cargo tree" })
 
 -- Documentation
-
--- CargoDoc: cargo doc
 vim.api.nvim_buf_create_user_command(0, "CargoDoc", function(opts)
   local open = opts.bang and " --open" or ""
   notify("Running: cargo doc" .. open)
@@ -227,7 +198,6 @@ vim.api.nvim_buf_create_user_command(0, "CargoDoc", function(opts)
   })
 end, { bang = true, desc = "cargo doc (! to open)" })
 
--- RustDoc: open docs.rs for word under cursor
 vim.api.nvim_buf_create_user_command(0, "RustDoc", function(opts)
   local crate = opts.args ~= "" and opts.args or vim.fn.expand("<cword>")
   local url = "https://docs.rs/" .. crate
@@ -237,8 +207,6 @@ vim.api.nvim_buf_create_user_command(0, "RustDoc", function(opts)
 end, { nargs = "?", desc = "Open docs.rs for crate" })
 
 -- Project Management
-
--- CargoNew: cargo new
 vim.api.nvim_buf_create_user_command(0, "CargoNew", function(opts)
   if opts.args == "" then
     notify("Usage: CargoNew <name> [--lib]", vim.log.levels.WARN)
@@ -256,7 +224,6 @@ vim.api.nvim_buf_create_user_command(0, "CargoNew", function(opts)
   })
 end, { nargs = "+", desc = "cargo new <name>" })
 
--- CargoInit: cargo init
 vim.api.nvim_buf_create_user_command(0, "CargoInit", function(opts)
   local args = opts.args ~= "" and opts.args or ""
   notify("Running: cargo init " .. args)
@@ -272,7 +239,6 @@ vim.api.nvim_buf_create_user_command(0, "CargoInit", function(opts)
   })
 end, { nargs = "?", desc = "cargo init" })
 
--- CargoClean: cargo clean
 vim.api.nvim_buf_create_user_command(0, "CargoClean", function()
   notify("Running: cargo clean")
   run_cmd({ "cargo", "clean" }, {
@@ -288,42 +254,31 @@ vim.api.nvim_buf_create_user_command(0, "CargoClean", function()
 end, { desc = "cargo clean" })
 
 -- Utilities
-
--- CargoExpand: cargo expand (requires cargo-expand)
 vim.api.nvim_buf_create_user_command(0, "CargoExpand", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "cargo expand " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal cargo expand " .. args)
 end, { nargs = "?", desc = "cargo expand (macro expansion)" })
 
--- CargoAudit: cargo audit (requires cargo-audit)
 vim.api.nvim_buf_create_user_command(0, "CargoAudit", function()
   vim.cmd("split | terminal cargo audit")
 end, { desc = "cargo audit (security vulnerabilities)" })
 
--- CargoOutdated: cargo outdated (requires cargo-outdated)
 vim.api.nvim_buf_create_user_command(0, "CargoOutdated", function()
   vim.cmd("split | terminal cargo outdated")
 end, { desc = "cargo outdated" })
 
--- CargoBench: cargo bench
 vim.api.nvim_buf_create_user_command(0, "CargoBench", function(opts)
   local args = opts.args ~= "" and opts.args or ""
-  local cmd_str = "cargo bench " .. args
-  vim.cmd("split | terminal " .. cmd_str)
+  vim.cmd("split | terminal cargo bench " .. args)
 end, { nargs = "?", desc = "cargo bench" })
 
 -- Navigation
-
--- RustAlt: switch between source and test
 vim.api.nvim_buf_create_user_command(0, "RustAlt", function()
   local filepath = vim.api.nvim_buf_get_name(0)
   local filename = vim.fn.fnamemodify(filepath, ":t")
   local dir = vim.fn.fnamemodify(filepath, ":h")
 
-  -- Check if we're in a tests module or main source
   if filename == "mod.rs" and dir:match("/tests$") then
-    -- In tests/mod.rs, go to lib.rs or main.rs
     local parent = vim.fn.fnamemodify(dir, ":h")
     local lib = parent .. "/lib.rs"
     local main = parent .. "/main.rs"
@@ -335,7 +290,6 @@ vim.api.nvim_buf_create_user_command(0, "RustAlt", function()
       notify("No lib.rs or main.rs found", vim.log.levels.WARN)
     end
   elseif filename == "lib.rs" or filename == "main.rs" then
-    -- Go to tests/mod.rs or create inline test module
     local tests_dir = dir .. "/tests"
     local tests_mod = tests_dir .. "/mod.rs"
     if vim.fn.filereadable(tests_mod) == 1 then
@@ -349,7 +303,6 @@ vim.api.nvim_buf_create_user_command(0, "RustAlt", function()
 end, { desc = "Switch between source and tests" })
 
 -- Cargo Subcommand Installation
-
 local cargo_tools = {
   { name = "cargo-expand", desc = "Macro expansion" },
   { name = "cargo-audit", desc = "Security audit" },
@@ -380,7 +333,6 @@ local function install_cargo_tools_async(tools, index, on_complete)
   end)
 end
 
--- CargoInstallTools: install useful cargo subcommands
 vim.api.nvim_buf_create_user_command(0, "CargoInstallTools", function()
   notify("Installing Cargo tools (this may take a few minutes)...")
   install_cargo_tools_async(cargo_tools, 1, function()
@@ -388,7 +340,6 @@ vim.api.nvim_buf_create_user_command(0, "CargoInstallTools", function()
   end)
 end, { desc = "Install useful cargo subcommands" })
 
--- CargoInstallTool: install a specific cargo tool
 vim.api.nvim_buf_create_user_command(0, "CargoInstallTool", function(opts)
   if opts.args == "" then
     local tool_list = {}

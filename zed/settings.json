@@ -1,0 +1,143 @@
+// Zed settings — mirror nvim where possible.
+// Docs: https://zed.dev/docs/configuring-zed
+{
+  // Vim
+  "vim_mode": true,
+  "base_keymap": "VSCode",
+  "cursor_shape": "block",
+  "vim": {
+    "use_system_clipboard": "always",
+    "use_multiline_find": true,
+    "use_smartcase_find": true
+  },
+
+  // Theme — nvim uses Nordic. Zed has no built-in nordic; install
+  // "Nord" via cmd-shift-x (Extensions) then switch "dark" to "Nord".
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "Nordic Syntax"
+  },
+
+  // Fonts (matches ghostty: Fira Code 13; sized up here for editor).
+  "ui_font_size": 16,
+  "buffer_font_family": "Fira Code",
+  "buffer_font_size": 15,
+  "buffer_font_features": {
+    "calt": true
+  },
+
+  // Line numbers — hybrid (number + relativenumber).
+  "relative_line_numbers": true,
+
+  // Cursor / scroll.
+  "cursor_blink": false,
+  "vertical_scroll_margin": 8,
+  "horizontal_scroll_margin": 8,
+  "scroll_beyond_last_line": "one_page",
+  "current_line_highlight": "line",
+
+  // Indent — 2 spaces, expandtab.
+  "tab_size": 2,
+  "hard_tabs": false,
+  "auto_indent": true,
+  "auto_indent_on_paste": true,
+  "remove_trailing_whitespace_on_save": true,
+  "ensure_final_newline_on_save": true,
+
+  // Search — ignorecase + smartcase.
+  "use_smartcase_search": true,
+
+  // Wrap / whitespace.
+  "soft_wrap": "none",
+  "show_whitespaces": "boundary",
+  "wrap_guides": [],
+  "show_wrap_guides": false,
+
+  // Splits — splitright + splitbelow.
+  "default_panel_size": "240px",
+  "pane_split_direction_horizontal": "down",
+  "pane_split_direction_vertical": "right",
+
+  // Save / format.
+  "format_on_save": "on",
+  "formatter": "auto",
+  "autosave": "on_focus_change",
+  "confirm_quit": true,
+
+  // Completion menu.
+  "show_completions_on_input": true,
+  "show_completion_documentation": true,
+
+  // File explorer / panels.
+  "project_panel": {
+    "dock": "left",
+    "default_width": 260,
+    "git_status": true
+  },
+  "outline_panel": {
+    "dock": "right"
+  },
+  "git_panel": {
+    "dock": "left"
+  },
+
+  // Terminal — match shell from env.
+  "terminal": {
+    "shell": {
+      "program": "/opt/homebrew/bin/fish"
+    },
+    "font_family": "Fira Code",
+    "font_size": 14,
+    "blinking": "off",
+    "copy_on_select": true,
+    "working_directory": "current_project_directory"
+  },
+
+  // Inlay hints — like nvim LSP.
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true,
+    "show_other_hints": true
+  },
+
+  // Diagnostics.
+  "diagnostics": {
+    "include_warnings": true,
+    "inline": {
+      "enabled": true
+    }
+  },
+
+  // Per-language overrides — match conform.nvim formatters.
+  "languages": {
+    "Lua": { "tab_size": 2, "formatter": { "external": { "command": "stylua", "arguments": ["-"] } } },
+    "Go": { "tab_size": 4, "hard_tabs": true },
+    "Python": { "tab_size": 4, "formatter": "language_server" },
+    "Ruby": { "tab_size": 2 },
+    "Rust": { "tab_size": 4 },
+    "JavaScript": { "tab_size": 2, "formatter": { "language_server": { "name": "prettier" } } },
+    "TypeScript": { "tab_size": 2, "formatter": { "language_server": { "name": "prettier" } } },
+    "TSX": { "tab_size": 2, "formatter": { "language_server": { "name": "prettier" } } },
+    "JSX": { "tab_size": 2, "formatter": { "language_server": { "name": "prettier" } } },
+    "JSON": { "tab_size": 2 },
+    "YAML": { "tab_size": 2 },
+    "Markdown": { "soft_wrap": "editor_width", "show_whitespaces": "selection" },
+    "Shell Script": { "tab_size": 2 }
+  },
+
+  // File-type associations (mirrors filetype.add in options.lua).
+  "file_types": {
+    "JSONC": ["**/tsconfig*.json", "**/jsconfig*.json"],
+    "Shell Script": [".env", ".env.*", "env"],
+    "Markdown": ["*.txt"]
+  },
+
+  // Agents (kept from prior config).
+  "agent_servers": {
+    "github-copilot-cli": { "type": "registry" },
+    "codex-acp": { "type": "registry" },
+    "claude-acp": { "type": "registry" }
+  }
+}
