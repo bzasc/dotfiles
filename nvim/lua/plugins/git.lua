@@ -27,14 +27,36 @@ return {
         word_diff = false,
         watch_gitdir = { interval = 1000, follow_files = true },
         attach_to_untracked = true,
-        current_line_blame = false,
+        current_line_blame = true,
         current_line_blame_opts = {
           virt_text = true,
           virt_text_pos = "eol",
-          delay = 1000,
+          delay = 0,
           ignore_whitespace = false,
         },
-        current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
+        current_line_blame_formatter = function(name, blame_info)
+          local icon = "\238\156\165" -- nerd font  (U+E725)
+          if not blame_info.author_time or blame_info.author == "Not Committed Yet" then
+            return { { "  " .. icon .. " Not Committed Yet", "GitSignsCurrentLineBlame" } }
+          end
+          local author = blame_info.author == name and "You" or blame_info.author
+          local diff = os.difftime(os.time(), tonumber(blame_info.author_time))
+          local rel
+          if diff < 60 then
+            rel = "just now"
+          elseif diff < 3600 then
+            rel = math.floor(diff / 60) .. "m ago"
+          elseif diff < 86400 then
+            rel = math.floor(diff / 3600) .. "h ago"
+          elseif diff < 2592000 then
+            rel = math.floor(diff / 86400) .. "d ago"
+          elseif diff < 31536000 then
+            rel = math.floor(diff / 2592000) .. "mo ago"
+          else
+            rel = math.floor(diff / 31536000) .. "y ago"
+          end
+          return { { "  " .. icon .. " " .. author .. ", " .. rel, "GitSignsCurrentLineBlame" } }
+        end,
         sign_priority = 6,
         status_formatter = nil,
         update_debounce = 200,

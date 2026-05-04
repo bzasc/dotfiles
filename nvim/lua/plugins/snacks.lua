@@ -43,8 +43,6 @@ return {
     },
     indent = {
       enabled = false,
-      --char = "│",
-      --animate = { enabled = false },
     },
     input = { enabled = true },
     notifier = { enabled = true, timeout = 3000 },
@@ -106,7 +104,9 @@ return {
     scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
-    styles = { notification = {} },
+    styles = {
+      notification = {},
+    },
     toogle = { enabled = true },
   },
   keys = {

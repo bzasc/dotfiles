@@ -286,4 +286,15 @@ return {
       { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yanky yank" },
     },
   },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    event = "VeryLazy",
+    opts = {
+      scope = {
+        show_start = false,
+        show_end = false,
+      },
+    },
+  },
 }

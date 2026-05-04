@@ -35,6 +35,7 @@ brew 'golang'
 brew 'golangci-lint'
 brew 'golangci-lint-langserver'
 brew 'gopls'
+brew 'tmux'
 
 cask 'alt-tab'
 cask 'discord'
