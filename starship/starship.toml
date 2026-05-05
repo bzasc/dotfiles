@@ -21,7 +21,7 @@ right_format = """
 $all
 """
 
-palette = 'nordic'
+palette = 'sonokai'
 
 [time]
 disabled = true
@@ -67,9 +67,9 @@ ignore_timeout = true
 shell = ["bash", "--noprofile", "--norc"]
 
 [git_branch]
-symbol = "[](base) "
-style = "fg:lavender bg:base"
-format =  " [$symbol$branch]($style)[](base)"
+symbol = "[](bg1) "
+style = "fg:lavender bg:bg1"
+format =  " [$symbol$branch]($style)[](bg1)"
 
 [git_status]
 format = "[$staged$modified$renamed$conflicted$ahead_behind]($style)"
@@ -287,6 +287,26 @@ lavender = '#9cabca'
 teal = '#6a9589'
 mauve = '#957fb8'
 gray = '#727169'
+
+[palettes.sonokai]
+fg0 = '#e2e2e3'
+bg0 = '#2c2e34'
+bg1 = '#33353f'
+bg3 = '#3b3e48'
+blue = '#76cce0'
+aqua = '#76cce0'
+green = '#9ed072'
+orange = '#f39660'
+purple = '#b39df3'
+red = '#fc5d7c'
+peach = '#f39660'
+yellow = '#e7c664'
+sapphire = '#76cce0'
+base = '#181819'
+lavender = '#b39df3'
+teal = '#76cce0'
+mauve = '#b39df3'
+gray = '#7f8490'
 
 [palettes.nordic]
 fg0 = '#d8dee9'

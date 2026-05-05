@@ -8,31 +8,31 @@
 # for appropriate commands to add to ~/.config/fish/config.fish instead.
 # See also the release notes for fish 4.3.0 (run `help relnotes`).
 
-set --global fish_color_autosuggestion 54546D
-set --global fish_color_cancel E82424
-set --global fish_color_command 98BB6C
-set --global fish_color_comment 727169
-set --global fish_color_cwd 7E9CD8
-set --global fish_color_cwd_root E82424
-set --global fish_color_end FFA066
-set --global fish_color_error E82424
-set --global fish_color_escape FFA066
+set --global fish_color_autosuggestion 7F8490
+set --global fish_color_cancel FC5D7C
+set --global fish_color_command 9ED072
+set --global fish_color_comment 7F8490
+set --global fish_color_cwd 76CCE0
+set --global fish_color_cwd_root FC5D7C
+set --global fish_color_end F39660
+set --global fish_color_error FC5D7C
+set --global fish_color_escape F39660
 set --global fish_color_history_current --bold
-set --global fish_color_host 957FB8
-set --global fish_color_host_remote E6C384
-set --global fish_color_keyword 957FB8
-set --global fish_color_normal DCD7BA
-set --global fish_color_operator FFA066
-set --global fish_color_param 9CABCA
-set --global fish_color_quote E6C384
-set --global fish_color_redirection 7FB4CA
-set --global fish_color_search_match --background=2A2A37
-set --global fish_color_selection --background=2A2A37
-set --global fish_color_status E82424
-set --global fish_color_user 98BB6C
+set --global fish_color_host B39DF3
+set --global fish_color_host_remote E7C664
+set --global fish_color_keyword B39DF3
+set --global fish_color_normal E2E2E3
+set --global fish_color_operator F39660
+set --global fish_color_param 76CCE0
+set --global fish_color_quote E7C664
+set --global fish_color_redirection 76CCE0
+set --global fish_color_search_match --background=414550
+set --global fish_color_selection --background=414550
+set --global fish_color_status FC5D7C
+set --global fish_color_user 9ED072
 set --global fish_color_valid_path --underline
-set --global fish_pager_color_completion DCD7BA
-set --global fish_pager_color_description 727169
-set --global fish_pager_color_prefix 98BB6C --bold
-set --global fish_pager_color_progress 7E9CD8
-set --global fish_pager_color_selected_background --background=2A2A37
+set --global fish_pager_color_completion E2E2E3
+set --global fish_pager_color_description 7F8490
+set --global fish_pager_color_prefix 9ED072 --bold
+set --global fish_pager_color_progress 76CCE0
+set --global fish_pager_color_selected_background --background=414550

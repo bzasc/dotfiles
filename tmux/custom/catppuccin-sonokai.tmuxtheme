@@ -1,0 +1,17 @@
+# NOTE: vars with $<var> need double quotes
+# WARNING: hex colors lowercase only
+
+# --> Sonokai (sainnhe)
+thm_bg="#2c2e34"
+thm_fg="#e2e2e3"
+thm_cyan="#76cce0"
+thm_black="#181819"
+thm_gray="#33353f"
+thm_magenta="#b39df3"
+thm_pink="#b39df3"
+thm_red="#fc5d7c"
+thm_green="#9ed072"
+thm_yellow="#e7c664"
+thm_blue="#76cce0"
+thm_orange="#f39660"
+thm_black4="#7f8490"

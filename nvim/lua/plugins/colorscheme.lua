@@ -1,23 +1,33 @@
 return {
-  -- {
-  --   "sainnhe/sonokai",
-  --   priority = 1000,
-  --   lazy = false,
-  --   config = function()
-  --     vim.g.sonokai_enable_italic = true
-  --     --vim.g.sonokai_colors_override = { bg0 = { "#1C2021", "235" } }
-  --     vim.cmd.colorscheme("sonokai")
-  --   end,
-  -- },
   {
-    "AlexvZyl/nordic.nvim",
-    lazy = false,
+    "sainnhe/sonokai",
     priority = 1000,
+    lazy = false,
     config = function()
-      require("nordic").load()
-      vim.cmd.colorscheme("nordic")
+      vim.g.sonokai_enable_italic = true
+      --vim.g.sonokai_colors_override = { bg0 = { "#1C2021", "235" } }
+      vim.cmd.colorscheme("sonokai")
     end,
   },
+  --{
+  --  "navarasu/onedark.nvim",
+  --  priority = 1000, -- make sure to load this before all the other start plugins
+  --  config = function()
+  --    require("onedark").setup({
+  --      style = "warmer",
+  --    })
+  --    require("onedark").load()
+  --  end,
+  --},
+  --{
+  --  "AlexvZyl/nordic.nvim",
+  --  lazy = false,
+  --  --   priority = 1000,
+  --  config = function()
+  --    require("nordic").load()
+  --    vim.cmd.colorscheme("nordic")
+  --  end,
+  --},
   --{
   --  "sainnhe/gruvbox-material",
   --  --priority = 1000,
