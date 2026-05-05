@@ -1,7 +1,9 @@
 # Font
-font-family = Fira Code
+font-family = "FiraCode Nerd Font"
 font-size = 13
-font-style = Regular
+font-feature = -calt
+font-feature = -dlig
+font-feature = -liga
 
 # Theme
 theme = Sonokai
