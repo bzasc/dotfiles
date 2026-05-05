@@ -48,12 +48,6 @@ if status is-interactive
     abbr dpa "docker ps -a"
     abbr dx "docker exec -it"
     abbr docker_rm "docker rm -f (docker ps -aq)"
-
-    # SDKMAN (via fisher plugin ou manual)
-    if test -s "$HOME/.sdkman/bin/sdkman-init.sh"
-        # Fish não suporta sdkman nativamente — use o plugin fisher/sdkman-for-fish
-        # fisher install reitzig/sdkman-for-fish@v2.1.0
-    end
 end
 
 # Environment variables
@@ -65,7 +59,6 @@ set -gx SNACKS_GHOSTTY true
 set -gx OBSIDIAN_VAULT "$HOME/annotations/bzasc_brain"
 set -gx ZETTELKASTEN "$HOME/annotations/bzasc_brain"
 set -gx DAILY_NOTES_TEMPLATE_PATH "$HOME/annotations/bzasc_brain/templates/daily-note.md"
-set -gx SDKMAN_DIR "$HOME/.sdkman"
 set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
 
 # PATH

@@ -2,105 +2,109 @@
 return {
   {
     "saghen/blink.cmp",
-    version = "*",
     dependencies = {
       "fang2hou/blink-copilot",
+      "saghen/blink.lib",
     },
-    config = function()
-      require("blink.cmp").setup({
-        snippets = { preset = "luasnip" },
-        signature = { enabled = true },
-        appearance = {
-          use_nvim_cmp_as_default = false,
-          nerd_font_variant = "normal",
-        },
-        fuzzy = {
-          implementation = "prefer_rust",
-        },
-        cmdline = {
-          enabled = false,
-          completion = { menu = { auto_show = true } },
-        },
-        --cmdline = {
-        --  keymap = { preset = "inherit" },
-        --  completion = {
-        --    menu = { auto_show = true },
-        --    ghost_text = { enabled = true },
-        --  },
-        --},
-        sources = {
-          default = { "lsp", "path", "buffer", "snippets", "copilot" },
-          per_filetype = {
-            lua = { inherit_defaults = true, "lazydev" },
-          },
-          providers = {
-            lazydev = {
-              name = "LazyDev",
-              module = "lazydev.integrations.blink",
-              score_offset = 100,
-            },
-            copilot = {
-              name = "copilot",
-              module = "blink-copilot",
-              score_offset = 100,
-              async = true,
-            },
-            cmdline = {
-              min_keyword_length = 2,
-            },
-          },
-        },
-        keymap = {
-          preset = "enter",
-          ["<C-space>"] = { "show", "show_documentation", "hide_documentation", "fallback" },
-          ["<C-j>"] = { "select_next" },
-          ["<C-k>"] = { "select_prev" },
-          ["<C-b>"] = { "scroll_documentation_up", "fallback" },
-          ["<C-f>"] = {},
-          --["<Tab>"] = {
-          --  "snippet_forward",
-          --  function() -- sidekick next edit suggestion
-          --    return require("sidekick").nes_jump_or_apply()
-          --  end,
-          --  function() -- if you are using Neovim's native inline completions
-          --    return vim.lsp.inline_completion.get()
-          --  end,
-          --  "fallback",
-          --},
-        },
-        completion = {
-          list = {
-            -- Insert items while navigating the completion list.
-            selection = { preselect = false, auto_insert = true },
-            max_items = 10,
-          },
-          menu = {
-            border = "rounded",
-            scrolloff = 1,
-            scrollbar = false,
-            draw = {
-              padding = 1,
-              gap = 2,
-              columns = {
-                { "kind_icon", gap = 1 },
-                { "label", "label_description", gap = 1 },
-                { "kind" },
-                { "source_name" },
-              },
-            },
-          },
-          documentation = {
-            window = {
-              border = "rounded",
-              scrollbar = false,
-              winhighlight = "Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc",
-            },
-            auto_show = true,
-            auto_show_delay_ms = 500,
-          },
-        },
-      })
+    event = "InsertEnter",
+    build = function()
+      require("blink.cmp").build():wait(60000)
     end,
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      snippets = { preset = "luasnip" },
+      signature = { enabled = true },
+      appearance = {
+        use_nvim_cmp_as_default = false,
+        nerd_font_variant = "normal",
+      },
+      cmdline = {
+        enabled = false,
+        completion = { menu = { auto_show = true } },
+      },
+      --cmdline = {
+      --  keymap = { preset = "inherit" },
+      --  completion = {
+      --    menu = { auto_show = true },
+      --    ghost_text = { enabled = true },
+      --  },
+      --},
+      sources = {
+        default = { "lsp", "path", "buffer", "snippets", "copilot" },
+        per_filetype = {
+          lua = { inherit_defaults = true, "lazydev" },
+        },
+        providers = {
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            score_offset = 100,
+          },
+          copilot = {
+            name = "copilot",
+            module = "blink-copilot",
+            score_offset = 100,
+            async = true,
+          },
+          cmdline = {
+            min_keyword_length = 2,
+          },
+        },
+      },
+      keymap = {
+        preset = "enter",
+        ["<C-space>"] = { "show", "show_documentation", "hide_documentation", "fallback" },
+        ["<C-j>"] = { "select_next" },
+        ["<C-k>"] = { "select_prev" },
+        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-f>"] = {},
+        --["<Tab>"] = {
+        --  "snippet_forward",
+        --  function() -- sidekick next edit suggestion
+        --    return require("sidekick").nes_jump_or_apply()
+        --  end,
+        --  function() -- if you are using Neovim's native inline completions
+        --    return vim.lsp.inline_completion.get()
+        --  end,
+        --  "fallback",
+        --},
+      },
+      completion = {
+        list = {
+          -- Insert items while navigating the completion list.
+          selection = { preselect = false, auto_insert = true },
+          max_items = 10,
+        },
+        menu = {
+          border = "rounded",
+          scrolloff = 1,
+          scrollbar = false,
+          draw = {
+            padding = 1,
+            gap = 2,
+            columns = {
+              { "kind_icon", gap = 1 },
+              { "label", "label_description", gap = 1 },
+              { "kind" },
+              { "source_name" },
+            },
+          },
+        },
+        documentation = {
+          window = {
+            border = "rounded",
+            scrollbar = false,
+            winhighlight = "Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc",
+          },
+          auto_show = true,
+          auto_show_delay_ms = 500,
+        },
+      },
+      fuzzy = {
+        implementation = "rust",
+      },
+    },
   },
   {
     "nvim-treesitter/nvim-treesitter",
