@@ -61,6 +61,13 @@ set -gx ZETTELKASTEN "$HOME/annotations/bzasc_brain"
 set -gx DAILY_NOTES_TEMPLATE_PATH "$HOME/annotations/bzasc_brain/templates/daily-note.md"
 set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
 
+# Android SDK (Homebrew cask)
+set -gx ANDROID_HOME /opt/homebrew/share/android-commandlinetools
+set -gx ANDROID_SDK_ROOT $ANDROID_HOME
+fish_add_path $ANDROID_HOME/cmdline-tools/latest/bin
+fish_add_path $ANDROID_HOME/platform-tools
+fish_add_path $ANDROID_HOME/emulator
+
 # PATH
 set -gx PATH (string match -v "$HOME/.config/tmux/tmuxifier/libexec" $PATH)
 set -gx PATH (string match -v "$HOME/.config/tmux/tmuxifier/bin" $PATH)
