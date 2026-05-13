@@ -7,10 +7,6 @@ if status is-interactive
 
     # Vi mode
     fish_vi_key_bindings
-    #set fish_cursor_default block
-    #set fish_cursor_insert line
-    #set fish_cursor_replace_one underscore
-    #set fish_cursor_visual block
 
     # Overrides de sistema (alias)
     alias vi="nvim"
@@ -67,7 +63,3 @@ set -gx ANDROID_SDK_ROOT $ANDROID_HOME
 fish_add_path $ANDROID_HOME/cmdline-tools/latest/bin
 fish_add_path $ANDROID_HOME/platform-tools
 fish_add_path $ANDROID_HOME/emulator
-
-# PATH
-set -gx PATH (string match -v "$HOME/.config/tmux/tmuxifier/libexec" $PATH)
-set -gx PATH (string match -v "$HOME/.config/tmux/tmuxifier/bin" $PATH)

@@ -31,7 +31,7 @@ return {
         current_line_blame_opts = {
           virt_text = true,
           virt_text_pos = "eol",
-          delay = 0,
+          delay = 1000,
           ignore_whitespace = false,
         },
         current_line_blame_formatter = function(name, blame_info)

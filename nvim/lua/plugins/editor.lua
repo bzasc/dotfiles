@@ -104,14 +104,22 @@ return {
     config = function()
       require("obsidian").setup({
         legacy_commands = false,
-        ui = { enable = false },
+        ui = {
+          enable = false,
+        },
+
+        picker = {
+          name = "snacks.picker",
+        },
+
         workspaces = {
           {
             name = "bzasc-brain",
             path = vim.env.OBSIDIAN_VAULT or "~/annotations/bzasc_brain",
           },
         },
-        notes_subdir = "inbox",
+
+        notes_subdir = "raw",
         new_notes_location = "notes_subdir",
 
         templates = {

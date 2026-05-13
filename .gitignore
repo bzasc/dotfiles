@@ -48,3 +48,6 @@ tmux/tpm
 nvim/lazy
 tmux/tmuxifier
 tasks/
+
+# Fish universal variables (local state)
+fish/fish_variables
