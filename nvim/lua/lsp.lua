@@ -144,6 +144,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
     setup_keymaps(bufnr)
     vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
 
+    if client.name == "ruff" then
+      client.server_capabilities.hoverProvider = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end
+
     if client.server_capabilities.documentHighlightProvider then
       local highlight_group = vim.api.nvim_create_augroup("LspDocumentHighlight_" .. bufnr, { clear = true })
       vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -167,7 +173,8 @@ for _, name in ipairs({
   "zls",
   "ts_ls",
   "ruff",
-  "pyright",
+  --  "pyright",
+  "pyrefly",
   "intelephense",
   "bashls",
   "cssls",
