@@ -11,6 +11,9 @@ map("i", "jj", "<Esc>", { desc = "Exit Insert" })
 map("i", "jk", "<Esc>", { desc = "Exit Insert" })
 
 -- Movement
+map({ "n", "x", "o" }, "<C-Space>", "<Nop>", { desc = "Disable Ctrl-Space" })
+map({ "n", "x", "o" }, "<C-@>", "<Nop>", { desc = "Disable Ctrl-Space" })
+
 map("n", "j", function()
   return vim.v.count == 0 and "gj" or "j"
 end, { expr = true, silent = true, desc = "Down (wrap-aware)" })
@@ -65,7 +68,7 @@ map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease Width" })
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Width" })
 
 -- LSP
-map("n", "gs", function()
+map("n", "<leader>gs", function()
   vim.cmd("vsplit")
   vim.cmd("wincmd l")
   vim.lsp.buf.definition()

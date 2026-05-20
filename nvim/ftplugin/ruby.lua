@@ -13,3 +13,13 @@ iabbrev("none", "nil")
 iabbrev("None", "nil")
 iabbrev("elif", "elsif")
 iabbrev("elseif", "elsif")
+
+vim.keymap.set("n", "<leader>gr", function()
+  local ok = pcall(function()
+    Snacks.picker.grep_word({ ft = "ruby" })
+  end)
+  if not ok then
+    vim.cmd("silent grep! " .. vim.fn.expand("<cword>") .. " --type ruby")
+    vim.cmd("copen")
+  end
+end, { buffer = true, desc = "Ruby refs (ripgrep)" })

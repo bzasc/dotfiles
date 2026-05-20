@@ -46,6 +46,9 @@ return {
             module = "blink-copilot",
             score_offset = 100,
             async = true,
+            opts = {
+              max_completions = 2,
+            },
           },
           cmdline = {
             min_keyword_length = 2,
@@ -73,7 +76,7 @@ return {
       completion = {
         list = {
           -- Insert items while navigating the completion list.
-          selection = { preselect = false, auto_insert = true },
+          selection = { preselect = false, auto_insert = false },
           max_items = 10,
         },
         menu = {

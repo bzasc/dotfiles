@@ -45,12 +45,13 @@ local function setup_keymaps(bufnr)
   map("n", "K", function()
     vim.lsp.buf.hover({ border = "rounded", max_height = 25, max_width = 120 })
   end, "Hover")
-  map("n", "<C-k>", vim.lsp.buf.signature_help, "Signature Help")
+  map("n", "gK", vim.lsp.buf.signature_help, "Signature Help")
 
   -- Navigation
   map("n", "gd", vim.lsp.buf.definition, "Definition")
   map("n", "gD", vim.lsp.buf.declaration, "Declaration")
   map("n", "gr", snacks_picker("lsp_references", vim.lsp.buf.references), "References")
+  map("n", "grR", vim.lsp.buf.references, "References (raw)")
   map("n", "gi", snacks_picker("lsp_implementations", vim.lsp.buf.implementation), "Implementation")
   map("n", "gy", snacks_picker("lsp_type_definitions", vim.lsp.buf.type_definition), "Type Definition")
 
@@ -111,7 +112,7 @@ vim.lsp.config("*", {
 
 -- Diagnostics UI
 vim.diagnostic.config({
-  virtual_text = true,
+  virtual_text = false, -- tiny-inline-diagnostic handles this
   underline = true,
   update_in_insert = false,
   severity_sort = true,
@@ -150,6 +151,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
       client.server_capabilities.documentRangeFormattingProvider = false
     end
 
+    if client.name == "ruby_lsp" then
+      client.server_capabilities.semanticTokensProvider = nil
+      client.server_capabilities.documentHighlightProvider = nil
+    end
+
     if client.server_capabilities.documentHighlightProvider then
       local highlight_group = vim.api.nvim_create_augroup("LspDocumentHighlight_" .. bufnr, { clear = true })
       vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
@@ -173,7 +179,6 @@ for _, name in ipairs({
   "zls",
   "ts_ls",
   "ruff",
-  --  "pyright",
   "pyrefly",
   "intelephense",
   "bashls",

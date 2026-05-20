@@ -16,7 +16,8 @@ background-opacity = 1
 macos-titlebar-style = hidden
 macos-option-as-alt = true
 macos-titlebar-style=transparent
-macos-window-shadow = true
+macos-window-shadow = false 
+macos-non-native-fullscreen = true
 minimum-contrast = 1.1
 
 gtk-tabs-location = hidden
