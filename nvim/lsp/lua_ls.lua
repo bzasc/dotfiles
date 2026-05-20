@@ -2,23 +2,26 @@
 return {
   cmd = { "lua-language-server" },
   filetypes = { "lua" },
-  root_markers = {
-    { ".luarc.json", ".luarc.jsonc", ".luacheckrc" },
-    { ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml" },
-    ".git",
-  },
+  root_markers = { ".luarc.json", ".luarc.jsonc" },
   settings = {
     Lua = {
-      diagnostics = {
-        globals = { "vim", "Snacks" },
-        disable = { "inject-field", "undefined-field", "missing-fields" },
+      completion = { callSnippet = "Replace" },
+      -- Using stylua for formatting.
+      format = { enable = false },
+      hint = {
+        enable = false,
+        arrayIndex = "Disable",
       },
-      runtime = { version = "LuaJIT" },
+      runtime = {
+        version = "LuaJIT",
+      },
       workspace = {
-        library = { vim.env.VIMRUNTIME },
         checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+          "${3rd}/luv/library",
+        },
       },
-      telemetry = { enable = false },
     },
   },
 }

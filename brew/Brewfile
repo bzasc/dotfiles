@@ -27,6 +27,9 @@ brew 'wget'
 brew 'tectonic'
 brew 'ghostscript'
 brew 'zig'
+brew 'ast-grep'
+brew 'nixfmt',
+brew 'oxfmt',
 
 brew 'delve'
 brew 'gofumpt'

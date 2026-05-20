@@ -1,0 +1,34 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  "runtime": {
+    "version": "LuaJIT",
+  },
+  "diagnostics": {
+    "globals": ["vim", "Snacks"],
+  },
+  "workspace": {
+    "checkThirdParty": false,
+    "library": [
+      // Runtime and builtin libraries.
+      "$VIMRUNTIME/lua",
+      "${3rd}/luv/library",
+      // Extra configuration helpers.
+      "lua/icons.lua",
+      // Include some plugins for API completion.
+      "$XDG_DATA_HOME/nvim/lazy/LuaSnip/lua",
+      "$XDG_DATA_HOME/nvim/lazy/blink.cmp/lua",
+      "$XDG_DATA_HOME/nvim/lazy/diffview.nvim/lua",
+      "$XDG_DATA_HOME/nvim/lazy/lazy.nvim/lua",
+      "$XDG_DATA_HOME/nvim/lazy/mini.ai/lua",
+      "$XDG_DATA_HOME/nvim/lazy/mini.files/lua",
+      "$XDG_DATA_HOME/nvim/lazy/mini.icons/lua",
+      "$XDG_DATA_HOME/nvim/lazy/mini.splitjoin/lua",
+      "$XDG_DATA_HOME/nvim/lazy/mini.statusline/lua",
+      "$XDG_DATA_HOME/nvim/lazy/mini.surround/lua",
+      "$XDG_DATA_HOME/nvim/lazy/nvim-dap-view/lua",
+      "$XDG_DATA_HOME/nvim/lazy/nvim-dap/lua",
+      "$XDG_DATA_HOME/nvim/lazy/overseer.nvim/lua/overseer/init.lua",
+      "$XDG_DATA_HOME/nvim/lazy/snacks.nvim/lua",
+    ],
+  },
+}
