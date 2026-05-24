@@ -23,3 +23,13 @@ fmt-check:
 	@echo "✅ Formatting valid!"
 
 validate: check fmt-check
+
+# Wipe Neovim plugin/state/cache dirs (config files untouched)
+clean:
+	#!/usr/bin/env bash
+	set -euo pipefail
+	echo "🧹 Cleaning Neovim data, state, and cache..."
+	rm -rf "${XDG_DATA_HOME:-$HOME/.local/share}/nvim"
+	rm -rf "${XDG_STATE_HOME:-$HOME/.local/state}/nvim"
+	rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}/nvim"
+	echo "✅ Clean complete"

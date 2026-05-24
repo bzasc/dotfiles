@@ -15,8 +15,8 @@ background-opacity = 1
 
 macos-titlebar-style = hidden
 macos-option-as-alt = true
-macos-titlebar-style=transparent
 macos-window-shadow = false 
+macos-icon = official
 macos-non-native-fullscreen = true
 minimum-contrast = 1.1
 
@@ -29,7 +29,6 @@ window-padding-balance = true
 window-save-state = always
 window-colorspace = "display-p3"
 window-vsync=true
-window-decoration=false
 
 # Shaders
 custom-shader = shaders/cursor_warp.glsl

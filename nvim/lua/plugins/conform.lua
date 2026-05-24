@@ -5,6 +5,9 @@ require("conform").setup({
     lua = { "stylua" },
     go = { "goimports", "gofmt", stop_after_first = true },
     python = { "ruff_organise_imports", "ruff_fix", "ruff_format" },
+    ruby = { "rubocop" },
+    eruby = { "erb_format" },
+    erb = { "erb_format" },
     json = { "oxfmt", "prettier", stop_after_first = true },
     jsonc = { "oxfmt", "prettier", stop_after_first = true },
     javascript = { "oxfmt", "prettier", stop_after_first = true },
@@ -123,7 +126,11 @@ require("conform").setup({
     if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
-    if vim.api.nvim_buf_get_name(bufnr):match("/node_modules/") then
+    local bufname = vim.api.nvim_buf_get_name(bufnr)
+    if bufname:match("/node_modules/") then
+      return
+    end
+    if bufname:match("/Brewfile$") or bufname:match("/Brewfile%.[^/]+$") then
       return
     end
     return { timeout_ms = 500, lsp_format = "fallback" }

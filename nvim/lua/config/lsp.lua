@@ -68,6 +68,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
         })
       end
 
+      if client.name == "ruff" then
+        client.server_capabilities.hoverProvider = false
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+      end
+
+      if client.name == "ruby_lsp" then
+        client.server_capabilities.semanticTokensProvider = nil
+        client.server_capabilities.documentHighlightProvider = nil
+      end
+
       for _, km in ipairs(default_keymaps) do
         -- Only bind if there's no `has` requirement, or the server supports it
         if not km.has or client.server_capabilities[km.has] then
@@ -85,25 +96,46 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local ts_server = vim.g.lsp_typescript_server or "vtsls"
 
--- Enable LSP servers for Neovim 0.11+
-vim.lsp.enable({
-  --ts_server,
-  --"oxlint", -- Priority linter
-  --"eslint", -- Fallback linter
-  "lua_ls",
-  --"gopls",
-  --"rust_analyser",
-  --"zls",
-  ---- "cssls",
-  ---- "html",
-  ---- "helm_ls",
-  --"jsonls",
-  --"biome",
-  ---- "yamlls",
+local servers_by_ft = {
+  lua = { "lua_ls" },
+  python = { "ruff", "pyreply" },
+  ruby = { "ruby_lsp" },
+  javascript = { ts_server, "oxlint", "eslint" },
+  javascriptreact = { ts_server, "oxlint", "eslint", "tailwindcss" },
+  typescript = { ts_server, "oxlint", "eslint" },
+  typescriptreact = { ts_server, "oxlint", "eslint", "tailwindcss" },
+  vue = { ts_server, "tailwindcss" },
+  svelte = { ts_server, "tailwindcss" },
+  html = { "html", "tailwindcss" },
+  css = { "cssls", "tailwindcss" },
+  scss = { "cssls", "tailwindcss" },
+  less = { "cssls" },
+  sh = { "bashls" },
+  bash = { "bashls" },
+  json = { "jsonls" },
+  jsonc = { "jsonls" },
+  yaml = { "yamlls" },
+  rust = { "rust_analyzer" },
+  zig = { "zls" },
+}
+
+local enabled = {}
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup("lsp_lazy_enable"),
+  callback = function(ev)
+    local servers = servers_by_ft[ev.match]
+    if not servers then
+      return
+    end
+    for _, name in ipairs(servers) do
+      if not enabled[name] then
+        enabled[name] = true
+        vim.lsp.enable(name)
+      end
+    end
+  end,
 })
 
--- Load Lsp on-demand, e.g: eslint is disable by default
--- e.g: We could enable eslint by set vim.g.lsp_on_demands = {"eslint"}
 if vim.g.lsp_on_demands then
   vim.lsp.enable(vim.g.lsp_on_demands)
 end

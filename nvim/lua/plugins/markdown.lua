@@ -4,6 +4,7 @@ vim.pack.add({
 })
 
 local renderOpts = {
+  enabled = false,
   heading = {
     enabled = true,
     render_modes = true,

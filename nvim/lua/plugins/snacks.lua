@@ -92,6 +92,8 @@ Snacks.setup({
           "**/claude/todos",
           "**/claude/history.jsonl",
           "**/claude/*cache*",
+          "**/tmp/**",
+          "**/data/**",
         },
       },
       grep = {

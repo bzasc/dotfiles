@@ -8,6 +8,7 @@ wk.setup({
 })
 wk.add({
   { "<leader><tab>", group = "tabs" },
+  { "<leader>a", group = "ai", icon = { icon = "󰚩 ", color = "purple" } },
   { "<leader>c", group = "code" },
   { "<leader>d", group = "debug" },
   { "<leader>D", group = "Diffview", icon = { icon = "", color = "orange" } },
@@ -16,6 +17,7 @@ wk.add({
   { "<leader>f", group = "file/find" },
   { "<leader>g", group = "git" },
   { "<leader>gh", group = "hunks" },
+  { "<leader>o", group = "obsidian", icon = { icon = "󱓧 ", color = "blue" } },
   { "<leader>q", group = "quit/session" },
   { "<leader>s", group = "search" },
   { "<leader>u", group = "ui", icon = { icon = "󰙵 ", color = "cyan" } },

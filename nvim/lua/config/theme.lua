@@ -1,5 +1,5 @@
 -- Native Catppuccin Configuration (Neovim 0.12+)
-vim.g.catppuccin_flavour = "macchiato"
+vim.g.catppuccin_flavour = "sonokai"
 
 -- 1. Custom Palette Definition (Gruvbox-like feel)
 local palettes = {
@@ -28,6 +28,36 @@ local palettes = {
     surface2 = "#414550",
     surface1 = "#3b3e48",
     surface0 = "#33353f",
+    base = "#2c2e34",
+    mantle = "#222327",
+    crust = "#1c1d22",
+    none = "NONE",
+  },
+  sonokai = {
+    rosewater = "#fc5d7c",
+    flamingo = "#ff6077",
+    red = "#fc5d7c",
+    maroon = "#fc5d7c",
+    pink = "#b39df3",
+    mauve = "#b39df3",
+    peach = "#f39660",
+    yellow = "#e7c664",
+    green = "#9ed072",
+    teal = "#87c095",
+    sky = "#76cce0",
+    sapphire = "#76cce0",
+    blue = "#76cce0",
+    lavender = "#b39df3",
+    text = "#e2e2e3",
+    subtext2 = "#c7c8cc",
+    subtext1 = "#c1c2c7",
+    subtext0 = "#a8a9af",
+    overlay2 = "#7f8490",
+    overlay1 = "#595f6f",
+    overlay0 = "#4e525c",
+    surface2 = "#414550",
+    surface1 = "#3b3e48",
+    surface0 = "#363944",
     base = "#2c2e34",
     mantle = "#222327",
     crust = "#1c1d22",
@@ -62,7 +92,7 @@ local function apply_custom_highlights()
     CursorLine = { bg = colors.surface0 },
     CursorColumn = { bg = colors.surface0 },
     CursorLineNr = { fg = colors.text, bold = true },
-    FloatBorder = { bg = colors.mantle, fg = colors.base },
+    FloatBorder = { bg = colors.base, fg = colors.text },
     NormalFloat = { fg = colors.text, bg = colors.base },
     LineNr = { fg = colors.overlay0 },
     LspInfoBorder = { link = "FloatBorder" },
@@ -85,11 +115,11 @@ local function apply_custom_highlights()
     SnacksNormal = { link = "NormalFloat" },
     SnacksPicker = { link = "NormalFloat" },
     SnacksPickerBorder = { link = "FloatBorder" },
-    SnacksPickerList = { bg = colors.mantle, fg = colors.text },
+    SnacksPickerList = { bg = colors.base, fg = colors.text },
     SnacksPickerPreview = { bg = colors.crust, fg = colors.text },
     SnacksPickerPreviewBorder = { bg = colors.crust, fg = colors.crust },
-    SnacksPickerInput = { bg = colors.mantle, fg = colors.text },
-    SnacksPickerInputBorder = { bg = colors.mantle, fg = colors.mantle },
+    SnacksPickerInput = { bg = colors.base, fg = colors.text },
+    SnacksPickerInputBorder = { bg = colors.base, fg = colors.base },
     SnacksPickerTitle = { fg = colors.mauve, bold = true },
     SnacksPickerMatch = { fg = colors.blue, bold = true },
     SnacksPickerLabel = { fg = colors.overlay1 },
@@ -98,6 +128,14 @@ local function apply_custom_highlights()
     SnacksPickerRow = { bg = colors.mantle },
     SnacksPickerListCursorLine = { bg = colors.surface0 },
     SnacksPickerCursorLine = { bg = colors.surface0 },
+    SnacksPickerDir = { fg = colors.overlay2 },
+    SnacksPickerDimmed = { fg = colors.overlay2 },
+    SnacksPickerFile = { fg = colors.text },
+    SnacksPickerPathHidden = { fg = colors.overlay2 },
+    SnacksPickerPathIgnored = { fg = colors.overlay2 },
+    SnacksPickerTree = { fg = colors.overlay1 },
+    SnacksPickerGitStatusUntracked = { fg = colors.subtext0 },
+    SnacksPickerGitStatusIgnored = { fg = colors.overlay1 },
 
     -- [3] Plugin: WhichKey
     WhichKey = { fg = colors.pink },
@@ -157,6 +195,8 @@ local function apply_custom_highlights()
     FlashLabel = { bg = colors.peach, fg = colors.base, bold = true },
     NoiceLspProgressTitle = { fg = colors.peach, bold = true },
     YankyYanked = { bg = colors.surface2 },
+    TinyCmdlineNormal = { bg = colors.base, fg = colors.text },
+    TinyCmdlineBorder = { bg = "NONE", fg = colors.text },
 
     -- [7] Debugger (DAP)
     DapBreakpoint = { fg = colors.red },
@@ -204,7 +244,7 @@ local function apply_custom_highlights()
     Ignore = { fg = colors.subtext2 },
     Macro = { fg = colors.teal },
     String = { fg = colors.teal },
-    Comment = { fg = colors.overlay1, italic = true },
+    Comment = { fg = colors.overlay2, italic = true },
 
     -- [10] Treesitter & LSP Highlighting (Comprehensive)
     ["@variable"] = { fg = colors.text },
