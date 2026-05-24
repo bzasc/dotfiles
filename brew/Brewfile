@@ -32,6 +32,7 @@ brew 'ast-grep'
 brew 'nixfmt'
 brew 'oxfmt'
 brew 'utftex'
+brew 'harper'
 
 brew 'delve'
 brew 'gofumpt'

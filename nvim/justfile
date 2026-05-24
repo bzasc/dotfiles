@@ -22,6 +22,165 @@ fmt-check:
 	@stylua --check .
 	@echo "✅ Formatting valid!"
 
+lsp-check:
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	check_cmd() {
+		local name="$1"
+		local bin="$2"
+		if command -v "$bin" >/dev/null 2>&1; then
+			local resolved
+			resolved="$(command -v "$bin")"
+			echo "✅ $name -> $bin ($resolved)"
+		else
+			echo "❌ $name -> $bin (missing)"
+			return 1
+		fi
+	}
+
+	status=0
+
+	echo "🔍 Checking configured LSP servers..."
+	check_cmd "lua_ls" "lua-language-server" || status=1
+	check_cmd "ruff" "ruff" || status=1
+	check_cmd "pyreply" "pyrefly" || status=1
+	check_cmd "ruby_lsp" "ruby-lsp" || status=1
+	check_cmd "vtsls" "vtsls" || status=1
+	check_cmd "eslint" "vscode-eslint-language-server" || status=1
+	check_cmd "oxlint" "oxlint" || status=1
+	check_cmd "tailwindcss" "tailwindcss-language-server" || status=1
+	check_cmd "html" "vscode-html-language-server" || status=1
+	check_cmd "cssls" "vscode-css-language-server" || status=1
+	check_cmd "bashls" "bash-language-server" || status=1
+	check_cmd "jsonls" "vscode-json-language-server" || status=1
+	check_cmd "yamlls" "yaml-language-server" || status=1
+	check_cmd "rust_analyzer" "rust-analyzer" || status=1
+	check_cmd "zls" "zls" || status=1
+
+	echo
+	echo "🔍 Checking on-demand LSP servers..."
+	check_cmd "harper_ls" "harper-ls" || status=1
+
+	if [ "$status" -ne 0 ]; then
+		echo
+		echo "❌ Some required language tools are missing"
+		exit 1
+	fi
+
+	echo
+	echo "✅ All configured LSP binaries are available"
+
+lsp-doctor:
+	#!/usr/bin/env bash
+	set -euo pipefail
+
+	check_cmd() {
+		local name="$1"
+		local bin="$2"
+		if command -v "$bin" >/dev/null 2>&1; then
+			local resolved
+			resolved="$(command -v "$bin")"
+			echo "OK|$name|$bin|$resolved"
+		else
+			echo "MISSING|$name|$bin|"
+		fi
+	}
+
+	results=()
+	while IFS= read -r line; do
+		results+=("$line")
+	done < <(
+		check_cmd "lua_ls" "lua-language-server"
+		check_cmd "ruff" "ruff"
+		check_cmd "pyreply" "pyrefly"
+		check_cmd "ruby_lsp" "ruby-lsp"
+		check_cmd "vtsls" "vtsls"
+		check_cmd "eslint" "vscode-eslint-language-server"
+		check_cmd "oxlint" "oxlint"
+		check_cmd "tailwindcss" "tailwindcss-language-server"
+		check_cmd "html" "vscode-html-language-server"
+		check_cmd "cssls" "vscode-css-language-server"
+		check_cmd "bashls" "bash-language-server"
+		check_cmd "jsonls" "vscode-json-language-server"
+		check_cmd "yamlls" "yaml-language-server"
+		check_cmd "rust_analyzer" "rust-analyzer"
+		check_cmd "zls" "zls"
+		check_cmd "harper_ls" "harper-ls"
+	)
+
+	missing=()
+
+	echo "🩺 LSP doctor"
+	echo
+	for row in "${results[@]}"; do
+		IFS='|' read -r status name bin resolved <<< "$row"
+		if [ "$status" = "OK" ]; then
+			echo "✅ $name -> $bin ($resolved)"
+		else
+			echo "❌ $name -> $bin (missing)"
+			missing+=("$bin")
+		fi
+	done
+
+	echo
+	if [ "${#missing[@]}" -eq 0 ]; then
+		echo "✅ Environment looks consistent with the native LSP config"
+		exit 0
+	fi
+
+	echo "Suggested installs for missing tools:"
+	for bin in "${missing[@]}"; do
+		case "$bin" in
+			zls)
+				echo "- zls: install via your Zig/ZLS distribution method"
+				;;
+			rust-analyzer)
+				echo "- rust-analyzer: rustup component add rust-analyzer (or brew install rust-analyzer)"
+				;;
+			lua-language-server|gopls)
+				echo "- $bin: install with Homebrew or your system package manager"
+				;;
+			ruff)
+				echo "- ruff: uv tool install ruff (or brew install ruff)"
+				;;
+			pyrefly)
+				echo "- pyrefly: uv tool install pyrefly"
+				;;
+			oxlint)
+				echo "- oxlint: npm install -g oxlint"
+				;;
+			vtsls)
+				echo "- vtsls: npm install -g @vtsls/language-server"
+				;;
+			vscode-eslint-language-server)
+				echo "- vscode-eslint-language-server: npm install -g vscode-langservers-extracted"
+				;;
+			tailwindcss-language-server)
+				echo "- tailwindcss-language-server: npm install -g @tailwindcss/language-server"
+				;;
+			vscode-css-language-server|vscode-html-language-server|vscode-json-language-server)
+				echo "- $bin: npm install -g vscode-langservers-extracted"
+				;;
+			bash-language-server|yaml-language-server)
+				echo "- $bin: npm install -g ${bin}"
+				;;
+			ruby-lsp)
+				echo "- $bin: gem install ruby-lsp"
+				;;
+			harper-ls)
+				echo "- harper-ls: brew install harper (or cargo install harper-ls)"
+				;;
+			*)
+				echo "- $bin: install it and ensure it is available on PATH"
+				;;
+		esac
+	done
+
+	echo
+	echo "Run 'just lsp-check' for a strict CI-style failure, or rerun 'just lsp-doctor' after installing."
+	exit 1
+
 validate: check fmt-check
 
 # Wipe Neovim plugin/state/cache dirs (config files untouched)
