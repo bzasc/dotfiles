@@ -3,16 +3,34 @@ vim.pack.add({
     src = "https://github.com/saghen/blink.cmp",
     version = vim.version.range("^1"),
   },
+  "https://github.com/giuxtaposition/blink-cmp-copilot",
+  "https://github.com/zbirenbaum/copilot.lua",
 })
 
 -- Lazy load on first insert mode entry
-local group = vim.api.nvim_create_augroup("BlinkCmpLazyLoad", { clear = true })
+local group = vim.api.nvim_create_augroup("CompletionLazyLoad", { clear = true })
 
 vim.api.nvim_create_autocmd("InsertEnter", {
-  pattern = "*",
   group = group,
   once = true,
   callback = function()
+    -- Copilot (inline suggestions disabled; fed through blink.cmp)
+    require("copilot").setup({
+      suggestion = { enabled = false },
+      panel = { enabled = false },
+      filetypes = {
+        markdown = true,
+        yaml = true,
+        help = false,
+        gitcommit = false,
+        gitrebase = false,
+        hgcommit = false,
+        svn = false,
+        cvs = false,
+        ["."] = false,
+      },
+    })
+
     require("blink.cmp").setup({
       keymap = {
         preset = "enter",
@@ -20,7 +38,7 @@ vim.api.nvim_create_autocmd("InsertEnter", {
         ["<C-j>"] = { "select_next" },
         ["<C-k>"] = { "select_prev" },
         ["<C-b>"] = { "scroll_documentation_up", "fallback" },
-        ["<C-f>"] = {},
+        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
       },
       appearance = {
         nerd_font_variant = "normal",
@@ -58,11 +76,12 @@ vim.api.nvim_create_autocmd("InsertEnter", {
         },
       },
       sources = {
-        default = { "lsp", "path", "snippets", "buffer", "lazydev" },
+        default = { "lsp", "path", "snippets", "buffer", "lazydev", "copilot" },
         per_filetype = {
           markdown = { "obsidian", "obsidian_new", "obsidian_tags", "lsp", "path", "snippets", "buffer" },
         },
         providers = {
+          copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100 },
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",

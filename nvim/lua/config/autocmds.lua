@@ -85,7 +85,20 @@ vim.api.nvim_create_autocmd("InsertLeave", {
   group = augroup("insert_ui_perf"),
   callback = function()
     vim.wo.cursorline = true
+    vim.wo.number = true
     vim.wo.relativenumber = true
+  end,
+})
+
+-- Restore number column on normal buffers (sidekick / pickers / terminals
+-- can leave neighboring windows with `nonumber` after they close).
+vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
+  group = augroup("restore_number_ui"),
+  callback = function(args)
+    if vim.bo[args.buf].buftype == "" then
+      vim.wo.number = true
+      vim.wo.relativenumber = true
+    end
   end,
 })
 

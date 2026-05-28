@@ -3,6 +3,24 @@ local function augroup(name)
   return vim.api.nvim_create_augroup("user_" .. name, { clear = true })
 end
 
+vim.api.nvim_create_user_command("LspInfo", function()
+  vim.cmd("checkhealth vim.lsp")
+end, { desc = "Show builtin LSP health information" })
+
+vim.api.nvim_create_user_command("LspRestart", function(opts)
+  local args = opts.args ~= "" and (" " .. opts.args) or ""
+  vim.cmd("lsp restart" .. args)
+end, { desc = "Restart builtin LSP clients", nargs = "*" })
+
+vim.api.nvim_create_user_command("LspStop", function(opts)
+  local args = opts.args ~= "" and (" " .. opts.args) or ""
+  vim.cmd("lsp stop" .. args)
+end, { desc = "Stop builtin LSP clients", nargs = "*" })
+
+vim.api.nvim_create_user_command("LspStart", function()
+  vim.cmd("edit")
+end, { desc = "Retry attaching builtin LSP for the current buffer" })
+
 local default_keymaps = {
   { keys = "<leader>ca", func = vim.lsp.buf.code_action, desc = "Code Actions" },
   {
@@ -28,6 +46,8 @@ local default_keymaps = {
   { keys = "grt", func = vim.lsp.buf.type_definition, desc = "Goto Type Definition", has = "typeDefinitionProvider" },
   { keys = "grx", func = vim.lsp.codelens.run, desc = "Run Codelens", has = "codeLensProvider" },
   { keys = "<leader>cw", func = vim.lsp.buf.workspace_diagnostics, desc = "Workspace Diagnostics" },
+  { keys = "<leader>li", func = "<cmd>LspInfo<cr>", desc = "LSP Info" },
+  { keys = "<leader>lr", func = "<cmd>LspRestart<cr>", desc = "LSP Restart" },
 }
 
 local completion = vim.g.completion_mode or "blink" -- or 'native'

@@ -45,7 +45,7 @@ Snacks.setup({
   statuscolumn = { enabled = true },
   terminal = { enabled = true },
   toggle = { enabled = true },
-  words = { enabled = false },
+  words = { enabled = true },
   zen = { enabled = true },
 
   picker = {

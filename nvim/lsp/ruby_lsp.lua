@@ -3,6 +3,9 @@ return {
   cmd = { "ruby-lsp" },
   filetypes = { "ruby" },
   root_markers = { "Gemfile", ".git" },
+  on_attach = function(client, bufnr)
+    vim.lsp.semantic_tokens.enable(true, { bufnr = bufnr })
+  end,
   init_options = {
     formatter = "standard",
     linters = { "standard" },

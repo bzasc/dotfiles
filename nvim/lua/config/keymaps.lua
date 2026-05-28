@@ -135,7 +135,6 @@ map("n", "<leader>ww", "<C-W>p", { desc = "Other Window", remap = true })
 map("n", "<leader>wd", "<C-W>c", { desc = "Delete Window", remap = true })
 map("n", "<leader>w-", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>sh", "<C-W>s", { desc = "Split Window Below", remap = true })
--- map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true }) -- already use for yazi
 map("n", "<leader>w|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 map("n", "<leader>`", "<C-W>v", { desc = "Split Window Right", remap = true })
@@ -228,15 +227,6 @@ map("n", "<leader>us", function()
     vim.notify("Enabled Spell + Harper")
   end
 end, { desc = "Toggle Spell + Harper" })
-
--- auto close pairs
--- map("i", "'", "''<left>")
-map("i", "`", "``<left>")
-map("i", '"', '""<left>')
-map("i", "(", "()<left>")
-map("i", "[", "[]<left>")
-map("i", "{", "{}<left>")
--- map("i", "<", "<><left>")
 
 -- vim.pack keymaps  (<leader>p = pack)
 map("n", "<leader>pp", "<cmd>Pack<cr>", { desc = "Pack UI" })

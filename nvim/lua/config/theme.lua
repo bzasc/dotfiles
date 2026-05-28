@@ -190,6 +190,7 @@ local function apply_custom_highlights()
     GitSignsChange = { fg = colors.peach },
     GitSignsAdd = { fg = colors.green },
     GitSignsDelete = { fg = colors.red },
+    GitSignsCurrentLineBlame = { fg = colors.overlay1 },
     BlinkCmpLabelMatch = { fg = colors.blue, bold = true },
     FlashMatch = { bg = colors.mauve, fg = colors.base },
     FlashLabel = { bg = colors.peach, fg = colors.base, bold = true },
