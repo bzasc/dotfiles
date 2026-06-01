@@ -177,10 +177,9 @@ vim.api.nvim_create_autocmd("FileType", {
       return
     end
 
-    -- Only set expr folds when treesitter successfully started
+    -- Only set expr folds + indent when treesitter successfully started
     vim.wo[0].foldmethod = "expr"
     vim.wo[0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
   end,
 })
-
-vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"

@@ -44,7 +44,7 @@ lsp-check:
 	echo "🔍 Checking configured LSP servers..."
 	check_cmd "lua_ls" "lua-language-server" || status=1
 	check_cmd "ruff" "ruff" || status=1
-	check_cmd "pyreply" "pyrefly" || status=1
+	check_cmd "pyrefly" "pyrefly" || status=1
 	check_cmd "ruby_lsp" "ruby-lsp" || status=1
 	check_cmd "vtsls" "vtsls" || status=1
 	check_cmd "eslint" "vscode-eslint-language-server" || status=1
@@ -93,7 +93,7 @@ lsp-doctor:
 	done < <(
 		check_cmd "lua_ls" "lua-language-server"
 		check_cmd "ruff" "ruff"
-		check_cmd "pyreply" "pyrefly"
+		check_cmd "pyrefly" "pyrefly"
 		check_cmd "ruby_lsp" "ruby-lsp"
 		check_cmd "vtsls" "vtsls"
 		check_cmd "eslint" "vscode-eslint-language-server"

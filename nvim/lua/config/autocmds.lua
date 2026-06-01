@@ -176,19 +176,12 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   end,
 })
 
--- Set filetype for .env and .env.* files
-vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  group = augroup("env_filetype"),
-  pattern = { "*.env", ".env.*" },
-  callback = function()
-    vim.opt_local.filetype = "sh"
-  end,
-})
+-- (.env filetype handled by vim.filetype.add in options.lua → "dotenv")
 
 -- Set filetype for .toml files
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   group = augroup("toml_filetype"),
-  pattern = { "*.tomg-config*" },
+  pattern = { "*.toml" },
   callback = function()
     vim.opt_local.filetype = "toml"
   end,
@@ -209,5 +202,26 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
   pattern = { "*.code-snippets" },
   callback = function()
     vim.opt_local.filetype = "json"
+  end,
+})
+
+-- Auto-cd to the project root of the file being opened, so cwd-aware tools
+-- (sidekick splits, snacks pickers, grep, :terminal) start at the project root
+-- instead of wherever nvim was launched. Falls back to no-op for unnamed/special
+-- buffers and when no root marker is found.
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  group = augroup("auto_root_cd"),
+  callback = function(args)
+    if vim.bo[args.buf].buftype ~= "" then
+      return
+    end
+    local name = vim.api.nvim_buf_get_name(args.buf)
+    if name == "" or name:match("^%w+://") then
+      return
+    end
+    local root = vim.fs.root(args.buf, { ".git", "package.json", "pyproject.toml", "Cargo.toml", "go.mod", "Gemfile", ".jj" })
+    if root and root ~= vim.fn.getcwd() then
+      pcall(vim.fn.chdir, root)
+    end
   end,
 })

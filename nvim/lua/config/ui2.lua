@@ -1,7 +1,13 @@
 -- ui2: native Neovim 0.12+ message/cmdline redesign
 -- provides pager as a buffer+window.
 -- default options
-require("vim._core.ui2").enable({
+local ok, ui2 = pcall(require, "vim._core.ui2")
+if not ok then
+  vim.notify("ui2: vim._core.ui2 unavailable on this Neovim build", vim.log.levels.WARN)
+  return
+end
+
+ui2.enable({
   enable = true, -- Whether to enable or disable the UI.
   msg = { -- Options related to the message module.
     ---@type 'cmd'|'msg' Default message target, either in the

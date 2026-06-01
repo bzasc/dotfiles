@@ -10,6 +10,7 @@ sidekick.setup({
     mux = {
       backend = "tmux",
       enabled = true,
+      create = "split", -- new tmux split pane (outside nvim), opened at nvim's cwd
     },
   },
 })

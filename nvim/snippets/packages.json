@@ -5,6 +5,34 @@
       {
         "language": ["typescript", "typescriptreact", "javascriptreact", "javascript"],
         "path": "./typescript.json"
+      },
+      {
+        "language": ["javascript", "javascriptreact"],
+        "path": "./javascript.json"
+      },
+      {
+        "language": ["python"],
+        "path": "./python.json"
+      },
+      {
+        "language": ["ruby"],
+        "path": "./ruby.json"
+      },
+      {
+        "language": ["ruby"],
+        "path": "./rspec.json"
+      },
+      {
+        "language": ["ruby"],
+        "path": "./rdoc.json"
+      },
+      {
+        "language": ["c"],
+        "path": "./c.json"
+      },
+      {
+        "language": ["rust"],
+        "path": "./rust.json"
       }
     ]
   }

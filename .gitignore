@@ -54,3 +54,6 @@ tasks/
 
 # Fish universal variables (local state)
 fish/fish_variables
+
+# ruby-lsp per-project working dirs
+**/.ruby-lsp/

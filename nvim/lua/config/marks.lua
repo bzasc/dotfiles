@@ -25,7 +25,7 @@ vim.api.nvim_set_decoration_provider(ns, {
     -- Global marks
     for _, mark in ipairs(vim.fn.getmarklist()) do
       if mark.mark:match("^.[a-zA-Z]$") then
-        local mark_file = vim.fn.fnamemodify(mark.file, ":p:a")
+        local mark_file = vim.fn.fnamemodify(mark.file, ":p")
         if current_file == mark_file then
           decor_mark(bufnr, mark)
         end
@@ -47,15 +47,26 @@ vim.on_key(function(_, typed)
     return
   end
 
+  -- Only react to `m{char}` in normal mode, not when typing an "m" in insert.
+  if not vim.startswith(vim.api.nvim_get_mode().mode, "n") then
+    return
+  end
+
   local mark = typed:sub(2)
 
   vim.schedule(function()
+    -- nvim__redraw is a private API; fall back to a plain redraw if it's gone.
+    local redraw = vim.api.nvim__redraw
+    if not redraw then
+      vim.cmd("redraw")
+      return
+    end
     if mark:match("[A-Z]") then
       for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-        vim.api.nvim__redraw({ win = win, range = { 0, -1 } })
+        pcall(redraw, { win = win, range = { 0, -1 } })
       end
     else
-      vim.api.nvim__redraw({ range = { 0, -1 } })
+      pcall(redraw, { range = { 0, -1 } })
     end
   end)
 end, ns)

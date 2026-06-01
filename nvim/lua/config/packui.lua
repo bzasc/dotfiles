@@ -290,7 +290,7 @@ local function open()
     buffer = state.bufnr,
     once = true,
     callback = function(ev)
-      if vim._tointeger(ev.match) == state.winid then
+      if tonumber(ev.match) == state.winid then
         state.winid, state.bufnr, state.expanded, state.help = nil, nil, {}, false
       end
     end,

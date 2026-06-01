@@ -1,2 +1,29 @@
+# StyLua configuration for Neovim Lua development
+# https://github.com/JohnnyMorganz/StyLua
+# NOTE: stylua reads .stylua.toml (this file) and ignores stylua.toml when both
+# exist, so all settings live here.
+
+# Column width for line wrapping
+column_width = 120
+
+# Line endings (Unix for cross-platform compatibility)
+line_endings = "Unix"
+
+# Indentation settings
 indent_type = "Spaces"
 indent_width = 2
+
+# Quote style: prefer double quotes
+quote_style = "AutoPreferDouble"
+
+# Always use parentheses for function calls
+call_parentheses = "Always"
+
+# Keep simple statements expanded for readability
+collapse_simple_statement = "Never"
+
+# No space between function name and parentheses
+space_after_function_names = "Never"
+
+[sort_requires]
+enabled = false

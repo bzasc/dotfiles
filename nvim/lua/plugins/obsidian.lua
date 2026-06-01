@@ -62,21 +62,23 @@ vim.keymap.set("n", "<leader>oL", obs_cmd("Obsidian link_new"), { desc = "Obsidi
 -- Custom templates
 vim.keymap.set("n", "<leader>oN", function()
   init_obsidian()
-  vim.cmd("ObsidianTemplate note")
-  vim.cmd([[1,/^\S/s/^\n\{1,}//]])
-end, { desc = "Add note ObsidianTemplate" })
+  vim.cmd("Obsidian template note")
+end, { desc = "Add note Obsidian template" })
 
 vim.keymap.set("n", "<leader>oc", function()
   init_obsidian()
-  vim.cmd("ObsidianTemplate class-note")
-  vim.cmd([[1,/^\S/s/^\n\{1,}//]])
-end, { desc = "Add class-note ObsidianTemplate" })
+  vim.cmd("Obsidian template class-note")
+end, { desc = "Add class-note Obsidian template" })
 
 vim.keymap.set("n", "<leader>od", function()
   init_obsidian()
-  vim.cmd("ObsidianTemplate daily")
-  vim.cmd([[1,/^\S/s/^\n\{1,}//]])
-end, { desc = "Add daily ObsidianTemplate" })
+  vim.cmd("Obsidian template daily")
+end, { desc = "Add daily Obsidian template" })
+
+vim.keymap.set("n", "<leader>oh", function()
+  init_obsidian()
+  vim.cmd("Obsidian template habits")
+end, { desc = "Add Habits Obsidian template" })
 
 -- Vault pickers (Snacks only — no obsidian setup needed)
 vim.keymap.set("n", "<leader>os", function()

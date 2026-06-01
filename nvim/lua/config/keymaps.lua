@@ -1,9 +1,7 @@
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
--- Tab switching
-map("n", "<Tab>", ":bnext<CR>", { desc = "Next buffer" })
-map("n", "<S-Tab>", ":bprevious<CR>", { desc = "Previous buffer" })
+-- Buffer switching (<Tab> left free for jumplist <C-i>; see also <S-h>/<S-l>, ]b/[b)
 map("n", "<leader>bn", ":bnext<CR>", { desc = "Next buffer" })
 map("n", "<leader>bp", ":bprevious<CR>", { desc = "Previous buffer" })
 
@@ -242,7 +240,7 @@ end, { desc = "Pack Delete" })
 map("n", "<leader>R", function()
   local session = vim.fn.stdpath("state") .. "/restart_session.vim"
   vim.cmd("mksession! " .. vim.fn.fnameescape(session))
-  vim.cmd("restart source " .. vim.fn.fnameescape(session))
+  vim.cmd("restart -S " .. vim.fn.fnameescape(session))
 end, { desc = "Restart Neovim" })
 
 -- delete marks (use m + character for a mark)

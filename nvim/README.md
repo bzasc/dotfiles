@@ -19,7 +19,7 @@ Base derivada de [tduyng](https://gitlab.com/tduyng). Modificada para uso pessoa
 nvim/
 ├── init.lua              # entrypoint: leader + require("config") + require("plugins")
 ├── justfile              # tasks: check, fmt, validate, clean
-├── stylua.toml
+├── .stylua.toml
 ├── nvim-pack-lock.json   # lock do vim.pack
 ├── lsp/                  # configs LSP nativos (vim.lsp.config)
 │   ├── lua_ls.lua, ruby_lsp.lua, vtsls.lua, rust_analyzer.lua, ...
@@ -29,7 +29,6 @@ nvim/
 │   │   ├── options.lua
 │   │   ├── keymaps.lua
 │   │   ├── session.lua
-│   │   ├── statusline.lua
 │   │   ├── tabline.lua
 │   │   ├── diagnostics.lua
 │   │   ├── autocmds.lua
@@ -37,7 +36,7 @@ nvim/
 │   │   ├── packui.lua        # UI custom para vim.pack
 │   │   └── ui2.lua
 │   └── plugins/          # cada arquivo = vim.pack.add(...)
-│       ├── blink.lua, conform.lua, dap.lua, git.lua,
+│       ├── completion.lua, conform.lua, dap.lua, git.lua,
 │       ├── grug-far.lua, markdown.lua, obsidian.lua,
 │       ├── sidekick.lua, snacks.lua, treesitter.lua,
 │       ├── whichkey.lua, yanky.lua, ...

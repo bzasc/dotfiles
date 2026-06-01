@@ -168,7 +168,6 @@ require("lualine").setup({
     lualine_x = {
       { macro_recording, color = { fg = palette.red, gui = "bold" } },
       { "%S" },
-      { lsp_progress },
       { "filetype", icon_only = false, colored = true },
     },
     lualine_y = {

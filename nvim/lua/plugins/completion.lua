@@ -7,6 +7,13 @@ vim.pack.add({
   "https://github.com/zbirenbaum/copilot.lua",
 })
 
+-- Advertise blink.cmp completion capabilities to every LSP server, at config
+-- time (not in the deferred setup below) so servers that attach before the
+-- first InsertEnter still negotiate snippet/resolve/insertReplace support.
+vim.lsp.config("*", {
+  capabilities = require("blink.cmp").get_lsp_capabilities(),
+})
+
 -- Lazy load on first insert mode entry
 local group = vim.api.nvim_create_augroup("CompletionLazyLoad", { clear = true })
 

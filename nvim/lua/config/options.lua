@@ -62,7 +62,7 @@ opt.backspace = "indent,eol,start" -- Better backspace behavior
 opt.autochdir = false -- Don't auto change directory
 
 opt.path:append("**") -- include subdirectories in search
-opt.selection = "exclusive" -- Selection behavior
+opt.selection = "inclusive" -- Selection behavior (snippet placeholders need inclusive or last char lingers)
 opt.mouse = "a" -- Enable mouse support
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 opt.modifiable = true -- Allow buffer modifications
@@ -125,6 +125,9 @@ opt.shiftwidth = 2 -- Size of an indent
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
 vim.g.markdown_recommended_style = 0
+
+-- global completion mode for LSP clients that support it; "native" uses built-in completion, "blink" uses blink.cmp
+vim.g.completion_mode = "blink"
 
 vim.filetype.add({
   extension = {

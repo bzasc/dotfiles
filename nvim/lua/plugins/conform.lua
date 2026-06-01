@@ -93,8 +93,17 @@ require("conform").setup({
             break
           end
         end
-        local config = project_config or vim.fn.expand("~/.prettierrc")
-        return { "--config", config, "--stdin-filepath", ctx.filename }
+        local args = { "--stdin-filepath", ctx.filename }
+        local config = project_config
+        if not config then
+          local home = vim.fn.expand("~/.prettierrc")
+          config = vim.fn.filereadable(home) == 1 and home or nil
+        end
+        if config then
+          table.insert(args, 1, config)
+          table.insert(args, 1, "--config")
+        end
+        return args
       end,
     },
     ruff_organise_imports = {
@@ -133,7 +142,7 @@ require("conform").setup({
     if bufname:match("/Brewfile$") or bufname:match("/Brewfile%.[^/]+$") then
       return
     end
-    return { timeout_ms = 500, lsp_format = "fallback" }
+    return { timeout_ms = 3000, lsp_format = "fallback" }
   end,
 })
 

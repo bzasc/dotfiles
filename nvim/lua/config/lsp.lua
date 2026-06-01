@@ -45,12 +45,18 @@ local default_keymaps = {
   { keys = "gd", func = vim.lsp.buf.definition, desc = "Goto Definition", has = "definitionProvider" },
   { keys = "grt", func = vim.lsp.buf.type_definition, desc = "Goto Type Definition", has = "typeDefinitionProvider" },
   { keys = "grx", func = vim.lsp.codelens.run, desc = "Run Codelens", has = "codeLensProvider" },
-  { keys = "<leader>cw", func = vim.lsp.buf.workspace_diagnostics, desc = "Workspace Diagnostics" },
+  {
+    keys = "<leader>cw",
+    func = function()
+      vim.diagnostic.setqflist()
+    end,
+    desc = "Workspace Diagnostics (quickfix)",
+  },
   { keys = "<leader>li", func = "<cmd>LspInfo<cr>", desc = "LSP Info" },
   { keys = "<leader>lr", func = "<cmd>LspRestart<cr>", desc = "LSP Restart" },
 }
 
-local completion = vim.g.completion_mode or "blink" -- or 'native'
+local completion = vim.g.completion_mode or "native" -- or 'native'
 vim.api.nvim_create_autocmd("LspAttach", {
   group = augroup("lsp_attach"),
   callback = function(args)
@@ -118,7 +124,7 @@ local ts_server = vim.g.lsp_typescript_server or "vtsls"
 
 local servers_by_ft = {
   lua = { "lua_ls" },
-  python = { "ruff", "pyreply" },
+  python = { "pyrefly", "ruff", "basedpyright" },
   ruby = { "ruby_lsp" },
   javascript = { ts_server, "oxlint", "eslint" },
   javascriptreact = { ts_server, "oxlint", "eslint", "tailwindcss" },
