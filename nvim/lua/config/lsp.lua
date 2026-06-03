@@ -21,6 +21,17 @@ vim.api.nvim_create_user_command("LspStart", function()
   vim.cmd("edit")
 end, { desc = "Retry attaching builtin LSP for the current buffer" })
 
+-- Cap hover/signature float size so large docs don't fill the screen.
+local hover = vim.lsp.buf.hover
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.buf.hover = function()
+  return hover({
+    max_height = math.floor(vim.o.lines * 0.5),
+    max_width = math.floor(vim.o.columns * 0.4),
+    border = "rounded",
+  })
+end
+
 local default_keymaps = {
   { keys = "<leader>ca", func = vim.lsp.buf.code_action, desc = "Code Actions" },
   {
@@ -42,8 +53,7 @@ local default_keymaps = {
   { keys = "<leader>cr", func = vim.lsp.buf.rename, desc = "Code Rename" },
   { keys = "<leader>k", func = vim.lsp.buf.hover, desc = "Hover Documentation", has = "hoverProvider" },
   { keys = "K", func = vim.lsp.buf.hover, desc = "Hover (alt)", has = "hoverProvider" },
-  { keys = "gd", func = vim.lsp.buf.definition, desc = "Goto Definition", has = "definitionProvider" },
-  { keys = "grt", func = vim.lsp.buf.type_definition, desc = "Goto Type Definition", has = "typeDefinitionProvider" },
+  -- Goto definition / type-definition owned by Snacks pickers (gd, gy in snacks.lua).
   { keys = "grx", func = vim.lsp.codelens.run, desc = "Run Codelens", has = "codeLensProvider" },
   {
     keys = "<leader>cw",
@@ -57,68 +67,79 @@ local default_keymaps = {
 }
 
 local completion = vim.g.completion_mode or "native" -- or 'native'
+local function on_attach(client, buf)
+  if client then
+    -- Built-in completion
+    if completion == "native" and client:supports_method("textDocument/completion") then
+      vim.lsp.completion.enable(true, client.id, buf, { autotrigger = true })
+    end
+
+    if client:supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+
+      if not vim.b[buf].inlay_hints_autocmd_set then
+        vim.api.nvim_create_autocmd("InsertEnter", {
+          buffer = buf,
+          callback = function()
+            vim.lsp.inlay_hint.enable(false, { bufnr = buf })
+          end,
+        })
+        vim.api.nvim_create_autocmd("InsertLeave", {
+          buffer = buf,
+          callback = function()
+            vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+          end,
+        })
+        vim.b[buf].inlay_hints_autocmd_set = true
+      end
+    end
+
+    if client:supports_method("textDocument/documentColor") then
+      vim.lsp.document_color.enable(true, { bufnr = buf }, {
+        style = "virtual",
+      })
+    end
+
+    if client.name == "ruff" then
+      client.server_capabilities.hoverProvider = false
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end
+
+    if client.name == "ruby_lsp" then
+      client.server_capabilities.semanticTokensProvider = nil
+      client.server_capabilities.documentHighlightProvider = nil
+    end
+
+    for _, km in ipairs(default_keymaps) do
+      -- Only bind if there's no `has` requirement, or the server supports it
+      if not km.has or client.server_capabilities[km.has] then
+        vim.keymap.set(
+          km.mode or "n",
+          km.keys,
+          km.func,
+          { buffer = buf, desc = "LSP: " .. km.desc, nowait = km.nowait }
+        )
+      end
+    end
+  end
+end
+
 vim.api.nvim_create_autocmd("LspAttach", {
   group = augroup("lsp_attach"),
   callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    local buf = args.buf
-    if client then
-      -- Built-in completion
-      if completion == "native" and client:supports_method("textDocument/completion") then
-        vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
-      end
-
-      if client:supports_method("textDocument/inlayHint") then
-        vim.lsp.inlay_hint.enable(true, { bufnr = buf })
-
-        if not vim.b[buf].inlay_hints_autocmd_set then
-          vim.api.nvim_create_autocmd("InsertEnter", {
-            buffer = buf,
-            callback = function()
-              vim.lsp.inlay_hint.enable(false, { bufnr = buf })
-            end,
-          })
-          vim.api.nvim_create_autocmd("InsertLeave", {
-            buffer = buf,
-            callback = function()
-              vim.lsp.inlay_hint.enable(true, { bufnr = buf })
-            end,
-          })
-          vim.b[buf].inlay_hints_autocmd_set = true
-        end
-      end
-
-      if client:supports_method("textDocument/documentColor") then
-        vim.lsp.document_color.enable(true, { bufnr = buf }, {
-          style = "virtual",
-        })
-      end
-
-      if client.name == "ruff" then
-        client.server_capabilities.hoverProvider = false
-        client.server_capabilities.documentFormattingProvider = false
-        client.server_capabilities.documentRangeFormattingProvider = false
-      end
-
-      if client.name == "ruby_lsp" then
-        client.server_capabilities.semanticTokensProvider = nil
-        client.server_capabilities.documentHighlightProvider = nil
-      end
-
-      for _, km in ipairs(default_keymaps) do
-        -- Only bind if there's no `has` requirement, or the server supports it
-        if not km.has or client.server_capabilities[km.has] then
-          vim.keymap.set(
-            km.mode or "n",
-            km.keys,
-            km.func,
-            { buffer = buf, desc = "LSP: " .. km.desc, nowait = km.nowait }
-          )
-        end
-      end
-    end
+    on_attach(vim.lsp.get_client_by_id(args.data.client_id), args.buf)
   end,
 })
+
+-- Re-run on_attach when a client registers capabilities dynamically (after
+-- initial attach), so late-registered methods still get their keymaps.
+local register_capability = vim.lsp.handlers["client/registerCapability"]
+---@diagnostic disable-next-line: duplicate-set-field
+vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
+  on_attach(vim.lsp.get_client_by_id(ctx.client_id), vim.api.nvim_get_current_buf())
+  return register_capability(err, res, ctx)
+end
 
 local ts_server = vim.g.lsp_typescript_server or "vtsls"
 

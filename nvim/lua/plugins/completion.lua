@@ -97,6 +97,7 @@ vim.api.nvim_create_autocmd("InsertEnter", {
         },
       },
       fuzzy = { implementation = "prefer_rust_with_warning" },
+      signature = { enabled = true, window = { border = "rounded" } },
     })
   end,
 })
