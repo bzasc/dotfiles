@@ -74,26 +74,6 @@ local function on_attach(client, buf)
       vim.lsp.completion.enable(true, client.id, buf, { autotrigger = true })
     end
 
-    if client:supports_method("textDocument/inlayHint") then
-      vim.lsp.inlay_hint.enable(true, { bufnr = buf })
-
-      if not vim.b[buf].inlay_hints_autocmd_set then
-        vim.api.nvim_create_autocmd("InsertEnter", {
-          buffer = buf,
-          callback = function()
-            vim.lsp.inlay_hint.enable(false, { bufnr = buf })
-          end,
-        })
-        vim.api.nvim_create_autocmd("InsertLeave", {
-          buffer = buf,
-          callback = function()
-            vim.lsp.inlay_hint.enable(true, { bufnr = buf })
-          end,
-        })
-        vim.b[buf].inlay_hints_autocmd_set = true
-      end
-    end
-
     if client:supports_method("textDocument/documentColor") then
       vim.lsp.document_color.enable(true, { bufnr = buf }, {
         style = "virtual",
@@ -137,7 +117,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 local register_capability = vim.lsp.handlers["client/registerCapability"]
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.lsp.handlers["client/registerCapability"] = function(err, res, ctx)
-  on_attach(vim.lsp.get_client_by_id(ctx.client_id), vim.api.nvim_get_current_buf())
+  local client = vim.lsp.get_client_by_id(ctx.client_id)
+  local buf = vim.api.nvim_get_current_buf()
+  -- Only re-attach when this client is actually on the current buffer, else
+  -- feature enables (inlay hints, document color) fire on the wrong buffer.
+  if client and vim.lsp.buf_is_attached(buf, client.id) then
+    on_attach(client, buf)
+  end
   return register_capability(err, res, ctx)
 end
 
