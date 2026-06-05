@@ -46,7 +46,26 @@ Snacks.setup({
   terminal = { enabled = true },
   toggle = { enabled = true },
   words = { enabled = true },
-  zen = { enabled = true },
+  zen = {
+    enabled = true,
+    -- Focus mode: kill the noise that makes prose (markdown) unreadable —
+    -- diagnostics (harper grammar) + spell undercurl. Restored on close.
+    toggles = {
+      dim = true,
+      git_signs = false,
+      mini_diff_signs = false,
+      diagnostics = false,
+    },
+    on_open = function(win)
+      vim.b[win.buf].__zen_spell = vim.wo[win.win].spell
+      vim.wo[win.win].spell = false
+    end,
+    on_close = function(win)
+      if vim.api.nvim_win_is_valid(win.win) then
+        vim.wo[win.win].spell = vim.b[win.buf].__zen_spell or false
+      end
+    end,
+  },
 
   picker = {
     sources = {

@@ -112,6 +112,9 @@ local function apply_custom_highlights()
 
     -- [2] Plugin: Snacks (Pickers, Notifier, etc.)
     SnacksBackdrop = { bg = "#000000" },
+    -- Dim (used by zen) must NOT inherit DiagnosticUnnecessary's undercurl,
+    -- else every dimmed line gets a spell-error-like squiggle. Plain fade only.
+    SnacksDim = { fg = colors.overlay0 },
     SnacksNormal = { link = "NormalFloat" },
     SnacksPicker = { link = "NormalFloat" },
     SnacksPickerBorder = { link = "FloatBorder" },
