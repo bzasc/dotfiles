@@ -57,9 +57,22 @@ set -gx ZETTELKASTEN "$HOME/annotations/bzasc_brain"
 set -gx DAILY_NOTES_TEMPLATE_PATH "$HOME/annotations/bzasc_brain/templates/daily-note.md"
 set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
 
+# NOTE on `fish_add_path --path` below: mise's conf.d/mise.fish overwrites $PATH
+# wholesale (stale `set -gx PATH` snapshot from `mise activate fish`, regenerated
+# by functions/regen-shell-cache.fish) before this file runs, so a plain
+# fish_add_path only updates $fish_user_paths — that var only gets folded into
+# $PATH at fish's very early startup, which already happened before mise's conf.d
+# clobbers it. --path mutates $PATH directly, here, after the clobber, so it
+# actually sticks. Without it, tools added here silently vanish from $PATH
+# (some, like adb/sdkmanager, happen to still resolve via separate Homebrew shims).
+
 # Android SDK (Homebrew cask)
 set -gx ANDROID_HOME /opt/homebrew/share/android-commandlinetools
 set -gx ANDROID_SDK_ROOT $ANDROID_HOME
-fish_add_path $ANDROID_HOME/cmdline-tools/latest/bin
-fish_add_path $ANDROID_HOME/platform-tools
-fish_add_path $ANDROID_HOME/emulator
+fish_add_path --path $ANDROID_HOME/cmdline-tools/latest/bin
+fish_add_path --path $ANDROID_HOME/platform-tools
+fish_add_path --path $ANDROID_HOME/emulator
+
+# Go (go install binaries land in GOPATH/bin, default ~/go/bin)
+set -gx GOPATH "$HOME/go"
+fish_add_path --path $GOPATH/bin
