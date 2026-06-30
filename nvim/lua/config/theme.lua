@@ -284,7 +284,7 @@ local function apply_custom_highlights()
     ["@lsp.type.namespace"] = { link = "@namespace" },
     ["@lsp.typemod.variable.defaultLibrary"] = { link = "@variable.builtin" },
 
-    -- Diff & Git (Fixes vdiff issues)
+    -- Diff & Git
     DiffAdd = { bg = "#374a2f", fg = colors.none },
     DiffChange = { bg = "#2e3a4a", fg = colors.none },
     DiffDelete = { bg = "#4a2f2f", fg = colors.red },
@@ -293,7 +293,6 @@ local function apply_custom_highlights()
     diffAdded = { fg = colors.green },
     diffRemoved = { fg = colors.red },
     diffChanged = { fg = colors.blue },
-    VDiffActiveFile = { link = "Search" },
 
     -- New highlight groups
     SnippetTabstopActive = { bg = colors.surface1, underline = true }, -- active snippet tabstop

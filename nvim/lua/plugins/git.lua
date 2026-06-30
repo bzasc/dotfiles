@@ -1,6 +1,6 @@
 vim.pack.add({
   "https://github.com/lewis6991/gitsigns.nvim",
-  "https://gitlab.com/tduyng/vdiff.nvim",
+  "https://github.com/sindrets/diffview.nvim",
 })
 
 -- Setup gitsigns.nvim
@@ -83,56 +83,43 @@ require("gitsigns").setup({
   end,
 })
 
--- Setup vdiff.nvim with side-by-side layout (IntelliJ style)
-require("vdiff").setup({
-  diff_layout = "diff2_vertical", -- side-by-side
-  merge_layout = "diff3_vertical", -- 3-way side-by-side
-})
+-- Setup diffview.nvim
+require("diffview").setup({})
+
+-- Quick shortcuts for common comparisons
+vim.keymap.set("n", "<leader>Do", "<Cmd>DiffviewOpen<CR>", { desc = "Diff: working tree (all files)" })
+vim.keymap.set("n", "<leader>Ds", "<Cmd>DiffviewOpen --staged<CR>", { desc = "Diff: staged (all files)" })
 
 -- Accepts any ref: branch, commit, tag, HEAD~N, or empty for working tree
--- Empty or nil = working tree vs HEAD
--- --staged = staged changes
--- main = compare with main branch
--- HEAD~3 = compare with 3 commits ago
--- abc123 = compare with commit hash
--- v1.0.0 = compare with tag
-vim.keymap.set("n", "<leader>gc", function()
+vim.keymap.set("n", "<leader>Dr", function()
   vim.ui.input({
-    prompt = "Compare with (branch/commit/tag/HEAD~N, empty=working): ",
+    prompt = "Diff against (branch/commit/tag/HEAD~N, empty=working): ",
   }, function(ref)
-    vim.cmd("VDiffCompare " .. (ref or ""))
+    vim.cmd("DiffviewOpen " .. (ref or ""))
   end)
-end, { desc = "Git: compare (universal)" })
+end, { desc = "Diff: against ref" })
 
 -- COMPARE TWO REFS (e.g., branches, commits, tags)
-vim.keymap.set("n", "<leader>gC", function()
-  vim.ui.input({ prompt = "Compare ref1 (default=HEAD): " }, function(ref1)
+vim.keymap.set("n", "<leader>DR", function()
+  vim.ui.input({ prompt = "Diff ref1 (default=HEAD): " }, function(ref1)
     if not ref1 or ref1 == "" then
       ref1 = "HEAD"
     end
-    vim.ui.input({ prompt = "Compare ref2: " }, function(ref2)
-      vim.cmd("VDiffCompareRefs " .. ref1 .. " " .. (ref2 or ""))
+    vim.ui.input({ prompt = "Diff ref2: " }, function(ref2)
+      if ref2 and ref2 ~= "" then
+        vim.cmd("DiffviewOpen " .. ref1 .. ".." .. ref2)
+      end
     end)
   end)
-end, { desc = "Git: compare two refs" })
+end, { desc = "Diff: two refs" })
 
--- Quick shortcuts for common comparisons
-vim.keymap.set("n", "<leader>gd", "<Cmd>VDiffCompare<CR>", { desc = "Git: working tree (all files)" })
-vim.keymap.set("n", "<leader>gD", "<Cmd>VDiffCompare --staged<CR>", { desc = "Git: staged (all files)" })
-vim.keymap.set("n", "<leader>gV", "<Cmd>VDiffHistory<CR>", { desc = "Git: file history" })
-vim.keymap.set("v", "<leader>gv", ":'<,'>VDiffRange<CR>", { desc = "Git: line history" })
-vim.keymap.set("n", "<leader>gx", "<Cmd>VDiffClose<CR>", { desc = "Git: close all" })
--- 3-way merge view (LOCAL | RESULT | REMOTE)
-vim.keymap.set("n", "<leader>gm", "<Cmd>VMerge<CR>", { desc = "Git: merge conflicts" })
+-- FILE / LINE HISTORY (diffview shows merge conflicts as a 3-way view automatically on DiffviewOpen)
+vim.keymap.set("n", "<leader>Dh", "<Cmd>DiffviewFileHistory %<CR>", { desc = "Diff: file history" })
+vim.keymap.set("v", "<leader>Dh", ":'<,'>DiffviewFileHistory<CR>", { desc = "Diff: line history" })
+vim.keymap.set("n", "<leader>DH", "<Cmd>DiffviewFileHistory<CR>", { desc = "Diff: repo history" })
 
--- CURRENT FILE DIFF
--- Same principle: accepts any ref or empty for HEAD
-vim.keymap.set("n", "<leader>gf", "<Cmd>VDiff<CR>", { desc = "Git: diff file vs HEAD" })
-vim.keymap.set("n", "<leader>gF", function()
-  vim.ui.input({ prompt = "Diff file with (ref, empty=HEAD): " }, function(ref)
-    vim.cmd("VDiff " .. (ref or ""))
-  end)
-end, { desc = "Git: diff file (universal)" })
+vim.keymap.set("n", "<leader>Dt", "<Cmd>DiffviewToggleFiles<CR>", { desc = "Diff: toggle file panel" })
+vim.keymap.set("n", "<leader>Dc", "<Cmd>DiffviewClose<CR>", { desc = "Diff: close" })
 
 -- UTILITY: Compare two arbitrary files with difftastic (or vimdiff fallback)
 vim.keymap.set("n", "<leader>g2", function()
