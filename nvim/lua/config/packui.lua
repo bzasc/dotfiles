@@ -10,21 +10,11 @@ local HL = {
   PackUiSection = "Label",
   PackUiSep = "FloatBorder",
   PackUiDetail = "Comment",
-  PackUiHelp = "SpecialComment",
 }
 
-local state = { bufnr = nil, winid = nil, expanded = {}, help = false, tags = {} }
+local state = { bufnr = nil, winid = nil, expanded = {} }
 
-local function git_tag(path)
-  if not path or state.tags[path] ~= nil then
-    return state.tags[path] or nil
-  end
-  local r = vim.fn.system("git -C " .. vim.fn.shellescape(path) .. " describe --tags --exact-match HEAD 2>/dev/null")
-  state.tags[path] = vim.v.shell_error == 0 and vim.trim(r) or false
-  return state.tags[path] or nil
-end
-
-local function render()
+function render()
   if not (state.bufnr and api.nvim_buf_is_valid(state.bufnr)) then
     return
   end
@@ -41,7 +31,7 @@ local function render()
   table.sort(unloaded, cmp)
 
   local lines, marks = {}, {}
-  state.lmap = {} -- lnum (1-based) -> plugin name
+  state.lmap = {}
 
   local function put(text, hl_group)
     lines[#lines + 1] = text
@@ -55,43 +45,22 @@ local function render()
 
   local w = state.winid and api.nvim_win_get_width(state.winid) or 80
 
-  -- Header
   put((" vim.pack  %d plugins  (%d loaded, %d not loaded)"):format(#plugins, #loaded, #unloaded), "PackUiHeader")
   put(" " .. ("─"):rep(w - 1), "PackUiSep")
 
-  -- Action bar  (only actions that make sense inside the UI)
-  local bar = "  [U] Update All   [u] Update   [D] Delete   [L] Log   [?] Help"
+  local bar = "  [U] Update All   [u] Update   [D] Delete"
   put(bar)
   for s, e in bar:gmatch("()%[.-%]()") do
     hl(#lines - 1, s - 1, e - 1, "PackUiButton")
   end
 
-  -- Help section
-  if state.help then
-    put("")
-    put("  Keymaps:", "PackUiHelp")
-    put("    U        Update all plugins", "PackUiHelp")
-    put("    u        Update plugin under cursor", "PackUiHelp")
-    put("    D        Delete plugin under cursor (inactive only)", "PackUiHelp")
-    put("    L        Open update log", "PackUiHelp")
-    put("    <CR>     Toggle path / rev details", "PackUiHelp")
-    put("    ]] / [[  Jump to next / prev plugin", "PackUiHelp")
-    put("    q / <Esc>  Close", "PackUiHelp")
-  end
-
-  -- max name width for column alignment
   local max_w = vim.iter(plugins):fold(0, function(acc, p)
     return math.max(acc, #p.spec.name)
   end)
 
   local function render_plugin(p, icon, grp)
     local name = p.spec.name
-    local ver = ""
-    if p.spec.version then
-      ver = git_tag(p.path) or tostring(p.spec.version)
-    elseif p.rev then
-      ver = p.rev:sub(1, 7)
-    end
+    local ver = p.spec.version and tostring(p.spec.version) or (p.rev and p.rev:sub(1, 7) or "")
     local pad = (" "):rep(max_w - #name + 2)
     put(("  %s %s%s%s"):format(icon, name, pad, ver))
 
@@ -121,7 +90,7 @@ local function render()
 
   if #unloaded > 0 then
     put("")
-    put((" Not Loaded (%d)  — safe to delete with D"):format(#unloaded), "PackUiSection")
+    put((" Not Loaded (%d)"):format(#unloaded), "PackUiSection")
     for _, p in ipairs(unloaded) do
       render_plugin(p, "○", "PackUiUnloaded")
     end
@@ -143,37 +112,11 @@ local function cursor_plugin()
   return state.lmap[api.nvim_win_get_cursor(state.winid)[1]]
 end
 
-local function jump(dir)
-  if not (state.winid and api.nvim_win_is_valid(state.winid)) then
-    return
-  end
-  local row = api.nvim_win_get_cursor(state.winid)[1]
-  local plines = vim.tbl_keys(state.lmap)
-  table.sort(plines)
-  local target
-  if dir > 0 then
-    target = vim.iter(plines):find(function(l)
-      return l > row
-    end) or plines[1]
-  else
-    for i = #plines, 1, -1 do
-      if plines[i] < row then
-        target = plines[i]
-        break
-      end
-    end
-    target = target or plines[#plines]
-  end
-  if target then
-    api.nvim_win_set_cursor(state.winid, { target, 0 })
-  end
-end
-
 local function close()
   if state.winid and api.nvim_win_is_valid(state.winid) then
     api.nvim_win_close(state.winid, true)
   end
-  state.winid, state.bufnr, state.expanded, state.help = nil, nil, {}, false
+  state.winid, state.bufnr, state.expanded = nil, nil, {}
 end
 
 local function open()
@@ -214,17 +157,6 @@ local function open()
 
   vim.keymap.set("n", "q", close, o)
   vim.keymap.set("n", "<Esc>", close, o)
-  vim.keymap.set("n", "?", function()
-    state.help = not state.help
-    render()
-  end, o)
-  vim.keymap.set("n", "]]", function()
-    jump(1)
-  end, o)
-  vim.keymap.set("n", "[[", function()
-    jump(-1)
-  end, o)
-
   vim.keymap.set("n", "<CR>", function()
     local name = cursor_plugin()
     if not name then
@@ -248,7 +180,6 @@ local function open()
   vim.keymap.set("n", "u", function()
     local name = cursor_plugin()
     if not name then
-      vim.notify("vim.pack: no plugin under cursor", vim.log.levels.WARN)
       return
     end
     close()
@@ -258,40 +189,22 @@ local function open()
   vim.keymap.set("n", "D", function()
     local name = cursor_plugin()
     if not name then
-      vim.notify("vim.pack: no plugin under cursor", vim.log.levels.WARN)
       return
     end
-    local pdata = vim.pack.get({ name }, { info = false })
-    if pdata[1] and pdata[1].active then
-      vim.notify(("vim.pack: %s is active — remove it from your config first"):format(name), vim.log.levels.WARN)
-      return
-    end
-    if vim.fn.confirm(("Delete %s?"):format(name), "&Yes\n&No", 2) == 1 then
-      close()
-      local ok, err = pcall(vim.pack.del, { name })
-      vim.notify(
-        ok and ("vim.pack: deleted %s"):format(name) or "vim.pack: " .. tostring(err),
-        ok and vim.log.levels.INFO or vim.log.levels.ERROR
-      )
-    end
-  end, o)
-
-  vim.keymap.set("n", "L", function()
     close()
-    local log = vim.fs.joinpath(vim.fn.stdpath("log"), "nvim-pack.log")
-    if vim.uv.fs_stat(log) then
-      vim.cmd.edit(log)
-    else
-      vim.notify("vim.pack: no log file yet", vim.log.levels.INFO)
-    end
+    local ok, err = pcall(vim.pack.del, { name })
+    vim.notify(
+      ok and ("vim.pack: deleted %s"):format(name) or "vim.pack: " .. tostring(err),
+      ok and vim.log.levels.INFO or vim.log.levels.ERROR
+    )
   end, o)
 
   api.nvim_create_autocmd("WinClosed", {
     buffer = state.bufnr,
     once = true,
     callback = function(ev)
-      if tonumber(ev.match) == state.winid then
-        state.winid, state.bufnr, state.expanded, state.help = nil, nil, {}, false
+      if vim._tointeger(ev.match) == state.winid then
+        state.winid, state.bufnr, state.expanded = nil, nil, {}
       end
     end,
   })

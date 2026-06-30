@@ -1,18 +1,24 @@
 local M = {}
 
 local SEP = "" -- separator glyph at buffer boundary
-local CLOSE = "" -- close icon shown on active buffer
+local CLOSE = "" -- close icon shown on active buffer
 local NO_NAME = "[NO NAME]"
+local OVERFLOW_LEFT = "«"
+local OVERFLOW_RIGHT = "»"
 
 local _tab_cache = nil -- cached rendered string
-local _tab_cache_buf = nil -- bufnr when cache was built
+local _tab_cache_key = nil -- cache key: bufnr + columns + buffer-list signature
 
 local _tab_invalidate_events = {
   "BufAdd",
   "BufDelete",
   "BufWipeout",
   "BufFilePost", -- buffer renamed
-  "BufModifiedSet", -- modified flag changed (shows/hides the indicator)
+  "BufWritePost", -- save clears the modified flag
+  "TextChanged", -- normal-mode edit sets modified flag
+  "TextChangedI", -- insert-mode edit sets modified flag
+  "VimResized", -- terminal resize changes layout
+  "TabEnter", -- tabpage switch may change active buffer set
 }
 
 vim.api.nvim_create_autocmd(_tab_invalidate_events, {
@@ -90,35 +96,112 @@ local function render_buf(bufnr, current)
   end
 end
 
+-- Strip statusline highlight groups (%#...#) to measure real display width
+local function display_width(s)
+  local stripped = s:gsub("%%#[^#]*#", ""):gsub("%%%%", "%%")
+  return vim.api.nvim_strwidth(stripped)
+end
+
 function _G.tabline()
   local current = vim.api.nvim_get_current_buf()
+  local columns = vim.o.columns
 
-  -- Return cached string if the buffer list and active buffer haven't changed
-  if _tab_cache and _tab_cache_buf == current then
-    return _tab_cache
-  end
-
-  local parts = {}
-  -- Iterate listed buffers in ascending handle order for stability
+  -- Render every listed buffer; remember which index is the active one.
+  -- We must build chunks before the cache check, because the cache key
+  -- includes the buffer-list signature.
+  local chunks = {}
+  local active_idx = nil
+  local sig = {} -- signature pieces for the cache key
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     local chunk = render_buf(bufnr, current)
     if chunk ~= "" then
-      table.insert(parts, chunk)
+      table.insert(chunks, chunk)
+      sig[#sig + 1] = bufnr .. ":" .. (vim.bo[bufnr].modified and "1" or "0")
+      if bufnr == current then
+        active_idx = #chunks
+      end
     end
   end
 
-  if #parts == 0 then
+  local key = current .. "|" .. columns .. "|" .. table.concat(sig, ",")
+  if _tab_cache and _tab_cache_key == key then
+    return _tab_cache
+  end
+
+  if #chunks == 0 then
     _tab_cache = ""
-    _tab_cache_buf = current
+    _tab_cache_key = key
     return ""
   end
 
-  local line = table.concat(parts)
-  -- Trim trailing separator if present
-  local result = line:gsub(vim.pesc(SEP) .. "$", "")
-  _tab_cache = result
-  _tab_cache_buf = current
-  return result
+  local widths = {}
+  local total = 0
+  for i, c in ipairs(chunks) do
+    widths[i] = display_width(c)
+    total = total + widths[i]
+  end
+
+  -- Fast path: everything fits
+  if total <= columns then
+    local line = table.concat(chunks):gsub(vim.pesc(SEP) .. "$", "")
+    _tab_cache = line
+    _tab_cache_key = key
+    return line
+  end
+
+  -- Sliding window: keep the active buffer visible, then expand outward
+  -- (alternating sides) until we run out of room. Reserve space for
+  -- overflow markers only on sides where buffers are actually hidden.
+  -- Markers include a count, like " 3 « ... » 5 ".
+  active_idx = active_idx or 1
+
+  local function marker_width(count, glyph)
+    -- e.g. " 12 « " = 6, " » 3 " = 5
+    return count > 0 and (vim.api.nvim_strwidth(glyph) + #tostring(count) + 3) or 0
+  end
+
+  local first, last = active_idx, active_idx
+  local used = widths[active_idx]
+
+  while true do
+    local left_count = first - 1
+    local right_count = #chunks - last
+    local reserved = marker_width(left_count, OVERFLOW_LEFT) + marker_width(right_count, OVERFLOW_RIGHT)
+    local budget = columns - reserved
+
+    local grew = false
+    -- Alternate: prefer extending right (more natural reading order)
+    if last < #chunks and used + widths[last + 1] <= budget then
+      last = last + 1
+      used = used + widths[last]
+      grew = true
+    elseif first > 1 and used + widths[first - 1] <= budget then
+      first = first - 1
+      used = used + widths[first]
+      grew = true
+    end
+    if not grew then
+      break
+    end
+  end
+
+  local visible = {}
+  local left_count = first - 1
+  local right_count = #chunks - last
+  if left_count > 0 then
+    table.insert(visible, "%#MyBufInactive# " .. left_count .. " " .. OVERFLOW_LEFT .. " ")
+  end
+  for i = first, last do
+    table.insert(visible, chunks[i])
+  end
+  if right_count > 0 then
+    table.insert(visible, "%#MyBufInactive# " .. OVERFLOW_RIGHT .. " " .. right_count .. " ")
+  end
+
+  local line = table.concat(visible):gsub(vim.pesc(SEP) .. "$", "")
+  _tab_cache = line
+  _tab_cache_key = key
+  return line
 end
 
 function M.setup()

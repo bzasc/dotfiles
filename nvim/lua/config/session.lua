@@ -121,3 +121,14 @@ vim.keymap.set("n", "<leader>qd", function()
   vim.fn.writefile({}, stop_file)
   print("Session saving stopped")
 end, { desc = "Stop session saving" })
+
+-- Delete current session file (fresh start on next open)
+vim.keymap.set("n", "<leader>qr", function()
+  local session_file = get_session_file()
+  if vim.fn.filereadable(session_file) == 1 then
+    vim.fn.delete(session_file)
+    print("Deleted: " .. session_file)
+  else
+    print("No session to delete for current directory")
+  end
+end, { desc = "Delete current session" })

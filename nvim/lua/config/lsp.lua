@@ -150,6 +150,8 @@ local servers_by_ft = {
   yaml = { "yamlls" },
   rust = { "rust_analyzer" },
   zig = { "zls" },
+  dockerfile = { "docker_language_server" },
+  ["yaml.docker-compose"] = { "docker_language_server" },
 }
 
 local enabled = {}

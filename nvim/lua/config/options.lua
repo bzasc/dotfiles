@@ -141,5 +141,6 @@ vim.filetype.add({
   pattern = {
     ["[jt]sconfig.*.json"] = "jsonc",
     ["%.env%.[%w_.-]+"] = "dotenv",
+    [".*compose%.[%w_.-]*ya?ml"] = "yaml.docker-compose",
   },
 })
