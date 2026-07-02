@@ -113,6 +113,8 @@ Snacks.setup({
           "**/claude/*cache*",
           "**/tmp/**",
           "**/data/**",
+          "**/graphify-out/**",
+          "**/_reversa_sdd/**",
         },
       },
       grep = {

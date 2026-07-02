@@ -56,6 +56,7 @@ opt.autoread = true -- Auto reload files changed outside vim
 opt.autowrite = true -- Auto save
 
 -- Behavior settings
+opt.winfixbuf = false -- disable winfixbuf globally
 opt.hidden = true -- Allow hidden buffers
 opt.errorbells = false -- No error bells
 opt.backspace = "indent,eol,start" -- Better backspace behavior
