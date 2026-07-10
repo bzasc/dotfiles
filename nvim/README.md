@@ -22,23 +22,28 @@ nvim/
 ├── .stylua.toml
 ├── nvim-pack-lock.json   # lock do vim.pack
 ├── lsp/                  # configs LSP nativos (vim.lsp.config)
-│   ├── lua_ls.lua, ruby_lsp.lua, vtsls.lua, rust_analyzer.lua, ...
+│   ├── lua_ls.lua, ruby_lsp.lua, vtsls.lua, rust_analyzer.lua,
+│   ├── basedpyright.lua, ruff.lua, eslint.lua, tailwindcss.lua,
+│   ├── docker_language_server.lua, yamlls.lua, zls.lua, ...
 ├── lua/
 │   ├── config/           # opções core
 │   │   ├── theme.lua         # Catppuccin com paletas customizadas (gruvbox-like, sonokai)
 │   │   ├── options.lua
 │   │   ├── keymaps.lua
 │   │   ├── session.lua
-│   │   ├── tabline.lua
+│   │   ├── tabline.lua       # tabline custom que lista buffers (janela deslizante)
 │   │   ├── diagnostics.lua
 │   │   ├── autocmds.lua
+│   │   ├── marks.lua         # signs na gutter para marks
+│   │   ├── jump.lua          # jump por label estilo hop/leap (s/f/t)
 │   │   ├── lsp.lua
 │   │   ├── packui.lua        # UI custom para vim.pack
 │   │   └── ui2.lua
 │   └── plugins/          # cada arquivo = vim.pack.add(...)
-│       ├── completion.lua, conform.lua, dap.lua, git.lua,
-│       ├── grug-far.lua, markdown.lua, obsidian.lua,
-│       ├── sidekick.lua, snacks.lua, treesitter.lua,
+│       ├── completion.lua, conform.lua, dap.lua, fidget.lua,
+│       ├── git.lua, grug-far.lua, lazydev.lua, lualine.lua,
+│       ├── markdown.lua, mini.lua, obsidian.lua, sidekick.lua,
+│       ├── snacks.lua, tmux-navigator.lua, treesitter.lua,
 │       ├── whichkey.lua, yanky.lua, ...
 ├── snippets/             # snippets JSON
 └── spell/                # dicionários
@@ -60,6 +65,8 @@ just check        # valida config headless
 just fmt          # stylua .
 just fmt-check    # stylua --check
 just validate     # check + fmt-check
+just lsp-check    # verifica se os binários dos LSPs configurados existem
+just lsp-doctor   # diagnóstico detalhado dos LSPs
 just clean        # apaga data/state/cache do nvim (config intacto)
 ```
 

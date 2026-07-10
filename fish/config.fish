@@ -66,8 +66,9 @@ set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
 # actually sticks. Without it, tools added here silently vanish from $PATH
 # (some, like adb/sdkmanager, happen to still resolve via separate Homebrew shims).
 
-# Android SDK (Homebrew cask)
-set -gx ANDROID_HOME /opt/homebrew/share/android-commandlinetools
+# Android SDK (o SDK real, com platforms/build-tools/NDK/emulator — o mesmo
+# do local.properties dos projetos; o antigo do Homebrew só tinha cmdline-tools)
+set -gx ANDROID_HOME $HOME/Library/Android/sdk
 set -gx ANDROID_SDK_ROOT $ANDROID_HOME
 fish_add_path --path $ANDROID_HOME/cmdline-tools/latest/bin
 fish_add_path --path $ANDROID_HOME/platform-tools
