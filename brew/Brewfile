@@ -42,6 +42,7 @@ brew 'golangci-lint'
 brew 'golangci-lint-langserver'
 brew 'gopls'
 brew 'tmux'
+brew 'herdr'
 brew 'rtk'
 
 cask 'alt-tab'

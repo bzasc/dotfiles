@@ -14,6 +14,7 @@
     ~/.config/wezterm: wezterm
     ~/.config/nvim: nvim
     ~/.config/tmux: tmux
+    ~/.config/herdr/config.toml: herdr/config.toml
     ~/.config/fastfetch: fastfetch
     ~/.config/starship: starship
     ~/.config/zed/settings.json: zed/settings.json

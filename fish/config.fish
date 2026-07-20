@@ -15,6 +15,7 @@ if status is-interactive
     alias cat="bat --paging=never"
     alias cd="z"
     alias ls="eza --icons --git"
+    alias ff="fastfetch --kitty ~/dev/dotfiles/fastfetch/pngs/ryuzaki.png"
 
     # Atalhos (abbr)
     abbr ll "eza -alh"

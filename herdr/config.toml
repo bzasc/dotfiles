@@ -1,0 +1,88 @@
+onboarding = false
+# herdr configuration — mirrors keybindings/behavior from ../tmux/tmux.conf
+# so muscle memory carries over between tmux and herdr.
+
+[theme]
+# catppuccin's base surface/overlay greys are inherently lavender-tinted, so
+# list selection highlights (spaces/agents panels) kept looking purple no
+# matter what accent/purple/magenta/pink got overridden below. one-dark's
+# neutrals are plain neutral grey (closer to sonokai's own thm_bg #2c2e34),
+# so it takes the custom colors below without that purple bleed.
+name = "one-dark"
+auto_switch = true
+# no confirmed one-dark light variant, so light mode falls back to catppuccin-latte
+light_name = "catppuccin-latte"
+dark_name = "one-dark"
+
+[theme.custom]
+# colors pulled from tmux/custom/catppuccin-sonokai.tmuxtheme
+panel_bg = "reset"
+accent = "#76cce0"  # thm_cyan / thm_blue
+green = "#9ed072"   # thm_green
+blue = "#76cce0"    # thm_blue
+red = "#fc5d7c"     # thm_red
+yellow = "#e7c664"  # thm_yellow
+# catppuccin's default mauve/purple was showing through in the agents/spaces
+# panels since it wasn't overridden above; sonokai only has one purple-ish
+# color (thm_magenta == thm_pink) so reuse it for all three tokens
+purple = "#b39df3"
+magenta = "#b39df3"
+pink = "#b39df3"
+
+[terminal]
+# tmux: set -g default-shell/default-command /opt/homebrew/bin/fish
+default_shell = "/opt/homebrew/bin/fish"
+# new_cwd defaults to "follow", already matching tmux's
+# `-c "#{pane_current_path}"` on every split/popup below
+
+[keys]
+# tmux: unbind C-b / set -g prefix C-s
+prefix = "ctrl+s"
+
+# tmux: bind r source-file ~/.config/tmux/tmux.conf
+reload_config = "prefix+r"
+# resize_mode isn't used in tmux.conf (it resizes directly with Alt+arrow,
+# which herdr has no direct equivalent for) so free up prefix+r for reload
+resize_mode = ""
+
+# tmux: bind h/j/k/l select-pane -L/-D/-U/-R (these match herdr's defaults
+# already; listed explicitly here since they're the point of this file)
+focus_pane_left = "prefix+h"
+focus_pane_down = "prefix+j"
+focus_pane_up = "prefix+k"
+focus_pane_right = "prefix+l"
+
+# tmux: bind '"' split-window -v (stacked top/bottom)  -> split_horizontal
+# tmux: bind '%' split-window -h (side by side)        -> split_vertical
+split_horizontal = "prefix+quote"
+split_vertical = "prefix+percent"
+
+# tmux also binds M-H/M-L and S-Left/S-Right to previous/next-window.
+# herdr only allows one binding per action, so this picks the alt+shift+h/l
+# pair (consistent with the h/j/k/l pane bindings above) at the cost of the
+# plain prefix+p/prefix+n tmux default; swap to "shift+left"/"shift+right"
+# if you'd rather keep that pair instead.
+previous_tab = "alt+shift+h"
+next_tab = "alt+shift+l"
+
+# tmux: bind i display-popup -E "fish"
+[[keys.command]]
+key = "prefix+i"
+type = "popup"
+command = "fish"
+
+# tmux: bind S-Z display-popup -d "#{pane_current_path}" -w 75% -h 75% -E "fish"
+[[keys.command]]
+key = "prefix+shift+z"
+type = "popup"
+command = "fish"
+width = "75%"
+height = "75%"
+
+[experimental]
+# tmux: set -g allow-passthrough on (kitty graphics protocol passthrough)
+kitty_graphics = true
+
+[advanced]
+# tmux: set -g history-limit 100000 (herdr's limit is bytes, not lines)
+scrollback_limit_bytes = 50000000
