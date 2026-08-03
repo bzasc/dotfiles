@@ -30,6 +30,12 @@ require("conform").setup({
   },
 
   formatters = {
+    -- Without `--force-exclusion`, RuboCop ignores `AllCops.Exclude` for files passed
+    -- explicitly (which is what `--stdin $FILENAME` does), so format-on-save rewrites
+    -- files the project deliberately excludes (e.g. `db/**/*`).
+    rubocop = {
+      prepend_args = { "--force-exclusion" },
+    },
     oxfmt = {
       args = function(_self, ctx)
         local search_dir = ctx.dirname or vim.fn.getcwd()

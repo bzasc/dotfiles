@@ -9,8 +9,7 @@ onboarding = false
 # neutrals are plain neutral grey (closer to sonokai's own thm_bg #2c2e34),
 # so it takes the custom colors below without that purple bleed.
 name = "one-dark"
-auto_switch = true
-# no confirmed one-dark light variant, so light mode falls back to catppuccin-latte
+auto_switch = false
 light_name = "catppuccin-latte"
 dark_name = "one-dark"
 
@@ -22,9 +21,6 @@ green = "#9ed072"   # thm_green
 blue = "#76cce0"    # thm_blue
 red = "#fc5d7c"     # thm_red
 yellow = "#e7c664"  # thm_yellow
-# catppuccin's default mauve/purple was showing through in the agents/spaces
-# panels since it wasn't overridden above; sonokai only has one purple-ish
-# color (thm_magenta == thm_pink) so reuse it for all three tokens
 purple = "#b39df3"
 magenta = "#b39df3"
 pink = "#b39df3"
@@ -64,6 +60,7 @@ split_vertical = "prefix+percent"
 # if you'd rather keep that pair instead.
 previous_tab = "alt+shift+h"
 next_tab = "alt+shift+l"
+toggle_sidebar = "prefix+p"
 
 # tmux: bind i display-popup -E "fish"
 [[keys.command]]
