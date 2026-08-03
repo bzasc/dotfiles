@@ -86,5 +86,5 @@ vim.keymap.set("n", "<leader>os", function()
 end, { desc = "Locate files in Obsidian vault" })
 
 vim.keymap.set("n", "<leader>oz", function()
-  Snacks.picker.live_grep({ cwd = obsidian_vault })
+  Snacks.picker.grep({ cwd = obsidian_vault })
 end, { desc = "Ripgrep in Obsidian vault" })
