@@ -8,7 +8,7 @@ onboarding = false
 # matter what accent/purple/magenta/pink got overridden below. one-dark's
 # neutrals are plain neutral grey (closer to sonokai's own thm_bg #2c2e34),
 # so it takes the custom colors below without that purple bleed.
-name = "one-dark"
+name = "nord"
 auto_switch = false
 light_name = "catppuccin-latte"
 dark_name = "one-dark"
@@ -16,7 +16,7 @@ dark_name = "one-dark"
 [theme.custom]
 # colors pulled from tmux/custom/catppuccin-sonokai.tmuxtheme
 panel_bg = "reset"
-accent = "#76cce0"  # thm_cyan / thm_blue
+accent = "#fc5d7c"  # thm_red (pane borders, highlights, navigation UI)
 green = "#9ed072"   # thm_green
 blue = "#76cce0"    # thm_blue
 red = "#fc5d7c"     # thm_red
@@ -80,6 +80,10 @@ height = "75%"
 # tmux: set -g allow-passthrough on (kitty graphics protocol passthrough)
 kitty_graphics = true
 
+switch_ascii_input_source_in_prefix = false
 [advanced]
 # tmux: set -g history-limit 100000 (herdr's limit is bytes, not lines)
 scrollback_limit_bytes = 50000000
+
+[ui]
+show_agent_labels_on_pane_borders = true
