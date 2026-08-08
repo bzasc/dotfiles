@@ -13,15 +13,16 @@ ${custom.giturl}\
 $git_branch\
 ${custom.git_worktree}\
 $git_status\
+$fill\
+$all\
 $line_break\
 $character\
 """
 
-right_format = """
-$all
-"""
-
 palette = 'sonokai'
+
+[fill]
+symbol = ' '
 
 [time]
 disabled = true

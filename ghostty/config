@@ -1,9 +1,10 @@
 # Font
-font-family = "FiraCode Nerd Font"
-font-size = 13
-font-feature = -calt
-font-feature = -dlig
-font-feature = -liga
+font-family = "JetBrainsMono Nerd Font Mono"
+# font-family = "MonoLisa Nerd Font Mono"
+font-size = 14.5
+# font-feature = -calt
+# font-feature = -dlig
+# font-feature = -liga
 
 # Theme
 theme = Sonokai

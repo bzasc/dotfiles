@@ -48,7 +48,7 @@ vim.api.nvim_create_autocmd("InsertEnter", {
         ["<C-f>"] = { "scroll_documentation_down", "fallback" },
       },
       appearance = {
-        nerd_font_variant = "normal",
+        nerd_font_variant = "mono",
         use_nvim_cmp_as_default = false,
       },
       completion = {

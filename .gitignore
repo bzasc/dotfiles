@@ -57,3 +57,7 @@ fish/fish_variables
 
 # ruby-lsp per-project working dirs
 **/.ruby-lsp/
+
+# MonoLisa is a commercial font — never commit the files to this public repo
+fonts/MonoLisa/*
+!fonts/MonoLisa/README.md
