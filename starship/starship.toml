@@ -32,7 +32,7 @@ format = "[[  $time ](fg:yellow bg:foam)]($style)"
 [directory]
 style = 'bold fg:blue'
 format = '[ $path ]($style)'
-truncation_length = 3
+truncation_length = 8
 truncation_symbol = '…/'
 truncate_to_repo = false
 

@@ -21,9 +21,7 @@ green = "#9ed072"   # thm_green
 blue = "#76cce0"    # thm_blue
 red = "#fc5d7c"     # thm_red
 yellow = "#e7c664"  # thm_yellow
-purple = "#b39df3"
-magenta = "#b39df3"
-pink = "#b39df3"
+mauve = "#b39df3"   # herdr's only purple token (was purple/magenta/pink pre-0.8)
 
 [terminal]
 # tmux: set -g default-shell/default-command /opt/homebrew/bin/fish
