@@ -48,8 +48,16 @@ focus_pane_right = "prefix+l"
 
 # tmux: bind '"' split-window -v (stacked top/bottom)  -> split_horizontal
 # tmux: bind '%' split-window -h (side by side)        -> split_vertical
-split_horizontal = "prefix+quote"
-split_vertical = "prefix+percent"
+# herdr only names a few punctuation keys (minus, comma, ampersand, plus,
+# backtick); everything else has to be the literal character, so "quote" and
+# "percent" parsed as nothing and both bindings were dead.
+#
+# tmux's " is unusable here anyway: on the Brazilian - Pro layout both ' and "
+# are dead keys (acute / diaeresis), so macOS never emits the character on
+# keydown and prefix mode sees nothing. minus is a live key and is also herdr's
+# own default for this action. % is shift+5, emits directly, works.
+split_horizontal = "prefix+minus"
+split_vertical = "prefix+%"
 
 # tmux also binds M-H/M-L and S-Left/S-Right to previous/next-window.
 # herdr only allows one binding per action, so this picks the alt+shift+h/l

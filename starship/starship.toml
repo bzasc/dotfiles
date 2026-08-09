@@ -3,8 +3,8 @@ command_timeout = 500
 
 "$schema" = "https://starship.rs/config-schema.json"
 
-follow_symlinks = false 
-add_newline = true 
+follow_symlinks = false
+add_newline = true
 
 format = """
 ➜\
@@ -33,7 +33,7 @@ format = "[[  $time ](fg:yellow bg:foam)]($style)"
 style = 'bold fg:blue'
 format = '[ $path ]($style)'
 truncation_length = 8
-truncation_symbol = '…/'
+truncation_symbol = '../'
 truncate_to_repo = false
 
 [directory.substitutions]
@@ -70,22 +70,22 @@ shell = ["bash", "--noprofile", "--norc"]
 [git_branch]
 symbol = "[](bg1) "
 style = "fg:lavender bg:bg1"
-format =  " [$symbol$branch]($style)[](bg1)"
+format = " [$symbol$branch]($style)[](bg1)"
 
 [git_status]
 format = "[$staged$modified$renamed$conflicted$ahead_behind]($style)"
 # options available for format
-staged     = "[+${count} ](green)"
-modified   = "[!${count} ](yellow)"
-renamed    = "[»${count} ](blue)"
-deleted    = "[-${count} ](red)"
-untracked  = "[?${count} ](sapphire)"
-stashed    = "[≡${count} ](lavender)"
+staged = "[+${count} ](green)"
+modified = "[!${count} ](yellow)"
+renamed = "[»${count} ](blue)"
+deleted = "[-${count} ](red)"
+untracked = "[?${count} ](sapphire)"
+stashed = "[≡${count} ](lavender)"
 conflicted = "[✖${count} ](red bold)"
 
-ahead      = "[⇡${count} ](teal)"
-behind     = "[⇣${count} ](peach)"
-diverged   = "[⇕⇡${ahead_count}⇣${behind_count} ](mauve)"
+ahead = "[⇡${count} ](teal)"
+behind = "[⇣${count} ](peach)"
+diverged = "[⇕⇡${ahead_count}⇣${behind_count} ](mauve)"
 
 [custom.git_worktree]
 description = "Show indicator when inside a git worktree"
@@ -175,6 +175,14 @@ format = "[ $symbol( $version) ]($style)"
 disabled = false
 symbol = '󰏗 '
 
+[gcloud]
+# default symbol is "☁️  " (U+2601 + U+FE0F): starship's width calc counts the
+# variation selector as 0 and the cloud as 1, but terminals draw it as 2 cells.
+# combined with $fill (which pads to exactly $COLUMNS) the prompt ends up one
+# column too wide, and fish truncates it from the left — eating the ➜.
+# U+2601 without the selector is text presentation, so widths agree.
+symbol = '☁ '
+
 [aws]
 disabled = true
 symbol = ' '
@@ -200,17 +208,17 @@ style = 'fg:gray'
 format = '[$duration]($style)'
 
 [palettes.onedark]
-dark_blue='#61afef'
-blue='#56b6c2'
-red='#e06c75'
-green='#98c379'
-purple='#c678dd'
-cyan='#56b6c2'
-orange='#be5046'
-yellow='#e5c07b'
-gray='#828997'
-white ='#abb2bf'
-black='#2c323c'
+dark_blue = '#61afef'
+blue = '#56b6c2'
+red = '#e06c75'
+green = '#98c379'
+purple = '#c678dd'
+cyan = '#56b6c2'
+orange = '#be5046'
+yellow = '#e5c07b'
+gray = '#828997'
+white = '#abb2bf'
+black = '#2c323c'
 
 [palettes.monokai_pro]
 fg0 = '#fcfcfa'
