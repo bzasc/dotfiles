@@ -176,7 +176,7 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   end,
 })
 
--- (.env filetype handled by vim.filetype.add in options.lua → "dotenv")
+-- (.env filetype is Neovim's builtin "env"; see the note in options.lua)
 
 -- Set filetype for .toml files
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {

@@ -130,18 +130,22 @@ vim.g.markdown_recommended_style = 0
 -- global completion mode for LSP clients that support it; "native" uses built-in completion, "blink" uses blink.cmp
 vim.g.completion_mode = "blink"
 
+-- NOTE: no "dotenv" mappings here. Neovim already detects .env / .env.* /
+-- *.env as filetype "env" and ships syntax/env.vim + ftplugin/env.vim for it;
+-- "dotenv" has no syntax, ftplugin or treesitter parser, so mapping to it
+-- silently killed the highlighting. It also tied with the builtin
+-- `^%.env%.` pattern at priority 0, and filetype.lua's sort is unstable —
+-- which made .env.local flip between "env" and "dotenv" run to run.
+-- A bare `env` file (no dot) is the only case Neovim misses.
 vim.filetype.add({
   extension = {
-    env = "dotenv",
     txt = "markdown",
   },
   filename = {
-    [".env"] = "dotenv",
-    ["env"] = "dotenv",
+    ["env"] = "env",
   },
   pattern = {
     ["[jt]sconfig.*.json"] = "jsonc",
-    ["%.env%.[%w_.-]+"] = "dotenv",
     [".*compose%.[%w_.-]*ya?ml"] = "yaml.docker-compose",
   },
 })

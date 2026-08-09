@@ -1,6 +1,7 @@
 # Font
-font-family = "JetBrainsMono Nerd Font Mono"
+# font-family = "JetBrainsMono Nerd Font Mono"
 # font-family = "MonoLisa Nerd Font Mono"
+font-family = "FiraCode Nerd Font Mono"
 font-size = 14.5
 # font-feature = -calt
 # font-feature = -dlig
