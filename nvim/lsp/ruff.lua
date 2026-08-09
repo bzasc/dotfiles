@@ -31,5 +31,7 @@ return {
       },
     },
   },
-  single_file_support = false,
+  -- `single_file_support` is an nvim-lspconfig field and is ignored by the
+  -- builtin client; `workspace_required` is the native equivalent.
+  workspace_required = true,
 }

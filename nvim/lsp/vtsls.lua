@@ -1,22 +1,26 @@
 local ROOT_MARKERS = { "tsconfig.json", "jsconfig.json", "package.json", ".git" }
 
 local _vtsls_cmd = nil
+
+--- Resolve the launch command once per session. Uses vim.system (no shell
+--- fork) and only runs when a TS server actually starts, instead of at
+--- config-resolution time.
 local function get_vtsls_cmd()
   if _vtsls_cmd then
     return _vtsls_cmd
   end
-  local handle = io.popen("node --version 2>/dev/null")
-  if handle then
-    local version = handle:read("*l")
-    handle:close()
-    if version then
-      local major = tonumber(version:match("^v?(%d+)"))
-      if major and major >= 20 then
-        _vtsls_cmd = { "vtsls", "--stdio" }
-        return _vtsls_cmd
-      end
+
+  local ok, res = pcall(function()
+    return vim.system({ "node", "--version" }, { text = true }):wait(2000)
+  end)
+  if ok and res and res.code == 0 then
+    local major = tonumber((res.stdout or ""):match("^v?(%d+)"))
+    if major and major >= 20 then
+      _vtsls_cmd = { "vtsls", "--stdio" }
+      return _vtsls_cmd
     end
   end
+
   -- Node < 20 or not found, use fnm with Node 24
   _vtsls_cmd = { "fnm", "exec", "--using=24", "vtsls", "--stdio" }
   return _vtsls_cmd
@@ -24,7 +28,9 @@ end
 
 ---@type vim.lsp.Config
 return {
-  cmd = get_vtsls_cmd(),
+  cmd = function(dispatchers, _config)
+    return vim.lsp.rpc.start(get_vtsls_cmd(), dispatchers)
+  end,
   filetypes = {
     "javascript",
     "javascriptreact",

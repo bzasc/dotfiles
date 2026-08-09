@@ -3,9 +3,9 @@ return {
   cmd = { "ruby-lsp" },
   filetypes = { "ruby" },
   root_markers = { "Gemfile", ".git" },
-  on_attach = function(client, bufnr)
-    vim.lsp.semantic_tokens.enable(true, { bufnr = bufnr })
-  end,
+  -- NOTE: semantic tokens + document highlight are stripped for ruby_lsp in
+  -- config/lsp.lua (they are slow on large Rails files; treesitter covers the
+  -- highlighting). Do not re-enable them here — the two used to fight.
   init_options = {
     formatter = "standard",
     linters = { "standard" },

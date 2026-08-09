@@ -209,19 +209,16 @@ map("n", "<leader>tw", "<cmd>set wrap!<CR>", {
 })
 
 map("n", "<leader>us", function()
-  local current_state = vim.o.spell
-  local bufnr = vim.api.nvim_get_current_buf()
-
-  if current_state then
-    local clients = vim.lsp.get_clients({ bufnr = bufnr, name = "harper_ls" })
-    for _, client in ipairs(clients) do
-      client:stop()
-    end
+  -- The 2nd arg of vim.lsp.enable() is a boolean (enable/disable), not a bufnr.
+  -- Disabling also stops every running client for that config, so the old
+  -- manual client:stop() loop is unnecessary.
+  if vim.o.spell then
     vim.o.spell = false
+    vim.lsp.enable("harper_ls", false)
     vim.notify("Disabled Spell + Harper")
   else
     vim.o.spell = true
-    vim.lsp.enable("harper_ls", bufnr)
+    vim.lsp.enable("harper_ls")
     vim.notify("Enabled Spell + Harper")
   end
 end, { desc = "Toggle Spell + Harper" })

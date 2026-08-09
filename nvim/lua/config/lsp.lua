@@ -51,6 +51,15 @@ local default_keymaps = {
     desc = "LSP Fix All",
   },
   { keys = "<leader>cr", func = vim.lsp.buf.rename, desc = "Code Rename" },
+  {
+    keys = "<leader>uh",
+    func = function()
+      local buf = vim.api.nvim_get_current_buf()
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = buf }), { bufnr = buf })
+    end,
+    desc = "Toggle Inlay Hints",
+    has = "inlayHintProvider",
+  },
   { keys = "<leader>k", func = vim.lsp.buf.hover, desc = "Hover Documentation", has = "hoverProvider" },
   { keys = "K", func = vim.lsp.buf.hover, desc = "Hover (alt)", has = "hoverProvider" },
   -- Goto definition / type-definition owned by Snacks pickers (gd, gy in snacks.lua).
@@ -78,6 +87,21 @@ local function on_attach(client, buf)
       vim.lsp.document_color.enable(true, { bufnr = buf }, {
         style = "virtual",
       })
+    end
+
+    -- Inlay hints. Servers curate what they send (see lsp/vtsls.lua,
+    -- lsp/rust_analyzer.lua; lua_ls opts out via hint.enable=false).
+    -- Set `vim.g.inlay_hints = false` to opt out globally, or <leader>uh
+    -- to toggle the current buffer.
+    if vim.g.inlay_hints ~= false and client:supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, { bufnr = buf })
+    end
+
+    -- Codelens defaults to off per-buffer, so `grx` had nothing to run.
+    -- enable() owns its own debounced refresh (nvim 0.12 capability
+    -- framework) — no manual refresh autocmd needed.
+    if client:supports_method("textDocument/codeLens") then
+      vim.lsp.codelens.enable(true, { bufnr = buf })
     end
 
     if client.name == "ruff" then
@@ -129,27 +153,37 @@ end
 
 local ts_server = vim.g.lsp_typescript_server or "vtsls"
 
+-- This table is the ONLY gate for starting a server: a filetype listed in an
+-- lsp/*.lua `filetypes` but missing here will never attach.
 local servers_by_ft = {
   lua = { "lua_ls" },
-  python = { "pyrefly", "ruff", "basedpyright" },
+  -- pyrefly covers definition/refs/hover/inlayHint (and adds codeLens +
+  -- foldingRange), so basedpyright was redundant here; ruff owns lint +
+  -- organizeImports.
+  python = { "pyrefly", "ruff" },
   ruby = { "ruby_lsp" },
+  eruby = { "tailwindcss" },
   javascript = { ts_server, "oxlint", "eslint" },
   javascriptreact = { ts_server, "oxlint", "eslint", "tailwindcss" },
   typescript = { ts_server, "oxlint", "eslint" },
   typescriptreact = { ts_server, "oxlint", "eslint", "tailwindcss" },
   vue = { ts_server, "tailwindcss" },
   svelte = { ts_server, "tailwindcss" },
+  astro = { "oxlint", "eslint", "tailwindcss" },
   html = { "html", "tailwindcss" },
+  htmlangular = { "eslint", "tailwindcss" },
   css = { "cssls", "tailwindcss" },
   scss = { "cssls", "tailwindcss" },
   less = { "cssls" },
   sh = { "bashls" },
   bash = { "bashls" },
+  zsh = { "bashls" },
   json = { "jsonls" },
   jsonc = { "jsonls" },
   yaml = { "yamlls" },
   rust = { "rust_analyzer" },
   zig = { "zls" },
+  zir = { "zls" },
   dockerfile = { "docker_language_server" },
   ["yaml.docker-compose"] = { "docker_language_server" },
 }
@@ -170,7 +204,3 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end,
 })
-
-if vim.g.lsp_on_demands then
-  vim.lsp.enable(vim.g.lsp_on_demands)
-end
