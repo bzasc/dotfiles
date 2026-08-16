@@ -78,3 +78,5 @@ fish_add_path --path $ANDROID_HOME/emulator
 # Go (go install binaries land in GOPATH/bin, default ~/go/bin)
 set -gx GOPATH "$HOME/go"
 fish_add_path --path $GOPATH/bin
+
+# fastfetch --kitty ~/dev/dotfiles/fastfetch/pngs/ryuzaki.png

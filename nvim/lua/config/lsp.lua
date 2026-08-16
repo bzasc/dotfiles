@@ -76,6 +76,15 @@ local default_keymaps = {
 }
 
 local completion = vim.g.completion_mode or "native" -- or 'native'
+
+-- Servers whose inlay hints we never want, regardless of capability.
+-- pyrefly only emits inferred-type hints (`x: str`) and ignores its own
+-- `python.pyrefly.inlayHints` settings, so it has to be filtered here.
+-- <leader>uh still works to turn them on ad hoc for a buffer.
+local no_inlay_hints = {
+  pyrefly = true,
+}
+
 local function on_attach(client, buf)
   if client then
     -- Built-in completion
@@ -93,7 +102,11 @@ local function on_attach(client, buf)
     -- lsp/rust_analyzer.lua; lua_ls opts out via hint.enable=false).
     -- Set `vim.g.inlay_hints = false` to opt out globally, or <leader>uh
     -- to toggle the current buffer.
-    if vim.g.inlay_hints ~= false and client:supports_method("textDocument/inlayHint") then
+    if
+      vim.g.inlay_hints ~= false
+      and not no_inlay_hints[client.name]
+      and client:supports_method("textDocument/inlayHint")
+    then
       vim.lsp.inlay_hint.enable(true, { bufnr = buf })
     end
 
