@@ -1,8 +1,10 @@
 # Font
 # font-family = "JetBrainsMono Nerd Font Mono"
 # font-family = "MonoLisa Nerd Font Mono"
-font-family = "FiraCode Nerd Font Mono"
+# font-family = "FiraCode Nerd Font Mono"
+font-family = "Hack Nerd Font Mono"
 font-size = 14.5
+
 # font-feature = -calt
 # font-feature = -dlig
 # font-feature = -liga
@@ -44,6 +46,11 @@ resize-overlay = never
 ## Clipboard
 clipboard-read = "allow"
 clipboard-paste-protection = false
+
+# --- Fullscreen ---
+# Disable cmd+enter (default) to avoid accidental fullscreen.
+# Still available in cmd+ctrl+f.
+keybind = super+enter=unbind
 
 # --- Navigate splits (tmux: bind h/j/k/l select-pane) ---
 # keybind = ctrl+h=goto_split:left
