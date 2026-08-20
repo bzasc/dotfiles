@@ -1,0 +1,155 @@
+# Helix — espelha os hábitos do meu Neovim (~/.config/nvim):
+# leader = space, mesmos pickers, mesmas teclas de janela/buffer.
+# Docs: https://docs.helix-editor.com/configuration.html
+
+theme = "sonokai"
+
+[editor]
+line-number = "relative"          # opt.relativenumber
+cursorline = true                 # opt.cursorline
+scrolloff = 10                    # opt.scrolloff
+mouse = true                      # opt.mouse = "a"
+bufferline = "multiple"           # tabline só quando há mais de um buffer
+color-modes = true                # cor do statusline por modo
+true-color = true                 # opt.termguicolors
+undercurl = true
+popup-border = "all"              # opt.winborder = "rounded"
+idle-timeout = 250                # ~opt.updatetime
+completion-trigger-len = 1
+completion-replace = true         # completar substitui a palavra, não insere
+text-width = 100
+default-line-ending = "lf"
+insert-final-newline = true
+trim-trailing-whitespace = true
+end-of-line-diagnostics = "hint"
+
+[editor.cursor-shape]
+normal = "block"
+insert = "bar"
+select = "underline"
+
+[editor.statusline]
+left = ["mode", "spinner", "version-control", "file-name", "read-only-indicator", "file-modification-indicator"]
+center = []
+right = ["diagnostics", "workspace-diagnostics", "selections", "register", "position", "file-type"]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.lsp]
+display-progress-messages = true  # ~fidget.nvim
+display-inlay-hints = false       # toggle com <space>ti
+auto-signature-help = true
+display-signature-help-docs = true
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
+other-lines = "error"
+
+[editor.indent-guides]
+render = true
+character = "▏"
+skip-levels = 1
+
+[editor.file-picker]
+hidden = false
+git-ignore = true
+
+[editor.search]
+smart-case = true                 # opt.ignorecase + opt.smartcase
+wrap-around = true
+
+[editor.soft-wrap]
+enable = false                    # opt.wrap = false
+
+[editor.auto-save]
+focus-lost = true                 # opt.autowrite
+
+# ---------------------------------------------------------------- keymaps ---
+
+[keys.normal]
+C-h = "jump_view_left"            # navegação entre janelas (como <C-w>h)
+C-j = "jump_view_down"
+C-k = "jump_view_up"
+C-l = "jump_view_right"
+C-s = ":write"                    # salvar
+S-h = "goto_previous_buffer"      # <S-h> / <S-l> entre buffers
+S-l = "goto_next_buffer"
+A-h = "goto_line_start"           # início/fim de linha
+A-l = "goto_line_end"
+A-a = "select_all"                # <A-a> selecionar tudo
+C-c = ["select_all", "yank_to_clipboard", "collapse_selection"]  # copiar arquivo inteiro
+A-j = ["extend_to_line_bounds", "delete_selection", "move_line_down", "paste_before"]     # mover linha
+A-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+
+[keys.normal.space]
+space = "file_picker"             # <leader><space>
+"/" = "global_search"             # <leader>/
+"." = ":new"                      # <leader>. scratch buffer
+"|" = "vsplit"                    # <leader>|
+"-" = "hsplit"
+e = "file_explorer"               # <leader>e
+E = "file_explorer_in_current_buffer_directory"
+k = "hover"                       # <leader>k
+"'" = "last_picker"               # <leader>sR (resume)
+
+[keys.normal.space.f]              # find
+f = "file_picker"
+d = "file_picker_in_current_buffer_directory"
+b = "buffer_picker"
+g = "changed_file_picker"          # arquivos alterados no git
+j = "jumplist_picker"
+n = ":new"
+c = ":open ~/.config/helix/config.toml"
+l = ":open ~/.config/helix/languages.toml"
+
+[keys.normal.space.b]              # buffers
+b = "goto_last_accessed_file"
+n = "goto_next_buffer"
+p = "goto_previous_buffer"
+d = ":buffer-close"
+o = ":buffer-close-others"
+a = ":buffer-close-all"
+
+[keys.normal.space.s]              # search / pickers
+g = "global_search"
+s = "symbol_picker"
+S = "workspace_symbol_picker"
+d = "diagnostics_picker"
+D = "workspace_diagnostics_picker"
+j = "jumplist_picker"
+c = "command_palette"
+R = "last_picker"
+
+[keys.normal.space.c]              # code
+a = "code_action"
+r = "rename_symbol"
+d = "diagnostics_picker"
+f = ":format"
+
+[keys.normal.space.l]              # lsp
+r = ":lsp-restart"
+s = ":lsp-stop"
+w = ":lsp-workspace-command"
+
+[keys.normal.space.t]              # toggles
+w = ":toggle soft-wrap.enable"
+i = ":toggle lsp.display-inlay-hints"
+n = ":toggle line-number relative absolute"
+d = ":toggle inline-diagnostics.cursor-line disable warning"
+
+[keys.normal.space.q]
+q = ":quit-all"
+Q = ":quit-all!"
+
+[keys.normal.space.w]              # além do grupo de janelas padrão
+"-" = "hsplit"
+"|" = "vsplit"
+
+[keys.select]
+p = "replace_with_yanked"          # paste sem sujar o registrador (v_p do nvim)
+A-j = ["extend_to_line_bounds", "delete_selection", "move_line_down", "paste_before"]
+A-k = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before"]
+
+[keys.insert]
+C-s = ["normal_mode", ":write"]

@@ -1,0 +1,124 @@
+# LSPs e formatters espelhando o setup do Neovim (nvim/lsp/*.lua + conform.lua).
+# Só o que difere do padrão do Helix está aqui — `hx --health <lang>` mostra o resto.
+
+# ------------------------------------------------------------ language servers
+
+[language-server.vtsls]
+command = "vtsls"
+args = ["--stdio"]
+
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+
+[language-server.pyrefly]
+command = "pyrefly"
+args = ["lsp"]
+
+[language-server.harper-ls]
+command = "harper-ls"
+args = ["--stdio"]
+
+[language-server.tailwindcss-ls]
+command = "tailwindcss-language-server"
+args = ["--stdio"]
+
+[language-server.rust-analyzer.config.check]
+command = "clippy"                       # igual ao nvim/lsp/rust_analyzer.lua
+
+# ------------------------------------------------------------------ languages
+
+[[language]]
+name = "lua"
+auto-format = true
+formatter = { command = "stylua", args = ["-"] }
+
+[[language]]
+name = "python"
+language-servers = ["ruff", "pyrefly"]   # ruff = lint/organize, pyrefly = tipos
+auto-format = true
+formatter = { command = "ruff", args = ["format", "-"] }
+
+[[language]]
+name = "typescript"
+language-servers = ["vtsls"]
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "a.ts"] }
+
+[[language]]
+name = "javascript"
+language-servers = ["vtsls"]
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "a.js"] }
+
+[[language]]
+name = "tsx"
+language-servers = ["vtsls", "tailwindcss-ls"]
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "a.tsx"] }
+
+[[language]]
+name = "jsx"
+language-servers = ["vtsls", "tailwindcss-ls"]
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "a.jsx"] }
+
+[[language]]
+name = "json"
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "a.json"] }
+
+[[language]]
+name = "jsonc"
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "a.jsonc"] }
+
+[[language]]
+name = "css"
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "a.css"] }
+
+[[language]]
+name = "scss"
+auto-format = true
+formatter = { command = "oxfmt", args = ["--stdin-filepath", "a.scss"] }
+
+[[language]]
+name = "html"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "html"] }
+
+[[language]]
+name = "yaml"
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "yaml"] }
+
+[[language]]
+name = "markdown"
+language-servers = ["harper-ls"]         # gramática/spell, como no <leader>us
+auto-format = true
+formatter = { command = "prettier", args = ["--parser", "markdown"] }
+
+[[language]]
+name = "go"
+auto-format = true
+formatter = { command = "goimports" }
+
+[[language]]
+name = "ruby"
+auto-format = true                       # formatação via ruby-lsp (rubocop/standard)
+
+[[language]]
+name = "bash"
+auto-format = true
+formatter = { command = "shfmt", args = ["-i", "2", "-"] }
+
+[[language]]
+name = "toml"
+auto-format = true
+formatter = { command = "taplo", args = ["format", "-"] }
+
+[[language]]
+name = "nix"
+auto-format = true
+formatter = { command = "nixfmt" }

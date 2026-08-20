@@ -13,6 +13,7 @@
     ~/.config/kitty: kitty
     ~/.config/wezterm: wezterm
     ~/.config/nvim: nvim
+    ~/.config/helix: helix
     ~/.config/tmux: tmux
     ~/.config/herdr/config.toml: herdr/config.toml
     ~/.config/fastfetch: fastfetch

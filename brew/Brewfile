@@ -33,6 +33,7 @@ brew 'nixfmt'
 brew 'oxfmt'
 brew 'utftex'
 brew 'harper'
+brew 'helix'
 
 brew 'delve'
 brew 'gofumpt'
