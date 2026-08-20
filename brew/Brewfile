@@ -47,6 +47,7 @@ brew 'herdr'
 brew 'rtk'
 
 cask 'alt-tab'
+cask 'karabiner-elements'
 cask 'discord'
 cask 'docker-desktop'
 cask 'font-hack-nerd-font'

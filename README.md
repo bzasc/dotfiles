@@ -11,6 +11,7 @@ Minhas configurações pessoais.
 | `fish/`      | Shell Fish + plugins                          |
 | `ghostty/`   | Terminal Ghostty + temas                      |
 | `hypr/`      | Hyprland (Wayland)                            |
+| `karabiner/` | Karabiner-Elements (Caps Lock como hyper key) |
 | `kitty/`     | Terminal Kitty                                |
 | `nvim/`      | Neovim (ver [nvim/README.md](nvim/README.md)) |
 | `starship/`  | Prompt Starship                               |

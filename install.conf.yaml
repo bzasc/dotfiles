@@ -16,6 +16,7 @@
     ~/.config/helix: helix
     ~/.config/tmux: tmux
     ~/.config/herdr/config.toml: herdr/config.toml
+    ~/.config/karabiner/karabiner.json: karabiner/karabiner.json
     ~/.config/fastfetch: fastfetch
     ~/.config/starship: starship
     ~/.config/zed/settings.json: zed/settings.json
