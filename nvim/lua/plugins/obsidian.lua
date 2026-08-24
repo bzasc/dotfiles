@@ -32,13 +32,16 @@ local function init_obsidian()
       default_tags = { "daily-notes" },
       template = "templates/daily.md",
     },
-    completion = { blink = true, min_chars = 2 },
+    completion = { min_chars = 2 },
   })
 end
 
--- Auto-init when entering a markdown buffer so :Obsidian* commands work without a keymap
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "markdown",
+-- Auto-init on the first markdown file so :Obsidian* commands work without a keymap.
+-- This must run *before* FileType fires: obsidian.nvim only registers its FileType/BufEnter
+-- handlers inside setup(), so initializing from FileType itself would leave the very first
+-- markdown buffer without obsidian-ls attached (no completion, no <CR> smart action).
+vim.api.nvim_create_autocmd({ "BufReadPre", "BufNewFile" }, {
+  pattern = { "*.md", "*.markdown" },
   once = true,
   callback = init_obsidian,
 })

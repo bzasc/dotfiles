@@ -85,7 +85,9 @@ vim.api.nvim_create_autocmd("InsertEnter", {
       sources = {
         default = { "lsp", "path", "snippets", "buffer", "lazydev", "copilot" },
         per_filetype = {
-          markdown = { "obsidian", "obsidian_new", "obsidian_tags", "lsp", "path", "snippets", "buffer" },
+          -- obsidian.nvim serves completion through its built-in obsidian-ls LSP client now,
+          -- so "lsp" covers refs/tags/new-note items; no dedicated obsidian sources anymore.
+          markdown = { "lsp", "path", "snippets", "buffer", "copilot" },
         },
         providers = {
           copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100 },
