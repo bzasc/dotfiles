@@ -1,7 +1,7 @@
 -- snacks first: other plugins (lazydev, completion sources) depend on it.
 require("plugins.snacks")
 require("plugins.lazydev")
-require("plugins.completion")
+require("plugins.blink")
 require("plugins.conform")
 require("plugins.dap")
 require("plugins.extras")
