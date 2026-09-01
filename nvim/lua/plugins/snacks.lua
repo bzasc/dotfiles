@@ -246,6 +246,17 @@ vim.api.nvim_create_autocmd("VimEnter", {
   end,
 })
 
+-- Files with uncommitted changes: new (untracked/added) + modified.
+-- Deleted entries are dropped, there's nothing left to open.
+local function pick_git_changed()
+  Snacks.picker.git_status({
+    preview = "file",
+    transform = function(item)
+      return not (item.status or ""):find("D")
+    end,
+  })
+end
+
 -- stylua: ignore start
 local   keymaps = {
     -- Top Pickers & Explorer
@@ -274,6 +285,7 @@ local   keymaps = {
     { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
     { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
     { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
+    { "<leader>fG", pick_git_changed, desc = "Find Git Changed Files (new + modified)" },
     { "<leader>fm", function() Snacks.picker.marks() end, desc = "Marks" },
     { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
     { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },

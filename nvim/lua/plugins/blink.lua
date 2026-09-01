@@ -7,99 +7,91 @@ vim.pack.add({
   "https://github.com/zbirenbaum/copilot.lua",
 })
 
--- Advertise blink.cmp completion capabilities to every LSP server, at config
--- time (not in the deferred setup below) so servers that attach before the
--- first InsertEnter still negotiate snippet/resolve/insertReplace support.
+-- Advertise blink.cmp completion capabilities to every LSP server so they
+-- negotiate snippet/resolve/insertReplace support.
 vim.lsp.config("*", {
   capabilities = require("blink.cmp").get_lsp_capabilities(),
 })
 
--- Lazy load on first insert mode entry
-local group = vim.api.nvim_create_augroup("CompletionLazyLoad", { clear = true })
+-- Copilot must be set up eagerly: :Copilot commands silently no-op until
+-- setup() has run and the LSP client exists. Inline suggestions disabled;
+-- completions are fed through blink.cmp.
+require("copilot").setup({
+  suggestion = { enabled = false },
+  panel = { enabled = false },
+  filetypes = {
+    markdown = true,
+    yaml = true,
+    help = false,
+    gitcommit = false,
+    gitrebase = false,
+    hgcommit = false,
+    svn = false,
+    cvs = false,
+    ["."] = false,
+  },
+})
 
-vim.api.nvim_create_autocmd("InsertEnter", {
-  group = group,
-  once = true,
-  callback = function()
-    -- Copilot (inline suggestions disabled; fed through blink.cmp)
-    require("copilot").setup({
-      suggestion = { enabled = false },
-      panel = { enabled = false },
-      filetypes = {
-        markdown = true,
-        yaml = true,
-        help = false,
-        gitcommit = false,
-        gitrebase = false,
-        hgcommit = false,
-        svn = false,
-        cvs = false,
-        ["."] = false,
-      },
-    })
-
-    require("blink.cmp").setup({
-      keymap = {
-        preset = "enter",
-        ["<C-space>"] = { "show", "show_documentation", "hide_documentation", "fallback" },
-        ["<C-j>"] = { "select_next" },
-        ["<C-k>"] = { "select_prev" },
-        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
-        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
-      },
-      appearance = {
-        nerd_font_variant = "mono",
-        use_nvim_cmp_as_default = false,
-      },
-      completion = {
-        list = {
-          -- Insert items while navigating the completion list.
-          selection = { preselect = false, auto_insert = false },
-          max_items = 10,
-        },
-        menu = {
-          border = "rounded",
-          scrolloff = 1,
-          scrollbar = false,
-          draw = {
-            padding = 1,
-            gap = 2,
-            columns = {
-              { "kind_icon", gap = 1 },
-              { "label", "label_description", gap = 1 },
-              { "kind" },
-              { "source_name" },
-            },
-          },
-        },
-        documentation = {
-          window = {
-            border = "rounded",
-            scrollbar = false,
-            winhighlight = "Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc",
-          },
-          auto_show = true,
-          auto_show_delay_ms = 500,
+require("blink.cmp").setup({
+  keymap = {
+    preset = "enter",
+    ["<C-space>"] = { "show", "show_documentation", "hide_documentation", "fallback" },
+    ["<C-j>"] = { "select_next" },
+    ["<C-k>"] = { "select_prev" },
+    ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+    ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+  },
+  appearance = {
+    nerd_font_variant = "mono",
+    use_nvim_cmp_as_default = false,
+  },
+  completion = {
+    list = {
+      -- Insert items while navigating the completion list.
+      selection = { preselect = false, auto_insert = false },
+      max_items = 10,
+    },
+    menu = {
+      border = "rounded",
+      scrolloff = 1,
+      scrollbar = false,
+      draw = {
+        padding = 1,
+        gap = 2,
+        columns = {
+          { "kind_icon", gap = 1 },
+          { "label", "label_description", gap = 1 },
+          { "kind" },
+          { "source_name" },
         },
       },
-      sources = {
-        default = { "lsp", "path", "snippets", "buffer", "lazydev", "copilot" },
-        per_filetype = {
-          -- obsidian.nvim serves completion through its built-in obsidian-ls LSP client now,
-          -- so "lsp" covers refs/tags/new-note items; no dedicated obsidian sources anymore.
-          markdown = { "lsp", "path", "snippets", "buffer", "copilot" },
-        },
-        providers = {
-          copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100 },
-          lazydev = {
-            name = "LazyDev",
-            module = "lazydev.integrations.blink",
-            score_offset = 100,
-          },
-        },
+    },
+    documentation = {
+      window = {
+        border = "rounded",
+        scrollbar = false,
+        winhighlight = "Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc",
       },
-      fuzzy = { implementation = "prefer_rust_with_warning" },
-      signature = { enabled = true, window = { border = "rounded" } },
-    })
-  end,
+      auto_show = true,
+      auto_show_delay_ms = 500,
+    },
+  },
+  sources = {
+    default = { "lsp", "path", "snippets", "buffer", "lazydev", "copilot" },
+    per_filetype = {
+      -- obsidian.nvim serves completion through its built-in obsidian-ls LSP client now,
+      -- so "lsp" covers refs/tags/new-note items; no dedicated obsidian sources anymore.
+      markdown = { "lsp", "path", "snippets", "buffer", "copilot" },
+    },
+    providers = {
+      copilot = { name = "copilot", module = "blink-cmp-copilot", score_offset = 100 },
+      lazydev = {
+        name = "LazyDev",
+        module = "lazydev.integrations.blink",
+        score_offset = 100,
+      },
+    },
+  },
+  fuzzy = { implementation = "prefer_rust_with_warning" },
+  signature = { enabled = true, window = { border = "rounded" } },
 })
