@@ -45,6 +45,9 @@ if status is-interactive
     abbr dpa "docker ps -a"
     abbr dx "docker exec -it"
     abbr docker_rm "docker rm -f (docker ps -aq)"
+
+    # Mobile
+    abbr kas "xcrun simctl shutdown all"
 end
 
 # Environment variables
