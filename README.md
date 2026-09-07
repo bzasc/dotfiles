@@ -6,6 +6,7 @@ Minhas configurações pessoais.
 
 | Diretório    | Descrição                                     |
 | ------------ | --------------------------------------------- |
+| `aerospace/` | AeroSpace (tiling window manager do macOS)    |
 | `brew/`      | Brewfile com pacotes do Homebrew              |
 | `fastfetch/` | Configuração do Fastfetch                     |
 | `fish/`      | Shell Fish + plugins                          |

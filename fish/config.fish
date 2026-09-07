@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/bzasc/.docker/bin"
+# End of Docker Desktop section.
+
 if status is-interactive
     # Docker: start if not running (skip inside tmux to avoid delay)
     if not set -q TMUX; and not docker info >/dev/null 2>&1
