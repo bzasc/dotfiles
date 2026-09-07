@@ -49,6 +49,10 @@
       "rev": "8d86a057fa14681cf7cab74ea7cba894a0abe14f",
       "src": "https://github.com/echasnovski/mini.nvim"
     },
+    "modicator.nvim": {
+      "rev": "7f867b4980946f115f4ccb922637d70d89a59cb4",
+      "src": "https://github.com/mawkler/modicator.nvim"
+    },
     "nvim-dap": {
       "rev": "b516f20b487b0ac6a281e376dfac1d16b5040041",
       "src": "https://github.com/mfussenegger/nvim-dap",
@@ -61,6 +65,10 @@
     "nvim-dap-virtual-text": {
       "rev": "fbdb48c2ed45f4a8293d0d483f7730d24467ccb6",
       "src": "https://github.com/theHamsta/nvim-dap-virtual-text"
+    },
+    "nvim-hlsLens": {
+      "rev": "be2d7b2be01860b5445a007ff2bc72b29896db6b",
+      "src": "https://github.com/kevinhwang91/nvim-hlsLens"
     },
     "nvim-nio": {
       "rev": "edcc181a875301dd21840189aa2f2f9ad69fc172",

@@ -25,7 +25,10 @@ local palette = {
   yellow = "#d8a657",
 }
 
-local mode_color = { bg = palette.green, fg = palette.dark_gray, gui = "bold" }
+local function mode_color(bg)
+  return { bg = bg, fg = palette.dark_gray, gui = "bold" }
+end
+
 local git_color = { bg = palette.dark_sienna, fg = palette.light_gray, gui = "bold" }
 local buffer_color = { bg = palette.dark_cyan, fg = palette.light_gray }
 local location_color = { bg = palette.soft_violet, fg = palette.light_gray }
@@ -34,18 +37,18 @@ local none_color = { bg = "NONE", fg = palette.light_gray }
 
 local theme = {
   normal = {
-    a = mode_color,
+    a = mode_color(palette.green),
     b = git_color,
     c = none_color,
     x = none_color,
     y = buffer_color,
     z = percent_color,
   },
-  insert = { a = mode_color },
-  visual = { a = mode_color },
-  replace = { a = mode_color },
-  command = { a = mode_color },
-  terminal = { a = mode_color },
+  insert = { a = mode_color(palette.sky_blue) },
+  visual = { a = mode_color(palette.yellow) },
+  replace = { a = mode_color(palette.red) },
+  command = { a = mode_color(palette.pink) },
+  terminal = { a = mode_color(palette.light_green) },
   inactive = {
     a = none_color,
     b = none_color,

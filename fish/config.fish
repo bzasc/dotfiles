@@ -74,12 +74,17 @@ set -gx STARSHIP_CONFIG "$HOME/.config/starship/starship.toml"
 # do local.properties dos projetos; o antigo do Homebrew só tinha cmdline-tools)
 set -gx ANDROID_HOME $HOME/Library/Android/sdk
 set -gx ANDROID_SDK_ROOT $ANDROID_HOME
-fish_add_path --path $ANDROID_HOME/cmdline-tools/latest/bin
-fish_add_path --path $ANDROID_HOME/platform-tools
-fish_add_path --path $ANDROID_HOME/emulator
+fish_add_path $ANDROID_HOME/cmdline-tools/latest/bin
+fish_add_path $ANDROID_HOME/platform-tools
+fish_add_path $ANDROID_HOME/emulator
 
 # Go (go install binaries land in GOPATH/bin, default ~/go/bin)
 set -gx GOPATH "$HOME/go"
-fish_add_path --path $GOPATH/bin
+fish_add_path $GOPATH/bin
+
+# Docker
+set -gx DOCKER "$HOME/.docker"
+fish_add_path $DOCKER/bin
+
 
 # fastfetch --kitty ~/dev/dotfiles/fastfetch/pngs/ryuzaki.png
