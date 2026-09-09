@@ -62,12 +62,26 @@ map(
 )
 
 -- https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n
-map("n", "n", "'Nn'[v:searchforward].'zv'", { expr = true, desc = "Next Search Result" })
+-- Normal mode goes through <Cmd> instead of expr so it can call hlslens.start()
+-- afterwards; hlslens only renders while it has been started explicitly.
+-- The 'Nn'[v:searchforward] index keeps the saner direction: n always moves the
+-- same visual way regardless of whether the search began with / or ?.
+local function search_next(keys)
+  return ("<Cmd>execute('normal! ' . v:count1 . '%s'[v:searchforward])<CR>"):format(keys)
+    .. "<Cmd>lua require('hlslens').start()<CR>zv"
+end
+
+map("n", "n", search_next("Nn"), { silent = true, desc = "Next Search Result" })
 map("x", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
 map("o", "n", "'Nn'[v:searchforward]", { expr = true, desc = "Next Search Result" })
-map("n", "N", "'nN'[v:searchforward].'zv'", { expr = true, desc = "Prev Search Result" })
+map("n", "N", search_next("nN"), { silent = true, desc = "Prev Search Result" })
 map("x", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
 map("o", "N", "'nN'[v:searchforward]", { expr = true, desc = "Prev Search Result" })
+
+-- hlslens needs star/hash to start it too (they had no mapping at all before)
+for _, key in ipairs({ "*", "#", "g*", "g#" }) do
+  map("n", key, key .. "<Cmd>lua require('hlslens').start()<CR>", { desc = "Search word under cursor" })
+end
 
 -- Add undo break-points
 map("i", ",", ",<c-g>u")

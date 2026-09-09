@@ -25,7 +25,7 @@ require("conform").setup({
     ["markdown.mdx"] = { "oxfmt", "prettier", stop_after_first = true },
     graphql = { "oxfmt", "prettier", stop_after_first = true },
     xml = { "prettier", stop_after_first = true }, -- oxfmt doesn't support xml
-    toml = { "taplo" },
+    toml = { "tombi", "taplo", stop_after_first = true },
     nix = { "nixfmt" },
   },
 
@@ -41,7 +41,7 @@ require("conform").setup({
       -- enforced via eslint-plugin-prettier/CI); formatting them with oxfmt
       -- defaults rewrites quotes/wrapping on every save. Only run oxfmt when
       -- the project opts in with an .oxfmtrc, or has no prettier config.
-      condition = function(_self, ctx)
+      condition = function(_, ctx)
         local dir = ctx.dirname or vim.fn.getcwd()
         local oxfmt_config = vim.fs.find({ ".oxfmtrc.jsonc", ".oxfmtrc.json" }, { path = dir, upward = true })[1]
         if oxfmt_config then
@@ -62,7 +62,7 @@ require("conform").setup({
         }, { path = dir, upward = true })[1]
         return prettier_config == nil
       end,
-      args = function(_self, ctx)
+      args = function(_, ctx)
         local search_dir = ctx.dirname or vim.fn.getcwd()
 
         -- only search at git root level, not walking up infinitely
@@ -101,7 +101,7 @@ require("conform").setup({
       end,
     },
     prettier = {
-      args = function(_self, ctx)
+      args = function(_, ctx)
         local search_dir = ctx.dirname or vim.fn.getcwd()
         local config_files = {
           ".prettierrc",
