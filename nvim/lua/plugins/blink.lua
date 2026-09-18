@@ -1,4 +1,5 @@
 vim.pack.add({
+  "https://github.com/xzbdmw/colorful-menu.nvim",
   {
     src = "https://github.com/saghen/blink.cmp",
     version = vim.version.range("^1"),
@@ -55,14 +56,21 @@ require("blink.cmp").setup({
       border = "rounded",
       scrolloff = 1,
       scrollbar = false,
+      auto_show = function()
+        return not vim.g.copilot_mode
+      end,
       draw = {
-        padding = 1,
-        gap = 2,
-        columns = {
-          { "kind_icon", gap = 1 },
-          { "label", "label_description", gap = 1 },
-          { "kind" },
-          { "source_name" },
+        -- see https://github.com/xzbdmw/colorful-menu.nvim
+        columns = { { "kind_icon" }, { "label", gap = 1 } },
+        components = {
+          label = {
+            text = function(ctx)
+              return require("colorful-menu").blink_components_text(ctx)
+            end,
+            highlight = function(ctx)
+              return require("colorful-menu").blink_components_highlight(ctx)
+            end,
+          },
         },
       },
     },
@@ -93,5 +101,8 @@ require("blink.cmp").setup({
     },
   },
   fuzzy = { implementation = "prefer_rust_with_warning" },
-  signature = { enabled = true, window = { border = "rounded" } },
+  signature = {
+    enabled = true,
+    window = { border = "rounded" },
+  },
 })

@@ -204,3 +204,9 @@ vim.keymap.set("n", "<leader>E", function()
     minifiles.open(vim.uv.cwd(), false)
   end
 end, { desc = "File explorer (mini.files)" })
+
+require("mini.splitjoin").setup({
+  mappings = {
+    toggle = "<leader>cj",
+  },
+})

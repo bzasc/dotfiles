@@ -80,8 +80,8 @@ outer.right = 5
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
-alt-enter = "exec-and-forget open -n /Applications/Ghostty.app"
-cmd-alt-ctrl-shift-enter = "exec-and-forget open -n /Applications/Ghostty.app"
+# alt-enter = "exec-and-forget open -n /Applications/Ghostty.app"
+cmd-alt-ctrl-shift-enter = "exec-and-forget open -a /Applications/Ghostty.app"
 
 # Modificador base: hyper (caps lock -> cmd+ctrl+alt+shift, via Karabiner).
 # Como o hyper ja contem shift, mover janela vive no modo 'move' (hyper-m).

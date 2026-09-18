@@ -1,7 +1,7 @@
 -- snacks first: other plugins (lazydev, completion sources) depend on it.
+require("plugins.sonokai")
 require("plugins.snacks")
 require("plugins.lazydev")
-require("plugins.blink")
 require("plugins.conform")
 require("plugins.dap")
 require("plugins.extras")
@@ -23,3 +23,4 @@ require("plugins.treesitter")
 require("plugins.trouble")
 require("plugins.whichkey")
 require("plugins.yanky")
+require("plugins.blink")
