@@ -105,25 +105,25 @@ vim.g.autoformat = true
 vim.g.trouble_lualine = true
 
 -- global floating window border (all vim.lsp, vim.diagnostic, etc.)
-opt.winborder = "rounded"
+-- opt.winborder = "rounded"
 -- completion popup menu border
-opt.pumborder = "rounded"
-opt.messagesopt = "hit-enter,history:500,progress:c"
-opt.fillchars = {
-  foldopen = "",
-  foldclose = "",
-  fold = " ",
-  foldsep = " ",
-  diff = "╱",
-  eob = " ",
-}
-opt.jumpoptions = "view"
-opt.laststatus = 3 -- global statusline
-opt.linebreak = true -- Wrap lines at convenient points
-opt.list = false -- Show some invisible characters (tabs...)
-opt.shiftround = true -- Round indent
-opt.shiftwidth = 2 -- Size of an indent
-opt.shortmess:append({ W = true, I = true, c = true, C = true })
+-- opt.pumborder = "rounded"
+--opt.messagesopt = "hit-enter,history:500,progress:c"
+--opt.fillchars = {
+--  foldopen = "",
+--  foldclose = "",
+--  fold = " ",
+--  foldsep = " ",
+--  diff = "╱",
+--  eob = " ",
+--}
+--opt.jumpoptions = "view"
+--opt.laststatus = 3 -- global statusline
+--opt.linebreak = true -- Wrap lines at convenient points
+--opt.list = false -- Show some invisible characters (tabs...)
+--opt.shiftround = true -- Round indent
+--opt.shiftwidth = 2 -- Size of an indent
+--opt.shortmess:append({ W = true, I = true, c = true, C = true })
 
 vim.g.markdown_recommended_style = 0
 

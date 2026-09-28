@@ -28,7 +28,6 @@ vim.lsp.buf.hover = function()
   return hover({
     max_height = math.floor(vim.o.lines * 0.5),
     max_width = math.floor(vim.o.columns * 0.4),
-    border = "rounded",
   })
 end
 

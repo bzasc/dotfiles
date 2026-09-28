@@ -42,10 +42,6 @@ require("blink.cmp").setup({
     ["<C-b>"] = { "scroll_documentation_up", "fallback" },
     ["<C-f>"] = { "scroll_documentation_down", "fallback" },
   },
-  appearance = {
-    nerd_font_variant = "mono",
-    use_nvim_cmp_as_default = false,
-  },
   completion = {
     list = {
       -- Insert items while navigating the completion list.
@@ -53,7 +49,6 @@ require("blink.cmp").setup({
       max_items = 10,
     },
     menu = {
-      border = "rounded",
       scrolloff = 1,
       scrollbar = false,
       auto_show = function()
@@ -61,8 +56,12 @@ require("blink.cmp").setup({
       end,
       draw = {
         -- see https://github.com/xzbdmw/colorful-menu.nvim
-        columns = { { "kind_icon" }, { "label", gap = 1 } },
+        padding = { 1, 1 },
+        columns = { { "kind_icon" }, { "label", gap = 1 }, { "kind" } },
         components = {
+          kind = {
+            highlight = "PmenuExtra",
+          },
           label = {
             text = function(ctx)
               return require("colorful-menu").blink_components_text(ctx)
@@ -76,7 +75,6 @@ require("blink.cmp").setup({
     },
     documentation = {
       window = {
-        border = "rounded",
         scrollbar = false,
         winhighlight = "Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc",
       },
@@ -103,6 +101,12 @@ require("blink.cmp").setup({
   fuzzy = { implementation = "prefer_rust_with_warning" },
   signature = {
     enabled = true,
-    window = { border = "rounded" },
   },
 })
+
+-- Subtle selection instead of sonokai's bright-blue PmenuSel.
+local function blink_hl()
+  vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", { bg = "#414550", bold = true })
+end
+blink_hl()
+vim.api.nvim_create_autocmd("ColorScheme", { callback = blink_hl })
