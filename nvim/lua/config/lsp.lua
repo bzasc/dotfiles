@@ -165,8 +165,10 @@ end
 
 local ts_server = vim.g.lsp_typescript_server or "vtsls"
 
--- This table is the ONLY gate for starting a server: a filetype listed in an
--- lsp/*.lua `filetypes` but missing here will never attach.
+-- This table is the gate for starting filetype-specific servers: a filetype
+-- listed in an lsp/*.lua `filetypes` but missing here will never attach.
+-- Exceptions: typos_lsp (enabled below for every buffer) and harper_ls
+-- (toggled with <leader>us).
 local servers_by_ft = {
   lua = { "lua_ls" },
   -- pyrefly covers definition/refs/hover/inlayHint (and adds codeLens +
@@ -179,8 +181,10 @@ local servers_by_ft = {
   javascriptreact = { ts_server, "oxlint", "eslint", "tailwindcss" },
   typescript = { ts_server, "oxlint", "eslint" },
   typescriptreact = { ts_server, "oxlint", "eslint", "tailwindcss" },
-  vue = { ts_server, "tailwindcss" },
-  svelte = { ts_server, "tailwindcss" },
+  -- vtsls rejects vue/svelte in its root_dir (no Vue/Svelte TS plugin set up),
+  -- so only the linters + tailwind attach here.
+  vue = { "oxlint", "eslint", "tailwindcss" },
+  svelte = { "oxlint", "eslint", "tailwindcss" },
   astro = { "oxlint", "eslint", "tailwindcss" },
   html = { "html", "tailwindcss" },
   htmlangular = { "eslint", "tailwindcss" },
@@ -216,3 +220,6 @@ vim.api.nvim_create_autocmd("FileType", {
     end
   end,
 })
+
+-- Filetype-agnostic source-code spell checker; runs on every buffer.
+vim.lsp.enable("typos_lsp")

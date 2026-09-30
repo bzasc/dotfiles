@@ -101,21 +101,7 @@ map("v", ">", ">gv")
 -- new file
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
--- location list
-map("n", "<leader>xl", function()
-  local success, err = pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
-  if not success and err then
-    vim.notify(err, vim.log.levels.ERROR)
-  end
-end, { desc = "Location List" })
--- quickfix list
-map("n", "<leader>xq", function()
-  local success, err = pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
-  if not success and err then
-    vim.notify(err, vim.log.levels.ERROR)
-  end
-end, { desc = "Quickfix List" })
-
+-- <leader>xl / <leader>xq (location list / quickfix) live in plugins/trouble.lua
 map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
 

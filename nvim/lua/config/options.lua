@@ -60,7 +60,7 @@ opt.winfixbuf = false -- disable winfixbuf globally
 opt.hidden = true -- Allow hidden buffers
 opt.errorbells = false -- No error bells
 opt.backspace = "indent,eol,start" -- Better backspace behavior
-opt.autochdir = false -- Don't auto change directory
+opt.autochdir = false -- cwd follows the project root instead (auto_root_cd in autocmds.lua)
 
 opt.path:append("**") -- include subdirectories in search
 opt.selection = "inclusive" -- Selection behavior (snippet placeholders need inclusive or last char lingers)
@@ -138,9 +138,6 @@ vim.g.completion_mode = "blink"
 -- which made .env.local flip between "env" and "dotenv" run to run.
 -- A bare `env` file (no dot) is the only case Neovim misses.
 vim.filetype.add({
-  extension = {
-    txt = "markdown",
-  },
   filename = {
     ["env"] = "env",
   },

@@ -4,6 +4,9 @@ vim.pack.add({
 })
 
 require("noice").setup({
+  -- Snacks.notifier owns vim.notify (history on <leader>n, dismiss on <leader>un);
+  -- noice taking it over left both of those empty.
+  notify = { enabled = false },
   lsp = {
     -- fidget handles progress, blink handles signature help,
     -- and config/lsp.lua wraps hover with its own size caps.

@@ -3,7 +3,7 @@ vim.pack.add({
   "https://github.com/obsidian-nvim/obsidian.nvim",
 })
 
-local obsidian_vault = vim.env.HOME .. "/annotations/bzasc_brain"
+local obsidian_vault = vim.env.OBSIDIAN_VAULT or (vim.env.HOME .. "/annotations/bzasc_brain")
 local _obsidian_initialized = false
 
 local function init_obsidian()
@@ -17,7 +17,7 @@ local function init_obsidian()
     ui = { enable = false },
     picker = { name = "snacks.picker" },
     workspaces = {
-      { name = "bzasc-brain", path = vim.env.OBSIDIAN_VAULT or "~/annotations/bzasc_brain" },
+      { name = "bzasc-brain", path = obsidian_vault },
     },
     notes_subdir = "raw",
     new_notes_location = "notes_subdir",

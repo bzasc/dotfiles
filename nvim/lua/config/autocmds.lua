@@ -74,7 +74,9 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Restore number column on normal buffers (sidekick / pickers / terminals
 -- can leave neighboring windows with `nonumber` after they close).
-vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
+-- BufWinEnter only: on WinEnter this also undid <leader>ul / <leader>uL
+-- every time focus changed windows.
+vim.api.nvim_create_autocmd("BufWinEnter", {
   group = augroup("restore_number_ui"),
   callback = function(args)
     if vim.bo[args.buf].buftype == "" then

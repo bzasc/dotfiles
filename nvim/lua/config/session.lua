@@ -6,8 +6,14 @@ if vim.fn.isdirectory(session_dir) == 0 then
   vim.fn.mkdir(session_dir, "p")
 end
 
-local function get_session_file()
-  local cwd = vim.fn.getcwd()
+-- cwd the active session belongs to. Captured when the session starts, because
+-- the auto_root_cd autocmd (config/autocmds.lua) keeps moving cwd as buffers
+-- change; keying the save on the cwd at exit would overwrite another
+-- project's session.
+local session_cwd = nil
+
+local function get_session_file(cwd)
+  cwd = cwd or session_cwd or vim.fn.getcwd()
   local session_name = cwd:gsub("/", "%%")
   return session_dir .. session_name .. ".vim"
 end
@@ -43,6 +49,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
     -- Only restore if no files were specified
     if vim.fn.argc() == 0 then
       session_started = true
+      session_cwd = vim.fn.getcwd()
       local session_file = get_session_file()
       if vim.fn.filereadable(session_file) == 1 then
         vim.cmd("silent! set winminwidth=1 winwidth=1 winminheight=1 winheight=1")
@@ -82,10 +89,12 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 
 -- Load session for current directory
 vim.keymap.set("n", "<leader>qs", function()
-  local session_file = get_session_file()
+  local cwd = vim.fn.getcwd()
+  local session_file = get_session_file(cwd)
   if vim.fn.filereadable(session_file) == 1 then
     vim.cmd("source " .. vim.fn.fnameescape(session_file))
     session_started = true
+    session_cwd = cwd
   else
     print("No session found for current directory")
   end
@@ -97,6 +106,7 @@ vim.keymap.set("n", "<leader>ql", function()
   if vim.fn.filereadable(last_session) == 1 then
     vim.cmd("source " .. vim.fn.fnameescape(last_session))
     session_started = true
+    session_cwd = vim.fn.getcwd() -- restored by the session's `cd` (curdir)
   else
     print("No last session found")
   end
@@ -125,6 +135,7 @@ vim.keymap.set("n", "<leader>qS", function()
       local session_file = session_dir .. choice:gsub("/", "%%") .. ".vim"
       vim.cmd("source " .. vim.fn.fnameescape(session_file))
       session_started = true
+      session_cwd = choice
     end
   end)
 end, { desc = "Select session to load" })

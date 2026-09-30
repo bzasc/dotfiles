@@ -7,8 +7,10 @@ return {
   -- config/lsp.lua (they are slow on large Rails files; treesitter covers the
   -- highlighting). Do not re-enable them here — the two used to fight.
   init_options = {
-    formatter = "standard",
-    linters = { "standard" },
+    -- Match conform (ruby = rubocop) so diagnostics and format-on-save follow
+    -- the same project .rubocop.yml.
+    formatter = "rubocop",
+    linters = { "rubocop" },
     experimentalFeaturesEnabled = false,
     indexing = {
       excludedPatterns = {
