@@ -15,9 +15,19 @@ vim.api.nvim_create_autocmd("InsertEnter", {
   end,
 })
 
--- mini.surround: lazy via stub keymaps (default `s` prefix)
+-- mini.surround: lazy via stub keymaps. `gs` prefix because plain `s` is the
+-- label jump (config/jump.lua); with `sa`/`sd`/... mapped, `s` could never
+-- jump to those letters.
 local _surround_loaded = false
-local surround_keys = { "sa", "sd", "sf", "sF", "sh", "sr", "sn" }
+local surround_mappings = {
+  add = "gsa",
+  delete = "gsd",
+  find = "gsf",
+  find_left = "gsF",
+  highlight = "gsh",
+  replace = "gsr",
+}
+local surround_keys = vim.tbl_values(surround_mappings)
 
 local function load_surround()
   if _surround_loaded then
@@ -28,13 +38,15 @@ local function load_surround()
     pcall(vim.keymap.del, "n", k)
     pcall(vim.keymap.del, "x", k)
   end
-  require("mini.surround").setup()
+  require("mini.surround").setup({ mappings = surround_mappings })
 end
 
 for _, k in ipairs(surround_keys) do
   vim.keymap.set({ "n", "x" }, k, function()
     load_surround()
-    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(k, true, false, true), "m", false)
+    -- "i": insert at the head of typeahead so already-queued keys (the motion
+    -- in a macro / fast typing) still come after the replayed prefix.
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(k, true, false, true), "mi", false)
   end, { desc = "Surround (lazy)" })
 end
 
