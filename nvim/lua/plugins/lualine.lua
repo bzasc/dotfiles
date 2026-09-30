@@ -98,10 +98,6 @@ local function word_reading()
   return " " .. w .. "w  " .. math.ceil(w / 200) .. "m"
 end
 
-local function lsp_progress()
-  return vim.ui.progress_status and vim.ui.progress_status() or ""
-end
-
 local _rec = ""
 
 local function macro_recording()
@@ -191,5 +187,5 @@ require("lualine").setup({
     lualine_y = {},
     lualine_z = {},
   },
-  extensions = { "quickfix", "fugitive", "lazy" },
+  extensions = { "quickfix" },
 })

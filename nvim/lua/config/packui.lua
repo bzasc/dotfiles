@@ -14,7 +14,7 @@ local HL = {
 
 local state = { bufnr = nil, winid = nil, expanded = {} }
 
-function Render()
+local function render()
   if not (state.bufnr and api.nvim_buf_is_valid(state.bufnr)) then
     return
   end
@@ -151,7 +151,7 @@ local function open()
   vim.wo[state.winid].cursorline = true
   vim.wo[state.winid].wrap = false
 
-  Render()
+  render()
 
   local o = { buffer = state.bufnr, silent = true, nowait = true }
 
@@ -163,7 +163,7 @@ local function open()
       return
     end
     state.expanded[name] = not state.expanded[name]
-    Render()
+    render()
     for lnum, n in pairs(state.lmap) do
       if n == name then
         api.nvim_win_set_cursor(state.winid, { lnum, 0 })

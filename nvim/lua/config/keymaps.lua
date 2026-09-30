@@ -1,7 +1,7 @@
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
--- Buffer switching (<Tab> left free for jumplist <C-i>; see also <S-h>/<S-l>, ]b/[b)
+-- Buffer switching (<Tab> left free for jumplist <C-i>; see also <S-h>/<S-l>, builtin ]b/[b)
 map("n", "<leader>bn", ":bnext<CR>", { desc = "Next buffer" })
 map("n", "<leader>bp", ":bprevious<CR>", { desc = "Previous buffer" })
 
@@ -11,11 +11,8 @@ map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr =
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { desc = "Up", expr = true, silent = true })
 
--- Go to different windows
-map("n", "<C-h>", "<C-w>h", { desc = "Go to Left Window", remap = true })
-map("n", "<C-j>", "<C-w>j", { desc = "Go to Lower Window", remap = true })
-map("n", "<C-k>", "<C-w>k", { desc = "Go to Upper Window", remap = true })
-map("n", "<C-l>", "<C-w>l", { desc = "Go to Right Window", remap = true })
+-- Window navigation (<C-h/j/k/l>, normal + terminal) is owned by
+-- plugins/tmux-navigator.lua.
 
 -- Resize windows/buffers with Ctrl+Cmd+arrow keys (macOS)
 map("n", "<C-S-Up>", "<cmd>resize +5<CR>", opts)
@@ -45,8 +42,6 @@ map("n", "gh", "^", { desc = "Go to start of line" })
 -- buffers
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
-map("n", "[b", "<cmd>bprevious<cr>", { desc = "Prev Buffer" })
-map("n", "]b", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 map("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
 -- Clear search with <esc>
@@ -101,9 +96,8 @@ map("v", ">", ">gv")
 -- new file
 map("n", "<leader>fn", "<cmd>enew<cr>", { desc = "New File" })
 
--- <leader>xl / <leader>xq (location list / quickfix) live in plugins/trouble.lua
-map("n", "[q", vim.cmd.cprev, { desc = "Previous Quickfix" })
-map("n", "]q", vim.cmd.cnext, { desc = "Next Quickfix" })
+-- <leader>xl / <leader>xq (location list / quickfix) live in plugins/trouble.lua;
+-- ]q/[q and ]b/[b are Neovim defaults.
 
 -- quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit All" })
@@ -121,10 +115,6 @@ map("n", "<leader>U", open_undotree, { desc = "Undo Tree" })
 
 -- Terminal Mappings
 map("t", "<esc><esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
-map("t", "<C-h>", "<cmd>wincmd h<cr>", { desc = "Go to Left Window" })
-map("t", "<C-j>", "<cmd>wincmd j<cr>", { desc = "Go to Lower Window" })
-map("t", "<C-k>", "<cmd>wincmd k<cr>", { desc = "Go to Upper Window" })
-map("t", "<C-l>", "<cmd>wincmd l<cr>", { desc = "Go to Right Window" })
 map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
 map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
 
@@ -173,11 +163,6 @@ map("n", "<C-c>", ":%y+<CR>", opts)
 -- Select all text in buffer with Alt-a
 map("n", "<A-a>", "ggVG", { noremap = true, silent = true, desc = "Select all" })
 
--- Visual --
--- Stay in indent mode
-map("v", "<", "<gv", opts)
-map("v", ">", ">gv", opts)
-
 -- Easier access to beginning and end of lines
 map("n", "<A-h>", "^", {
   desc = "Go to start of line",
@@ -200,12 +185,6 @@ map("v", "<A-Up>", ":m '<-2<CR>gv=gv", opts)
 -- Fix Spell checking
 map("n", "z0", "1z=", {
   desc = "Fix world under cursor",
-})
-
--- Toggle wrap
-map("n", "<leader>tw", "<cmd>set wrap!<CR>", {
-  desc = "Toggle Wrap",
-  silent = true,
 })
 
 map("n", "<leader>us", function()

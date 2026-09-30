@@ -12,7 +12,7 @@ wk.add({
   { "<leader>c", group = "code" },
   { "<leader>d", group = "debug" },
   { "<leader>D", group = "Diffview", icon = { icon = "", color = "orange" } },
-  { "<leader>p", group = "Yanky", icon = { icon = "󰃮 ", color = "yellow" } },
+  { "<leader>p", group = "pack", icon = { icon = "󰏗 ", color = "yellow" } },
   { "<leader>dp", group = "profiler" },
   { "<leader>f", group = "file/find" },
   { "<leader>g", group = "git" },
@@ -74,20 +74,20 @@ wk.add({
       end,
       desc = "Copy relative file path",
     },
-    {
-      "<leader>?",
-      function()
-        require("which-key").show({ global = false })
-      end,
-      desc = "Buffer Keymaps (which-key)",
-    },
-    {
-      "<c-w><space>",
-      function()
-        require("which-key").show({ keys = "<c-w>", loop = true })
-      end,
-      desc = "Window Hydra Mode (which-key)",
-    },
+  },
+  {
+    "<leader>?",
+    function()
+      require("which-key").show({ global = false })
+    end,
+    desc = "Buffer Keymaps (which-key)",
+  },
+  {
+    "<c-w><space>",
+    function()
+      require("which-key").show({ keys = "<c-w>", loop = true })
+    end,
+    desc = "Window Hydra Mode (which-key)",
   },
   {
     mode = { "n", "v" }, -- NORMAL and VISUAL mode

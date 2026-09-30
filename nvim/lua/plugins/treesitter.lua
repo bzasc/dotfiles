@@ -90,7 +90,7 @@ for _, map in ipairs({
   { { "x", "o" }, "aa", "@parameter.outer" },
   { { "x", "o" }, "ia", "@parameter.inner" },
   { { "x", "o" }, "ad", "@comment.outer" },
-  { { "x", "o" }, "as", "@statement.outer" },
+  { { "x", "o" }, "aS", "@statement.outer" }, -- `as` stays the builtin sentence object
 }) do
   vim.keymap.set(map[1], map[2], function()
     sel.select_textobject(map[3], "textobjects")
@@ -151,7 +151,6 @@ local SKIP_FT = {
   dapui_watches = true,
   dapui_console = true,
   dap_repl = true,
-  gitcommit = true,
   gitrebase = true,
   lazy = true,
   lspinfo = true,

@@ -44,16 +44,13 @@ require("blink.cmp").setup({
   },
   completion = {
     list = {
-      -- Insert items while navigating the completion list.
+      -- Navigate without preselecting or inserting; <CR> accepts.
       selection = { preselect = false, auto_insert = false },
       max_items = 10,
     },
     menu = {
       scrolloff = 1,
       scrollbar = false,
-      auto_show = function()
-        return not vim.g.copilot_mode
-      end,
       draw = {
         -- see https://github.com/xzbdmw/colorful-menu.nvim
         padding = { 1, 1 },

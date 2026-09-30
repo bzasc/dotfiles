@@ -47,7 +47,6 @@ opt.writebackup = false -- Don't create backup before writing
 opt.swapfile = false -- Don't create swap files
 opt.undofile = true -- Persistent undo
 opt.undolevels = 10000
-opt.undodir = vim.fn.expand("~/.vim/undodir") -- Undo directory
 
 opt.updatetime = 500
 opt.timeoutlen = vim.g.vscode and 1000 or 300 -- Lower than default (1000) to quickly trigger which-key
@@ -66,8 +65,6 @@ opt.path:append("**") -- include subdirectories in search
 opt.selection = "inclusive" -- Selection behavior (snippet placeholders need inclusive or last char lingers)
 opt.mouse = "a" -- Enable mouse support
 opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
-opt.modifiable = true -- Allow buffer modifications
-opt.encoding = "UTF-8" -- Set encoding
 
 -- Folding settings
 opt.smoothscroll = false
@@ -94,15 +91,6 @@ opt.diffopt:append("linematch:60,indent-heuristic,inline:char")
 -- Performance improvements
 opt.redrawtime = 10000
 opt.maxmempattern = 20000
-
--- Create undo directory if it doesn't exist
-local undodir = vim.fn.expand("~/.vim/undodir")
-if vim.fn.isdirectory(undodir) == 0 then
-  vim.fn.mkdir(undodir, "p")
-end
-
-vim.g.autoformat = true
-vim.g.trouble_lualine = true
 
 -- global floating window border (all vim.lsp, vim.diagnostic, etc.)
 -- opt.winborder = "rounded"

@@ -192,11 +192,9 @@ vim.api.nvim_create_user_command("FormatEnable", function()
   vim.notify("Autoformat enabled", vim.log.levels.INFO)
 end, { desc = "Re-enable autoformat-on-save" })
 
-local auto_format = true
-
 vim.keymap.set("n", "<leader>uf", function()
-  auto_format = not auto_format
-  if auto_format then
+  -- Read the real flag so this stays in sync with :FormatEnable/:FormatDisable.
+  if vim.g.disable_autoformat then
     vim.cmd("FormatEnable")
   else
     vim.cmd("FormatDisable")
