@@ -16,7 +16,7 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 })
 
 -- mini.surround: lazy via stub keymaps. `gs` prefix because plain `s` is the
--- label jump (config/jump.lua); with `sa`/`sd`/... mapped, `s` could never
+-- flash jump (plugins/flash.lua); with `sa`/`sd`/... mapped, `s` could never
 -- jump to those letters.
 local _surround_loaded = false
 local surround_mappings = {

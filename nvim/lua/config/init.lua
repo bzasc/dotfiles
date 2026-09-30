@@ -7,5 +7,4 @@ require("config.autocmds")
 require("config.marks")
 require("config.lsp")
 require("config.packui")
-require("config.jump")
 -- require("config.ui2") -- conflicts with noice.nvim
