@@ -78,9 +78,19 @@ Snacks.setup({
               ["<S-h>"] = "toggle_hidden",
               ["<S-i>"] = "toggle_ignored",
               ["<S-f>"] = "toggle_follow",
-              ["<C-y>"] = { "yazi_copy_relative_path", mode = { "n", "i" } },
+              ["<C-y>"] = { "copy_relative_path", mode = { "n", "i" } },
             },
           },
+        },
+        actions = {
+          copy_relative_path = function(_, item)
+            if not item then
+              return
+            end
+            local rel = vim.fn.fnamemodify(Snacks.picker.util.path(item), ":.")
+            vim.fn.setreg("+", rel)
+            vim.notify("Copied relative file path: " .. rel)
+          end,
         },
         exclude = {
           "**/.git/*",

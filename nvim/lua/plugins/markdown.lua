@@ -1,3 +1,19 @@
+-- Build markdown-preview's bundle only on install/update (must be registered
+-- before vim.pack.add so the initial install is caught).
+vim.api.nvim_create_autocmd("PackChanged", {
+  group = vim.api.nvim_create_augroup("markdown-preview-build", { clear = true }),
+  callback = function(ev)
+    local kind = ev.data.kind
+    if ev.data.spec.name ~= "markdown-preview.nvim" or (kind ~= "install" and kind ~= "update") then
+      return
+    end
+    if not ev.data.active then
+      vim.cmd.packadd("markdown-preview.nvim")
+    end
+    vim.fn["mkdp#util#install"]()
+  end,
+})
+
 vim.pack.add({
   "https://github.com/MeanderingProgrammer/render-markdown.nvim",
   "https://github.com/iamcco/markdown-preview.nvim",
@@ -218,7 +234,4 @@ vim.keymap.set("n", "<leader>um", function()
 end, { desc = "Toggle Render Markdown" })
 
 -- Markdown preview
-vim.keymap.set("n", "<leader>cp", function()
-  vim.fn["mkdp#util#install"]()
-  vim.cmd("MarkdownPreviewToggle")
-end, { desc = "Markdown preview" })
+vim.keymap.set("n", "<leader>cp", "<cmd>MarkdownPreviewToggle<cr>", { desc = "Markdown preview" })

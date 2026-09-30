@@ -55,6 +55,4 @@ local function jump()
   end
 end
 
-for _, key in ipairs({ "s", "f", "t" }) do
-  vim.keymap.set({ "n", "x", "o" }, key, jump, { desc = "Jump" })
-end
+vim.keymap.set({ "n", "x", "o" }, "s", jump, { desc = "Jump" })
