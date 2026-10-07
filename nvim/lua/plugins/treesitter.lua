@@ -16,6 +16,7 @@ require("nvim-treesitter").install({
   "c",
   "comment",
   "css",
+  "dart",
   "diff",
   "dockerfile",
   "fish",

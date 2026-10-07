@@ -1,5 +1,7 @@
 -- snacks first: other plugins (lazydev, completion sources) depend on it.
 require("plugins.sonokai")
+--require("plugins.onedarkpro")
+--require("plugins.kanagawa")
 require("plugins.snacks")
 require("plugins.lazydev")
 require("plugins.conform")

@@ -92,3 +92,5 @@ fish_add_path $DOCKER/bin
 
 
 # fastfetch --kitty ~/dev/dotfiles/fastfetch/pngs/ryuzaki.png
+
+string match -q "$TERM_PROGRAM" "kiro" and . (kiro --locate-shell-integration-path fish)

@@ -24,8 +24,8 @@ require("noice").setup({
   views = {
     cmdline_popup = {
       position = { row = "50%", col = "50%" },
-      border = { style = "none", padding = { 0, 1 } },
+      --border = { style = "none", padding = { 0, 1 } },
     },
-    popupmenu = { border = { style = "none", padding = { 0, 1 } } },
+    --popupmenu = { border = { style = "none", padding = { 0, 1 } } },
   },
 })
