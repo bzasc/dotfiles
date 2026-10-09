@@ -101,7 +101,7 @@ require("blink.cmp").setup({
   },
 })
 
--- Subtle selection instead of sonokai's bright-blue PmenuSel.
+-- Subtle selection instead of theme's bright-blue PmenuSel.
 local function blink_hl()
   vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", { bg = "#414550", bold = true })
 end
