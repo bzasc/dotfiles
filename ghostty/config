@@ -15,7 +15,7 @@ shell-integration = fish
 shell-integration-features = no-cursor,sudo,no-title
 
 # Window
-background-opacity = 1
+background-opacity = 0.95
 
 macos-titlebar-style = hidden
 macos-option-as-alt = true
