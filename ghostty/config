@@ -10,12 +10,12 @@ font-size = 14.5
 # font-feature = -liga
 
 # Theme
-theme = Sonokai
+theme = bzarro
 shell-integration = fish
 shell-integration-features = no-cursor,sudo,no-title
 
 # Window
-background-opacity = 0.95
+background-opacity = 1 
 
 macos-titlebar-style = hidden
 macos-option-as-alt = true

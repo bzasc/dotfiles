@@ -1,0 +1,24 @@
+# bzarro: same palette as nvim/lua/bzarro (Catppuccin Mocha accents on #26282d).
+# ANSI colors mirror the theme's `terminal` table, so :terminal and Ghostty match.
+palette = 0=#6c7086
+palette = 1=#f38ba8
+palette = 2=#a6e3a1
+palette = 3=#f9e2af
+palette = 4=#89b4fa
+palette = 5=#f5c2e7
+palette = 6=#89dceb
+palette = 7=#e2e2e3
+palette = 8=#7f849c
+palette = 9=#f38ba8
+palette = 10=#a6e3a1
+palette = 11=#f9e2af
+palette = 12=#89b4fa
+palette = 13=#f5c2e7
+palette = 14=#89dceb
+palette = 15=#e2e2e3
+background = #26282d
+foreground = #e2e2e3
+cursor-color = #e2e2e3
+cursor-text = #26282d
+selection-background = #44475a
+selection-foreground = #e2e2e3

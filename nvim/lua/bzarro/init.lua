@@ -1,4 +1,4 @@
--- bzarro: Catppuccin (or Dracula) accents on top of Sonokai's #2c2e34 background.
+-- bzarro: Catppuccin (or Dracula) accents on a cool dark grey (#26282d, a step below Sonokai's #2c2e34).
 -- Load with `:colorscheme bzarro`; call setup() first to change options.
 --
 -- Highlight groups only reference `base` and the semantic `roles`, so switching
@@ -6,10 +6,10 @@
 
 local M = {}
 
--- Backgrounds: shades tuned around #2c2e34 (same as the ghostty Sonokai theme).
+-- Backgrounds: shades tuned around #26282d (same as ghostty/themes/bzarro).
 local base = {
-  bg_dark = "#222327", -- floats, popup menu
-  bg = "#2c2e34",
+  bg_dark = "#1d1e23", -- floats, popup menu
+  bg = "#26282d",
   bg1 = "#33353f", -- cursorline, folds
   bg2 = "#363944",
   bg3 = "#3b3e48", -- lsp references
