@@ -49,6 +49,7 @@ require("blink.cmp").setup({
       max_items = 10,
     },
     menu = {
+      border = "single",
       scrolloff = 1,
       scrollbar = false,
       draw = {
@@ -60,6 +61,8 @@ require("blink.cmp").setup({
             highlight = "PmenuExtra",
           },
           label = {
+            -- Long items (multi-line copilot suggestions) get an ellipsis instead of a huge menu.
+            width = { fill = true, max = 40 },
             text = function(ctx)
               return require("colorful-menu").blink_components_text(ctx)
             end,
@@ -72,6 +75,7 @@ require("blink.cmp").setup({
     },
     documentation = {
       window = {
+        border = "single",
         scrollbar = false,
         winhighlight = "Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc",
       },
@@ -98,12 +102,6 @@ require("blink.cmp").setup({
   fuzzy = { implementation = "prefer_rust_with_warning" },
   signature = {
     enabled = true,
+    window = { border = "single" },
   },
 })
-
--- Subtle selection instead of theme's bright-blue PmenuSel.
-local function blink_hl()
-  vim.api.nvim_set_hl(0, "BlinkCmpMenuSelection", { bg = "#414550", bold = true })
-end
-blink_hl()
-vim.api.nvim_create_autocmd("ColorScheme", { callback = blink_hl })

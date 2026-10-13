@@ -491,10 +491,11 @@ local function groups(p, o)
     DiagnosticUnnecessary = { fg = p.grey, italic = true },
     DiagnosticDeprecated = { strikethrough = true },
 
-    -- blink.cmp (+ colorful-menu, which reuses the treesitter groups above)
+    -- blink.cmp (+ colorful-menu, which reuses the treesitter groups above).
+    -- Menu, docs and signature stay solid even with `transparent`, so they read over code.
     BlinkCmpMenu = { link = "Pmenu" },
     BlinkCmpMenuBorder = { fg = p.border, bg = p.bg_dark },
-    BlinkCmpMenuSelection = { link = "PmenuSel" },
+    BlinkCmpMenuSelection = { bg = blend(p.accent, p.bg_dark, 0.2), bold = true },
     BlinkCmpLabel = { fg = p.fg },
     BlinkCmpLabelMatch = { fg = p.match, bold = true },
     BlinkCmpLabelDeprecated = { fg = p.muted, strikethrough = true },
@@ -502,11 +503,12 @@ local function groups(p, o)
     BlinkCmpLabelDescription = { fg = p.muted },
     BlinkCmpSource = { fg = p.muted },
     BlinkCmpGhostText = { fg = p.muted, italic = true },
-    BlinkCmpDoc = { link = "NormalFloat" },
-    BlinkCmpDocBorder = { link = "FloatBorder" },
-    BlinkCmpDocSeparator = { fg = p.nontext, bg = float_bg },
-    BlinkCmpSignatureHelp = { link = "NormalFloat" },
-    BlinkCmpSignatureHelpBorder = { link = "FloatBorder" },
+    BlinkCmpDoc = { fg = p.fg, bg = p.bg_dark },
+    BlinkCmpDocBorder = { link = "BlinkCmpMenuBorder" },
+    BlinkCmpDocSeparator = { fg = p.nontext, bg = p.bg_dark },
+    BlinkCmpDocCursorLine = { link = "BlinkCmpMenuSelection" },
+    BlinkCmpSignatureHelp = { link = "BlinkCmpDoc" },
+    BlinkCmpSignatureHelpBorder = { link = "BlinkCmpMenuBorder" },
     BlinkCmpSignatureHelpActiveParameter = { link = "LspSignatureActiveParameter" },
     BlinkCmpKind = { fg = p.info },
     BlinkCmpKindText = { fg = p.fg },
