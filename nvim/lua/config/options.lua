@@ -115,6 +115,10 @@ opt.maxmempattern = 20000
 
 vim.g.markdown_recommended_style = 0
 
+-- No remote plugins need these; copilot.lua runs `node` directly.
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+
 -- global completion mode for LSP clients that support it; "native" uses built-in completion, "blink" uses blink.cmp
 vim.g.completion_mode = "blink"
 

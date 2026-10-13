@@ -9,10 +9,6 @@
       "src": "https://github.com/saghen/blink.cmp",
       "version": "1.0.0 - 2.0.0"
     },
-    "catppuccin": {
-      "rev": "edefef779ab08ce1a4a404713e3012b0d202bd35",
-      "src": "https://github.com/catppuccin/nvim"
-    },
     "colorful-menu.nvim": {
       "rev": "196ddf16d5f8fec09ba7f20e6b153aa5188e907b",
       "src": "https://github.com/xzbdmw/colorful-menu.nvim"
@@ -44,10 +40,6 @@
     "grug-far.nvim": {
       "rev": "11595bf747edc270bce2069d1020502ad4ae56cf",
       "src": "https://github.com/MagicDuck/grug-far.nvim"
-    },
-    "kanagawa.nvim": {
-      "rev": "bb85e4bfc8d89b0e62c8fa53ccdd13d12e2f77b3",
-      "src": "https://github.com/rebelot/kanagawa.nvim"
     },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
@@ -116,10 +108,6 @@
       "rev": "07f94ef04a417555ee56a5895ddeb740f2de0033",
       "src": "https://github.com/obsidian-nvim/obsidian.nvim"
     },
-    "onedarkpro.nvim": {
-      "rev": "24c806cb85c1f84d9faaff457cf7aa87c685a070",
-      "src": "https://github.com/olimorris/onedarkpro.nvim"
-    },
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
@@ -135,10 +123,6 @@
     "snacks.nvim": {
       "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",
       "src": "https://github.com/folke/snacks.nvim"
-    },
-    "sonokai": {
-      "rev": "b023c5280b16fe2366f5e779d8d2756b3e5ee9c3",
-      "src": "https://github.com/sainnhe/sonokai"
     },
     "tiny-code-action.nvim": {
       "rev": "0d040ed81f7953118b81cd12681fcdfcac069803",
@@ -156,10 +140,6 @@
       "rev": "bd67efe408d4816e25e8491cc5ad4088e708a69a",
       "src": "https://github.com/folke/trouble.nvim"
     },
-    "vdiff.nvim": {
-      "rev": "678ad1c309dbd1fdf162e112817e50110edd405a",
-      "src": "https://gitlab.com/tduyng/vdiff.nvim"
-    },
     "vim-rails": {
       "rev": "b0a5c76f86ea214ade36ab0b811e730c3f0add67",
       "src": "https://github.com/tpope/vim-rails"
@@ -172,17 +152,9 @@
       "rev": "e41c431a0c7b7388ae7ba341f01a0d217eb3a432",
       "src": "https://github.com/christoomey/vim-tmux-navigator"
     },
-    "vimux": {
-      "rev": "d6cb7f63a8bb428ffc27060b7f83c77fb115589c",
-      "src": "https://github.com/preservim/vimux"
-    },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
       "src": "https://github.com/folke/which-key.nvim"
-    },
-    "yanky.nvim": {
-      "rev": "dd6689fdda85f66cab7d9b1a1664625f3be0920d",
-      "src": "https://github.com/gbprod/yanky.nvim"
     }
   }
 }
