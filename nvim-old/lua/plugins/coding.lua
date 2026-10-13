@@ -183,7 +183,6 @@ return {
     "numToStr/Comment.nvim",
     keys = {
       { "gc", mode = { "n", "v" } },
-      { "gcc", mode = "n" },
     },
     dependencies = { "joosepalviste/nvim-ts-context-commentstring" },
     config = function()
